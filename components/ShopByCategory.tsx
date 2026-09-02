@@ -230,7 +230,7 @@ export default function ShopByCategory({
   return (
     <section
       id="shop-by-category"
-      className="w-full bg-[#FAF7F3] py-12 sm:py-16 md:py-20 border-t border-[#EAE2D8]/60 transition-colors"
+      className="w-full bg-[#FAF7F3] pt-5 sm:pt-8 md:pt-12 pb-12 sm:pb-16 md:pb-20 border-t border-[#EAE2D8]/60 transition-colors"
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header */}
@@ -452,7 +452,7 @@ export default function ShopByCategory({
         {/* Content Grid: Dedicated Beauty & Salon Services Grid OR Products Grid */}
         {activeTab === "beauty" ? (
           /* Beauty & Salon Services Grid */
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
             {(displayedItems as ServiceItem[]).map((service) => (
               <div
                 key={service.id}
@@ -492,28 +492,28 @@ export default function ShopByCategory({
                 <div className="p-4 sm:p-5 flex flex-col justify-between flex-1 bg-white">
                   <div>
                     {/* Subcategory Label */}
-                    <span className="text-[10.5px] font-semibold text-[#A57D4E] tracking-wider uppercase">
+                    <span className="text-[10px] sm:text-[11px] font-semibold text-[#A57D4E] tracking-wider uppercase font-sans">
                       {service.subCategory}
                     </span>
 
                     {/* Service Name */}
-                    <h3 className="text-sm sm:text-base font-normal text-[#231610] font-serif-luxury tracking-wide line-clamp-1 mt-0.5 group-hover:text-[#A57D4E] transition-colors uppercase">
+                    <h3 className="text-sm sm:text-base font-normal text-[#231610] font-serif-luxury tracking-wide line-clamp-2 mt-0.5 group-hover:text-[#A57D4E] transition-colors uppercase leading-snug">
                       {service.name}
                     </h3>
 
                     {/* Description */}
-                    <p className="text-xs text-[#6B5E55] line-clamp-2 mt-1.5 leading-relaxed font-normal">
+                    <p className="text-xs text-[#6B5E55] line-clamp-2 mt-1 leading-relaxed font-normal">
                       {service.description}
                     </p>
 
                     {/* Bullet Benefits */}
-                    <div className="mt-3 pt-2.5 border-t border-[#F2ECE4] space-y-1.5">
-                      {service.benefits.slice(0, 2).map((b, idx) => (
+                    <div className="mt-2.5 pt-2 border-t border-[#F2ECE4] space-y-1">
+                      {service.benefits.map((b, idx) => (
                         <div
                           key={idx}
-                          className="flex items-center gap-2 text-[11px] text-[#7A6F68]"
+                          className="flex items-center gap-2 text-[11px] sm:text-[11.5px] text-[#7A6F68]"
                         >
-                          <span className="w-1 h-1 rounded-full bg-[#C5A47E] flex-shrink-0" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#C5A47E] flex-shrink-0" />
                           <span className="truncate">{b}</span>
                         </div>
                       ))}
@@ -521,9 +521,9 @@ export default function ShopByCategory({
                   </div>
 
                   {/* Starting Price & Book Slot Action Button */}
-                  <div className="flex items-center justify-between pt-3 mt-3 border-t border-[#F2ECE4]">
+                  <div className="flex items-center justify-between pt-2.5 mt-2.5 border-t border-[#F2ECE4]">
                     <div>
-                      <span className="text-[9.5px] text-[#9E9085] uppercase tracking-wider block font-medium">
+                      <span className="text-[9px] sm:text-[9.5px] text-[#9E9085] uppercase tracking-wider block font-medium">
                         STARTING FROM
                       </span>
                       <span className="text-base sm:text-lg font-bold text-[#231610] font-sans">
@@ -534,7 +534,7 @@ export default function ShopByCategory({
                     <button
                       type="button"
                       onClick={() => setAppointmentService(service)}
-                      className="px-3.5 py-2 rounded-lg bg-[#FAF7F3] hover:bg-[#231610] text-[#231610] hover:text-[#FAF7F3] border border-[#C5A47E] text-[11px] font-semibold tracking-wider uppercase transition-colors shadow-sm flex items-center gap-1.5 cursor-pointer"
+                      className="px-3.5 py-2 rounded-lg bg-[#FAF7F3] hover:bg-[#231610] text-[#231610] hover:text-[#FAF7F3] border border-[#C5A47E] text-[10.5px] sm:text-[11px] font-semibold tracking-wider uppercase transition-all shadow-sm hover:shadow flex items-center gap-1.5 cursor-pointer active:scale-95"
                     >
                       <Calendar className="w-3.5 h-3.5 text-[#C5A47E]" />
                       <span>BOOK SLOT</span>

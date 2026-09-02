@@ -119,10 +119,14 @@ export default function FeatureBar() {
     <section className="w-full bg-[#FAF6F2] border-t border-b border-[#EAE2D8] py-4 sm:py-5">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-y-5 gap-x-3 sm:gap-x-4 lg:gap-x-6 items-center justify-between">
-          {features.map((item) => (
+          {features.map((item, index) => (
             <div
               key={item.id}
-              className="flex items-center gap-3 sm:gap-3.5 justify-start sm:justify-center group"
+              className={`flex items-center gap-3 sm:gap-3.5 group ${
+                index === 4
+                  ? "col-span-2 sm:col-span-1 md:col-span-1 justify-center sm:justify-center"
+                  : "justify-start sm:justify-center"
+              }`}
             >
               <div className="transition-transform duration-200 group-hover:scale-105 flex-shrink-0">
                 {item.icon}
