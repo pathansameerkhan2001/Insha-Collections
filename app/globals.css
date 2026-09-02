@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-main: #FAF7F3;
+    --text-primary: #231610;
+    --text-secondary: #7A6F68;
+    --gold-primary: #C5A47E;
+    --gold-dark: #A57D4E;
+    --gold-light: #DFCAAD;
+    --border-subtle: #EAE2D8;
+    --header-bg: #FAF7F3;
+    --feature-bar-bg: #FAF6F2;
+  }
+
+  body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-montserrat), sans-serif;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, .font-serif-luxury {
+    font-family: var(--font-cinzel), serif;
+  }
+
+  .font-cormorant {
+    font-family: var(--font-cormorant), serif;
+  }
+
+  .font-montserrat {
+    font-family: var(--font-montserrat), sans-serif;
+  }
+}
+
+/* Custom scrollbar and subtle transitions */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF7F3;
+}
+::-webkit-scrollbar-thumb {
+  background: #D8CEBE;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C5A47E;
+}
+
+/* Hide Next.js dev portal badges / indicators */
+nextjs-portal,
+[data-nextjs-dev-tools-button],
+[data-next-badge],
+#nextjs-dev-tools-button {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
