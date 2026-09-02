@@ -25,11 +25,22 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Insha Collections | Anti Tarnish Luxury Jewellery",
+  title: "Insha Collections | Timeless • Elegant • You",
   description:
-    "Timeless, elegant anti-tarnish luxury jewellery by Insha Collections. Elegance that lasts.",
+    "Timeless, elegant anti-tarnish luxury jewellery, Korean accessories, readymade dresses, silk materials, handlooms, and premier salon experiences by Insha Collections.",
   icons: {
-    icon: "/images/New-logo.jpeg",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
   },
 };
 
