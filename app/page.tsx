@@ -8,6 +8,7 @@ import CategoryGrid from "@/components/CategoryGrid";
 import ShopByCategory from "@/components/ShopByCategory";
 import Footer from "@/components/Footer";
 import CartDrawer, { CartEntry } from "@/components/CartDrawer";
+import CheckoutModal from "@/components/CheckoutModal";
 import WishlistDrawer from "@/components/WishlistDrawer";
 import StoreLocatorModal from "@/components/StoreLocatorModal";
 import AboutUsModal from "@/components/AboutUsModal";
@@ -32,6 +33,7 @@ export default function Home() {
   const [cart, setCart] = useState<CartEntry[]>([]);
   const [wishlistIds, setWishlistIds] = useState<Record<string, boolean>>({});
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isStoreLocatorOpen, setIsStoreLocatorOpen] = useState(false);
   const [isAboutUsOpen, setIsAboutUsOpen] = useState(false);
@@ -151,6 +153,24 @@ export default function Home() {
         items={cart}
         onUpdateQty={handleUpdateCartQty}
         onRemoveItem={handleRemoveCartItem}
+        onProceedToCheckout={() => {
+          setIsCartOpen(false);
+          setIsCheckoutOpen(true);
+        }}
+      />
+
+      {/* WhatsApp Checkout Modal */}
+      <CheckoutModal
+        isOpen={isCheckoutOpen}
+        onClose={() => setIsCheckoutOpen(false)}
+        items={cart}
+        onUpdateQty={handleUpdateCartQty}
+        onRemoveItem={handleRemoveCartItem}
+        onBackToCart={() => {
+          setIsCheckoutOpen(false);
+          setIsCartOpen(true);
+        }}
+        onClearCart={() => setCart([])}
       />
 
       <WishlistDrawer

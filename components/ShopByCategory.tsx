@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import Image from "next/image";
 import {
   Heart,
@@ -91,19 +91,6 @@ export default function ShopByCategory({
   // Modals state
   const [quickViewProduct, setQuickViewProduct] = useState<ProductItem | null>(null);
   const [appointmentService, setAppointmentService] = useState<ServiceItem | null>(null);
-
-  // Sync external props with internal state
-  useEffect(() => {
-    if (activeCategory) {
-      setInternalTab(activeCategory);
-    }
-  }, [activeCategory]);
-
-  useEffect(() => {
-    if (selectedSubCategory) {
-      setInternalSubCat(selectedSubCategory);
-    }
-  }, [selectedSubCategory]);
 
   const activeTab = activeCategory || internalTab;
   const currentSubCat = selectedSubCategory || internalSubCat;

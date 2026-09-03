@@ -5,7 +5,7 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FeatureBar from "@/components/FeatureBar";
-import { MapPin, Phone, Clock, Navigation, ArrowLeft, Store, Sparkles } from "lucide-react";
+import { MapPin, Phone, Clock, Navigation, ArrowLeft, Store } from "lucide-react";
 
 const STORES = [
   {

@@ -1279,3 +1279,18 @@ export const CATEGORY_SUBCATEGORIES: Record<string, string[]> = {
     "Hair Treatment",
   ],
 };
+
+export const ALL_CATALOG_PRODUCTS: ProductItem[] = [
+  ...JEWELLERY_PRODUCTS,
+  ...KOREAN_PRODUCTS,
+  ...DRESSES_PRODUCTS,
+  ...MATERIALS_PRODUCTS,
+  ...HANDLOOM_PRODUCTS,
+];
+
+/**
+ * Server-side & client-side helper to find a product by ID from the catalog source of truth.
+ */
+export function findProductById(productId: string): ProductItem | undefined {
+  return ALL_CATALOG_PRODUCTS.find((p) => p.id === productId);
+}
