@@ -16,10 +16,25 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       return new NextResponse("Invalid S3 image key", { status: 400 });
     }
 
-    const s3Key = resolvedParams.key.map(decodeURIComponent).join("/");
+    const rawKey = resolvedParams.key.map(decodeURIComponent).join("/");
+    const s3Key = rawKey.split("?")[0].split("#")[0].replace(/^\/+/, "");
     const searchParams = req.nextUrl.searchParams;
-    const requestedWidth = searchParams.get("w") ? parseInt(searchParams.get("w")!, 10) : null;
-    const requestedQuality = searchParams.get("q") ? parseInt(searchParams.get("q")!, 10) : null;
+
+    let requestedWidth = searchParams.get("w") ? parseInt(searchParams.get("w")!, 10) : null;
+    if (!requestedWidth && rawKey.includes("w=")) {
+      const match = rawKey.match(/[?&]w=(\d+)/);
+      if (match && match[1]) {
+        requestedWidth = parseInt(match[1], 10);
+      }
+    }
+
+    let requestedQuality = searchParams.get("q") ? parseInt(searchParams.get("q")!, 10) : null;
+    if (!requestedQuality && rawKey.includes("q=")) {
+      const match = rawKey.match(/[?&]q=(\d+)/);
+      if (match && match[1]) {
+        requestedQuality = parseInt(match[1], 10);
+      }
+    }
 
     // Check if client provided conditional ETag
     const ifNoneMatch = req.headers.get("if-none-match");

@@ -14,18 +14,20 @@
     "inStock": true,
     "status": "Active",
     "featured": false,
-    "mainImage": "/api/images/s3/products/new/showcase/1788612583011-chatgpt-image-sep-5-2026-06-19-02-pm.png",
+    "mainImage": "/api/images/s3/products/new/showcase/1788612583011-chatgpt-image-sep-5-2026-06-19-02-pm.png?w=400",
     "images": [
-      "/api/images/s3/products/new/real/1788613099662-img-46512.jpg"
+      "/api/images/s3/products/new/real/1788613099662-img-46512.jpg",
+      "/api/images/s3/products/jewel-144210/real/optimized/1788625676235-neckles1-800w.webp"
     ],
     "showcaseImage": "/api/images/s3/products/new/showcase/1788612583011-chatgpt-image-sep-5-2026-06-19-02-pm.png",
     "realImages": [
-      "/api/images/s3/products/new/real/1788613099662-img-46512.jpg"
+      "/api/images/s3/products/new/real/1788613099662-img-46512.jpg",
+      "/api/images/s3/products/jewel-144210/real/optimized/1788625676235-neckles1-800w.webp"
     ],
     "rating": 5,
     "reviewsCount": 1,
     "createdAt": "2026-09-05T12:59:04.210Z",
-    "updatedAt": "2026-09-05T12:59:04.210Z"
+    "updatedAt": "2026-09-05T16:28:08.794Z"
   },
   {
     "id": "kor-820613",
@@ -42,7 +44,7 @@
     "inStock": true,
     "status": "Active",
     "featured": false,
-    "mainImage": "/api/images/s3/products/new/showcase/1788610690589-chatgpt-image-sep-5-2026-05-47-52-pm.png",
+    "mainImage": "/api/images/s3/products/new/showcase/1788610690589-chatgpt-image-sep-5-2026-05-47-52-pm.png?w=400",
     "images": [
       "/api/images/s3/products/new/real/1788610696845-img-4763.jpg"
     ],
@@ -74,7 +76,7 @@
     "inStock": true,
     "status": "Active",
     "featured": false,
-    "mainImage": "/api/images/s3/products/new/showcase/1788610127272-chatgpt-image-sep-5-2026-05-38-27-pm.png",
+    "mainImage": "/api/images/s3/products/new/showcase/1788610127272-chatgpt-image-sep-5-2026-05-38-27-pm.png?w=400",
     "images": [
       "/api/images/s3/products/new/real/1788610132796-img-4749.jpg"
     ],

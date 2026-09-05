@@ -137,33 +137,43 @@ export function normalizeImageUrl(
   const s3Pattern = /^https?:\/\/([^/]+\.s3[.-][^/]+\.amazonaws\.com|s3[.-][^/]+\.amazonaws\.com\/[^/]+|insha-collection-assets\.s3\.amazonaws\.com)\/(.+)$/i;
   const match = raw.match(s3Pattern);
   if (match && match[2]) {
-    const s3Key = match[2].replace(/^\/+/, "");
+    const s3Key = match[2].replace(/^\/+/, "").split("?")[0].split("#")[0];
     const widthParam = validWidth ? `?w=${validWidth}` : "";
     return `/api/images/s3/${s3Key}${widthParam}`;
   }
 
   // 2. Bare S3 object key (e.g. products/jewel-2/real/...)
   if (raw.startsWith("products/")) {
+    const s3Key = raw.split("?")[0].split("#")[0];
     const widthParam = validWidth ? `?w=${validWidth}` : "";
-    return `/api/images/s3/${raw}${widthParam}`;
+    return `/api/images/s3/${s3Key}${widthParam}`;
   }
 
   // 3. Already an S3 API route (/api/images/s3/...)
   if (raw.startsWith("/api/images/s3/")) {
-    if (validWidth && !raw.includes("?w=") && !raw.includes("&w=")) {
-      const sep = raw.includes("?") ? "&" : "?";
-      return `${raw}${sep}w=${validWidth}`;
+    const cleanPath = raw.split("?")[0].split("#")[0];
+    if (validWidth) {
+      return `${cleanPath}?w=${validWidth}`;
     }
     return raw;
   }
 
   // 4. Local uploads (/uploads/products/...)
-  if (raw.startsWith("/uploads/products/") && validWidth) {
+  if (raw.startsWith("/uploads/products/")) {
     return raw;
   }
 
   return raw;
 }
+
+/**
+ * Checks if a URL is an internal secure S3 delivery route
+ */
+export function isS3DeliveryUrl(url: string | null | undefined): boolean {
+  if (!url) return false;
+  return url.startsWith("/api/images/s3/");
+}
+
 
 /**
  * Returns the optimized URL for storefront card display:
