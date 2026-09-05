@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getS3Object, convertHeicToJpeg } from "@/lib/aws/s3Service";
+import sharp from "sharp";
+import crypto from "crypto";
+import { getS3Object, convertHeicToJpeg, isS3Configured, uploadToS3Direct } from "@/lib/aws/s3Service";
 
 interface RouteParams {
   params: Promise<{
@@ -15,54 +17,115 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     }
 
     const s3Key = resolvedParams.key.map(decodeURIComponent).join("/");
+    const searchParams = req.nextUrl.searchParams;
+    const requestedWidth = searchParams.get("w") ? parseInt(searchParams.get("w")!, 10) : null;
+    const requestedQuality = searchParams.get("q") ? parseInt(searchParams.get("q")!, 10) : null;
 
-    // Fetch from S3 using AWS SigV4 GET
+    // Check if client provided conditional ETag
+    const ifNoneMatch = req.headers.get("if-none-match");
+
+    // Case 1: The key itself is already an optimized WebP derivative
+    if (s3Key.includes("/optimized/") && s3Key.toLowerCase().endsWith(".webp")) {
+      const s3Data = await getS3Object(s3Key);
+
+      if (s3Data.etag && ifNoneMatch && ifNoneMatch === s3Data.etag) {
+        return new NextResponse(null, { status: 304 });
+      }
+
+      const headers: Record<string, string> = {
+        "Content-Type": "image/webp",
+        "Content-Length": String(s3Data.buffer.byteLength),
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "Vary": "Accept",
+      };
+      if (s3Data.etag) headers["ETag"] = s3Data.etag;
+
+      return new NextResponse(new Uint8Array(s3Data.buffer), {
+        status: 200,
+        headers,
+      });
+    }
+
+    // Case 2: Target width requested and an optimized derivative might already exist in S3
+    if (requestedWidth && (requestedWidth === 400 || requestedWidth === 800 || requestedWidth === 1200 || requestedWidth === 1600)) {
+      const potentialOptimizedKey = s3Key
+        .replace("/original/", "/optimized/")
+        .replace(/\.[^.]+$/, `-${requestedWidth}w.webp`);
+
+      if (potentialOptimizedKey !== s3Key && potentialOptimizedKey.includes("/optimized/")) {
+        try {
+          const cachedS3Data = await getS3Object(potentialOptimizedKey);
+          if (cachedS3Data.etag && ifNoneMatch && ifNoneMatch === cachedS3Data.etag) {
+            return new NextResponse(null, { status: 304 });
+          }
+
+          const headers: Record<string, string> = {
+            "Content-Type": "image/webp",
+            "Content-Length": String(cachedS3Data.buffer.byteLength),
+            "Cache-Control": "public, max-age=31536000, immutable",
+            "Vary": "Accept",
+          };
+          if (cachedS3Data.etag) headers["ETag"] = cachedS3Data.etag;
+
+          return new NextResponse(new Uint8Array(cachedS3Data.buffer), {
+            status: 200,
+            headers,
+          });
+        } catch {
+          // Pre-optimized derivative not found; continue to on-the-fly Sharp optimization
+        }
+      }
+    }
+
+    // Case 3: Fetch original image and optimize on-the-fly using Sharp
     const s3Data = await getS3Object(s3Key);
-
     let imageBuffer = s3Data.buffer;
-    let contentType = s3Data.contentType;
-
-    // Check if the file is HEIC/HEIF (either by extension or MIME type)
     const lowerKey = s3Key.toLowerCase();
+
+    // Check if source is HEIC/HEIF
     const isHeic =
       lowerKey.endsWith(".heic") ||
       lowerKey.endsWith(".heif") ||
-      contentType.toLowerCase().includes("heic") ||
-      contentType.toLowerCase().includes("heif");
+      s3Data.contentType.toLowerCase().includes("heic") ||
+      s3Data.contentType.toLowerCase().includes("heif");
 
     if (isHeic) {
       try {
         imageBuffer = await convertHeicToJpeg(imageBuffer);
-        contentType = "image/jpeg";
       } catch (convErr) {
-        console.warn(`[Image Proxy] Failed on-the-fly HEIC conversion for ${s3Key}:`, convErr);
+        console.warn(`[Image Proxy] HEIC conversion fallback for ${s3Key}:`, convErr);
       }
-    } else if (lowerKey.endsWith(".png")) {
-      contentType = "image/png";
-    } else if (lowerKey.endsWith(".webp")) {
-      contentType = "image/webp";
-    } else if (lowerKey.endsWith(".jpg") || lowerKey.endsWith(".jpeg")) {
-      contentType = "image/jpeg";
     }
 
-    // Support Conditional GET (ETag caching)
-    const ifNoneMatch = req.headers.get("if-none-match");
-    if (s3Data.etag && ifNoneMatch && ifNoneMatch === s3Data.etag) {
+    // Process with Sharp into WebP
+    let sharpInstance = sharp(imageBuffer).rotate();
+
+    // Apply target width resizing if specified, or constrain enormous raw originals (>1600px)
+    const targetW = requestedWidth || 1200;
+    sharpInstance = sharpInstance.resize(targetW, null, {
+      withoutEnlargement: true,
+      fit: "inside",
+    });
+
+    const targetQuality = requestedQuality ? Math.min(Math.max(requestedQuality, 60), 95) : 82;
+    const webpBuffer = await sharpInstance.webp({ quality: targetQuality, effort: 4 }).toBuffer();
+
+    // Compute strong ETag for cached delivery
+    const generatedEtag = `"${crypto.createHash("md5").update(webpBuffer).digest("hex")}"`;
+
+    if (ifNoneMatch && ifNoneMatch === generatedEtag) {
       return new NextResponse(null, { status: 304 });
     }
 
-    // Return the secure image stream
     const headers: Record<string, string> = {
-      "Content-Type": contentType,
-      "Content-Length": String(imageBuffer.byteLength),
+      "Content-Type": "image/webp",
+      "Content-Length": String(webpBuffer.byteLength),
       "Cache-Control": "public, max-age=31536000, immutable",
+      "ETag": generatedEtag,
+      "Vary": "Accept",
     };
 
-    if (s3Data.etag) {
-      headers["ETag"] = s3Data.etag;
-    }
-
-    return new NextResponse(new Uint8Array(imageBuffer), {
+    return new NextResponse(new Uint8Array(webpBuffer), {
       status: 200,
       headers,
     });

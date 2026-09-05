@@ -16,7 +16,7 @@ import {
   Camera,
 } from "lucide-react";
 import { ProductItem } from "@/data/catalog";
-import { getQuickViewImageUrls } from "@/lib/products/productTypes";
+import { getQuickViewImageUrls, LUXURY_BLUR_DATA_URL } from "@/lib/products/productTypes";
 
 interface ProductQuickViewModalProps {
   product: ProductItem | null;
@@ -50,7 +50,7 @@ export default function ProductQuickViewModal({
   if (!isOpen || !product) return null;
 
   // Resolve Real Product Images for Quick View (Original photos take precedence)
-  const realImageUrls = getQuickViewImageUrls(product);
+  const realImageUrls = getQuickViewImageUrls(product, 800);
   const activeImage = realImageUrls[activeImageIndex] || product.image;
 
   const handleAdd = () => {
@@ -96,10 +96,12 @@ export default function ProductQuickViewModal({
                 src={activeImage}
                 alt={`${product.name} - Real Photo ${activeImageIndex + 1}`}
                 fill
-                quality={95}
+                quality={88}
+                priority
+                placeholder="blur"
+                blurDataURL={LUXURY_BLUR_DATA_URL}
                 className="object-cover object-center transition-all duration-300"
                 sizes="(max-width: 768px) 100vw, 450px"
-                unoptimized={activeImage.startsWith("/api/images/s3/")}
               />
 
               {/* Badge */}
@@ -167,9 +169,11 @@ export default function ProductQuickViewModal({
                       src={imgUrl}
                       alt={`Thumbnail ${idx + 1}`}
                       fill
+                      quality={80}
+                      placeholder="blur"
+                      blurDataURL={LUXURY_BLUR_DATA_URL}
                       className="object-cover"
                       sizes="72px"
-                      unoptimized={imgUrl.startsWith("/api/images/s3/")}
                     />
                   </button>
                 ))}

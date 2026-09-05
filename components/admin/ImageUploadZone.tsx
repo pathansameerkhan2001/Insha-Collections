@@ -15,7 +15,7 @@ import {
   ArrowLeft,
   ArrowRight,
 } from "lucide-react";
-import { normalizeImageUrl } from "@/lib/products/productTypes";
+import { normalizeImageUrl, LUXURY_BLUR_DATA_URL } from "@/lib/products/productTypes";
 
 interface ImageUploadZoneProps {
   showcaseImage: string;
@@ -283,9 +283,10 @@ export default function ImageUploadZone({
                 src={resolvedShowcaseUrl}
                 alt="AI Showcase Image Preview"
                 fill
+                placeholder="blur"
+                blurDataURL={LUXURY_BLUR_DATA_URL}
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
                 sizes="192px"
-                unoptimized={resolvedShowcaseUrl.startsWith("/api/images/s3/")}
               />
               <div className="absolute top-2 left-2 bg-[#231610]/85 text-white text-[9px] px-2 py-0.5 rounded font-semibold uppercase tracking-wider backdrop-blur-xs flex items-center gap-1">
                 <Sparkles className="w-2.5 h-2.5 text-[#E0C097]" />
@@ -447,9 +448,10 @@ export default function ImageUploadZone({
                   src={normalizedUrl}
                   alt={`Real Product Photo ${index + 1}`}
                   fill
+                  placeholder="blur"
+                  blurDataURL={LUXURY_BLUR_DATA_URL}
                   className="object-cover transition-transform group-hover:scale-105"
                   sizes="(max-width: 640px) 50vw, 20vw"
-                  unoptimized={normalizedUrl.startsWith("/api/images/s3/")}
                 />
 
                 {/* Top Tag */}

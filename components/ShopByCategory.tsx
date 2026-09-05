@@ -31,7 +31,7 @@ import {
 } from "@/data/catalog";
 import ProductQuickViewModal from "./ProductQuickViewModal";
 import AppointmentModal from "./AppointmentModal";
-import { getStorefrontImageUrl } from "@/lib/products/productTypes";
+import { getStorefrontImageUrl, LUXURY_BLUR_DATA_URL } from "@/lib/products/productTypes";
 
 // Bow SVG Icon
 function BowIcon({ className = "w-5 h-5" }: { className?: string }) {
@@ -92,8 +92,20 @@ export default function ShopByCategory({
   // Dynamic live synced products from admin
   const [liveProducts, setLiveProducts] = useState<ProductItem[] | null>(null);
   const [liveServices, setLiveServices] = useState<ServiceItem[] | null>(null);
+  const [dynamicSubcategoriesMap, setDynamicSubcategoriesMap] = useState<Record<string, string[]> | null>(null);
 
   useEffect(() => {
+    // Fetch dynamic subcategories
+    fetch("/api/subcategories")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.subcategories) {
+          setDynamicSubcategoriesMap(data.subcategories);
+        }
+      })
+      .catch(() => {});
+
+    // Fetch live products
     fetch("/api/products")
       .then((res) => res.json())
       .then((data) => {
@@ -118,7 +130,7 @@ export default function ShopByCategory({
                 benefits: item.benefits || ["Professional salon care", "Premium organic formulations"],
               });
             } else {
-              const storefrontImg = getStorefrontImageUrl(item);
+              const storefrontImg = getStorefrontImageUrl(item, 400);
               const realImgs =
                 item.realImages && item.realImages.length > 0
                   ? item.realImages
@@ -252,11 +264,12 @@ export default function ShopByCategory({
   // Available subcategories for filtering
   const availableSubCategories = useMemo(() => {
     if (activeTab === "all") return ["All"];
+    const subMap = dynamicSubcategoriesMap || CATEGORY_SUBCATEGORIES;
     if (activeTab === "beauty") {
-      return ["All", ...(CATEGORY_SUBCATEGORIES.beauty || [])];
+      return ["All", ...(subMap.beauty || CATEGORY_SUBCATEGORIES.beauty || [])];
     }
-    return ["All", ...(CATEGORY_SUBCATEGORIES[activeTab] || [])];
-  }, [activeTab]);
+    return ["All", ...(subMap[activeTab] || CATEGORY_SUBCATEGORIES[activeTab] || [])];
+  }, [activeTab, dynamicSubcategoriesMap]);
 
   // Filter items by subcategory
   const filteredItems = useMemo(() => {
@@ -619,7 +632,7 @@ export default function ShopByCategory({
         ) : (
           /* Products Grid */
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5 md:gap-6 lg:gap-7">
-            {(displayedItems as ProductItem[]).map((product) => {
+            {(displayedItems as ProductItem[]).map((product, idx) => {
               const isWishlisted = !!wishlist[product.id];
               const isAdded = !!addedCartIds[product.id];
 
@@ -634,10 +647,13 @@ export default function ShopByCategory({
                       src={product.image}
                       alt={product.name}
                       fill
-                      quality={95}
+                      quality={85}
+                      priority={idx < 4}
+                      loading={idx < 4 ? "eager" : "lazy"}
+                      placeholder="blur"
+                      blurDataURL={LUXURY_BLUR_DATA_URL}
                       className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                      unoptimized={product.image.startsWith("/api/images/s3/")}
                     />
 
                     {/* Top-Left Ribbon Badge */}

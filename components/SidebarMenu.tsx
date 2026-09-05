@@ -84,6 +84,18 @@ export default function SidebarMenu({
 }: SidebarMenuProps) {
   // Accordion state for expandable categories
   const [expandedCats, setExpandedCats] = useState<Record<string, boolean>>({});
+  const [subcategoriesMap, setSubcategoriesMap] = useState<Record<string, string[]>>(CATEGORY_SUBCATEGORIES);
+
+  React.useEffect(() => {
+    fetch("/api/subcategories")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.subcategories) {
+          setSubcategoriesMap(data.subcategories);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   if (!isOpen) return null;
 
@@ -151,16 +163,23 @@ export default function SidebarMenu({
               />
             </div>
           </div>
+
+          <h2 className="font-serif-luxury text-[15px] sm:text-[16px] tracking-[0.16em] uppercase text-[#231610] font-normal text-center mt-3">
+            INSHA COLLECTIONS
+          </h2>
+          <p className="text-[10px] sm:text-[10.5px] uppercase tracking-[0.24em] text-[#8C7E75] text-center font-sans mt-0.5">
+            TIMELESS • ELEGANT • YOU
+          </p>
         </div>
 
-        {/* Middle: 12 Strictly Defined Menu Items */}
-        <div className="flex-1 overflow-y-auto py-2 px-3 sm:px-4 no-scrollbar divide-y divide-[#EAE2D8]/50">
+        {/* Scrollable Navigation List */}
+        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-1 divide-y divide-[#EAE2D8]/60 text-sm">
           {/* 1. HOME */}
           <div className="py-1">
             <button
               type="button"
               onClick={handleHomeClick}
-              className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left hover:bg-[#F3ECE4]/60 transition-colors group cursor-pointer"
+              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-[#F3ECE4]/60 transition-colors group cursor-pointer"
             >
               <div className="flex items-center gap-3.5">
                 <Home className="w-5 h-5 text-[#C5A47E] stroke-[1.4] group-hover:scale-105 transition-transform" />
@@ -168,7 +187,6 @@ export default function SidebarMenu({
                   HOME
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#8C7E75] stroke-[1.5]" />
             </button>
           </div>
 
@@ -177,7 +195,7 @@ export default function SidebarMenu({
             <button
               type="button"
               onClick={handleShopByCategoryClick}
-              className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left hover:bg-[#F3ECE4]/60 transition-colors group cursor-pointer"
+              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-[#F3ECE4]/60 transition-colors group cursor-pointer"
             >
               <div className="flex items-center gap-3.5">
                 <LayoutGrid className="w-5 h-5 text-[#C5A47E] stroke-[1.4] group-hover:scale-105 transition-transform" />
@@ -185,7 +203,6 @@ export default function SidebarMenu({
                   SHOP BY CATEGORY
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#8C7E75] stroke-[1.5]" />
             </button>
           </div>
 
@@ -219,7 +236,7 @@ export default function SidebarMenu({
             {/* Expanded Subcategories */}
             {expandedCats["jewellery"] && (
               <div className="pl-11 pr-3 py-1 space-y-1 bg-[#FAF4ED]/50 rounded-lg animate-in fade-in slide-in-from-top-1 duration-150">
-                {CATEGORY_SUBCATEGORIES.jewellery.map((sub) => (
+                {(subcategoriesMap.jewellery || CATEGORY_SUBCATEGORIES.jewellery).map((sub) => (
                   <button
                     key={sub}
                     type="button"
@@ -262,7 +279,7 @@ export default function SidebarMenu({
 
             {expandedCats["korean"] && (
               <div className="pl-11 pr-3 py-1 space-y-1 bg-[#FAF4ED]/50 rounded-lg animate-in fade-in slide-in-from-top-1 duration-150">
-                {CATEGORY_SUBCATEGORIES.korean.map((sub) => (
+                {(subcategoriesMap.korean || CATEGORY_SUBCATEGORIES.korean).map((sub) => (
                   <button
                     key={sub}
                     type="button"
@@ -305,7 +322,7 @@ export default function SidebarMenu({
 
             {expandedCats["dresses"] && (
               <div className="pl-11 pr-3 py-1 space-y-1 bg-[#FAF4ED]/50 rounded-lg animate-in fade-in slide-in-from-top-1 duration-150">
-                {CATEGORY_SUBCATEGORIES.dresses.map((sub) => (
+                {(subcategoriesMap.dresses || CATEGORY_SUBCATEGORIES.dresses).map((sub) => (
                   <button
                     key={sub}
                     type="button"
@@ -348,7 +365,7 @@ export default function SidebarMenu({
 
             {expandedCats["materials"] && (
               <div className="pl-11 pr-3 py-1 space-y-1 bg-[#FAF4ED]/50 rounded-lg animate-in fade-in slide-in-from-top-1 duration-150">
-                {CATEGORY_SUBCATEGORIES.materials.map((sub) => (
+                {(subcategoriesMap.materials || CATEGORY_SUBCATEGORIES.materials).map((sub) => (
                   <button
                     key={sub}
                     type="button"
@@ -391,7 +408,7 @@ export default function SidebarMenu({
 
             {expandedCats["handlooms"] && (
               <div className="pl-11 pr-3 py-1 space-y-1 bg-[#FAF4ED]/50 rounded-lg animate-in fade-in slide-in-from-top-1 duration-150">
-                {CATEGORY_SUBCATEGORIES.handlooms.map((sub) => (
+                {(subcategoriesMap.handlooms || CATEGORY_SUBCATEGORIES.handlooms).map((sub) => (
                   <button
                     key={sub}
                     type="button"
@@ -434,7 +451,7 @@ export default function SidebarMenu({
 
             {expandedCats["beauty"] && (
               <div className="pl-11 pr-3 py-1 space-y-1 bg-[#FAF4ED]/50 rounded-lg animate-in fade-in slide-in-from-top-1 duration-150">
-                {CATEGORY_SUBCATEGORIES.beauty.map((sub) => (
+                {(subcategoriesMap.beauty || CATEGORY_SUBCATEGORIES.beauty).map((sub) => (
                   <button
                     key={sub}
                     type="button"

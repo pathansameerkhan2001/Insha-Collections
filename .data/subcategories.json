@@ -1,0 +1,504 @@
+{
+  "jewellery": [
+    {
+      "id": "jewellery-bangles-kadas",
+      "name": "Bangles & Kadas",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "jewellery-earrings",
+      "name": "Earrings",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "jewellery-earrings-jhumkas",
+      "name": "Earrings / Jhumkas",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "jewellery-rings",
+      "name": "Rings",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "jewellery-necklaces-chokers",
+      "name": "Necklaces & Chokers",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "jewellery-pendants-chains",
+      "name": "Pendants & Chains",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "jewellery-bracelets",
+      "name": "Bracelets",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "jewellery-anklets",
+      "name": "Anklets",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "jewellery-maang-tikka",
+      "name": "Maang Tikka",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "jewellery-bridal-jewellery",
+      "name": "Bridal Jewellery",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "jewellery-nose-pins",
+      "name": "Nose Pins",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "jewellery-hair-accessories",
+      "name": "Hair Accessories",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "jewellery-anti-tarnish-jewellery",
+      "name": "Anti-Tarnish Jewellery",
+      "categoryId": "jewellery",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "korean": [
+    {
+      "id": "korean-hair-accessories",
+      "name": "Hair Accessories",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "korean-hair-clips",
+      "name": "Hair Clips",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "korean-scrunchies",
+      "name": "Scrunchies",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "korean-pearl-accessories",
+      "name": "Pearl Accessories",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "korean-bows",
+      "name": "Bows",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "korean-hair-pins",
+      "name": "Hair Pins",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "korean-earrings",
+      "name": "Earrings",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "korean-necklaces",
+      "name": "Necklaces",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "korean-rings",
+      "name": "Rings",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "korean-bracelets",
+      "name": "Bracelets",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "korean-korean-bags",
+      "name": "Korean Bags",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "korean-korean-beauty-accessories",
+      "name": "Korean Beauty Accessories",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "korean-korean-fashion-accessories",
+      "name": "Korean Fashion Accessories",
+      "categoryId": "korean",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "dresses": [
+    {
+      "id": "dresses-anarkali",
+      "name": "Anarkali",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "dresses-kurti",
+      "name": "Kurti",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "dresses-kurtis",
+      "name": "Kurtis",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "dresses-salwar-suit",
+      "name": "Salwar Suit",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "dresses-salwar-suits",
+      "name": "Salwar Suits",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "dresses-kurta-sets",
+      "name": "Kurta Sets",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "dresses-party-wear",
+      "name": "Party Wear",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "dresses-casual-wear",
+      "name": "Casual Wear",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "dresses-ethnic-wear",
+      "name": "Ethnic Wear",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "dresses-western-wear",
+      "name": "Western Wear",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "dresses-festive-wear",
+      "name": "Festive Wear",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "dresses-designer-dresses",
+      "name": "Designer Dresses",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "dresses-kids-dresses",
+      "name": "Kids Dresses",
+      "categoryId": "dresses",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "materials": [
+    {
+      "id": "materials-cotton",
+      "name": "Cotton",
+      "categoryId": "materials",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "materials-silk",
+      "name": "Silk",
+      "categoryId": "materials",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "materials-chanderi",
+      "name": "Chanderi",
+      "categoryId": "materials",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "materials-linen",
+      "name": "Linen",
+      "categoryId": "materials",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "materials-embroidered",
+      "name": "Embroidered",
+      "categoryId": "materials",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "materials-printed",
+      "name": "Printed",
+      "categoryId": "materials",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "materials-festive",
+      "name": "Festive",
+      "categoryId": "materials",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "materials-bridal",
+      "name": "Bridal",
+      "categoryId": "materials",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "materials-georgette",
+      "name": "Georgette",
+      "categoryId": "materials",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "materials-traditional",
+      "name": "Traditional",
+      "categoryId": "materials",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "materials-designer",
+      "name": "Designer",
+      "categoryId": "materials",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "handlooms": [
+    {
+      "id": "handlooms-sarees",
+      "name": "Sarees",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "handlooms-dupattas",
+      "name": "Dupattas",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "handlooms-bedsheets",
+      "name": "Bedsheets",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "handlooms-curtains",
+      "name": "Curtains",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "handlooms-cushion-covers",
+      "name": "Cushion Covers",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "handlooms-table-runners",
+      "name": "Table Runners",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "handlooms-home-decor",
+      "name": "Home Decor",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "handlooms-towels",
+      "name": "Towels",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "handlooms-sofa-covers",
+      "name": "Sofa Covers",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "handlooms-bed-covers",
+      "name": "Bed Covers",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "handlooms-table-linen",
+      "name": "Table Linen",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "handlooms-throws",
+      "name": "Throws",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "handlooms-traditional-handloom",
+      "name": "Traditional Handloom",
+      "categoryId": "handlooms",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  ],
+  "beauty": [
+    {
+      "id": "beauty-facial",
+      "name": "Facial",
+      "categoryId": "beauty",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "beauty-bridal-makeup",
+      "name": "Bridal Makeup",
+      "categoryId": "beauty",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "beauty-hair-services",
+      "name": "Hair Services",
+      "categoryId": "beauty",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "beauty-hair-styling",
+      "name": "Hair Styling",
+      "categoryId": "beauty",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "beauty-manicure-pedicure",
+      "name": "Manicure / Pedicure",
+      "categoryId": "beauty",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "beauty-spa",
+      "name": "Spa",
+      "categoryId": "beauty",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "beauty-hair-treatment",
+      "name": "Hair Treatment",
+      "categoryId": "beauty",
+      "createdAt": "2026-01-01T00:00:00.000Z",
+      "updatedAt": "2026-01-01T00:00:00.000Z"
+    }
+  ]
+}

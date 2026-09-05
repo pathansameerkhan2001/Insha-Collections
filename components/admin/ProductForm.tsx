@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -11,6 +11,8 @@ import {
   X,
   Clock,
   CheckCircle2,
+  Plus,
+  FolderPlus,
 } from "lucide-react";
 import { CATEGORY_SUBCATEGORIES } from "@/data/catalog";
 import {
@@ -46,9 +48,63 @@ export default function ProductForm({
   const [category, setCategory] = useState<ProductCategory>(
     initialData?.category || "jewellery"
   );
-  const [subCategory, setSubCategory] = useState(
-    initialData?.subCategory || CATEGORY_SUBCATEGORIES["jewellery"]?.[0] || ""
+
+  // Dynamic subcategories state mapped by category
+  const [subcategoriesMap, setSubcategoriesMap] = useState<Record<string, string[]>>({
+    jewellery: CATEGORY_SUBCATEGORIES.jewellery || [],
+    korean: CATEGORY_SUBCATEGORIES.korean || [],
+    dresses: CATEGORY_SUBCATEGORIES.dresses || [],
+    materials: CATEGORY_SUBCATEGORIES.materials || [],
+    handlooms: CATEGORY_SUBCATEGORIES.handlooms || [],
+    beauty: CATEGORY_SUBCATEGORIES.beauty || [],
+  });
+
+  const [subCategory, setSubCategory] = useState<string>(
+    initialData?.subCategory ||
+      CATEGORY_SUBCATEGORIES[initialData?.category || "jewellery"]?.[0] ||
+      ""
   );
+
+  // Modal state for adding a new subcategory
+  const [isAddSubModalOpen, setIsAddSubModalOpen] = useState(false);
+  const [newSubName, setNewSubName] = useState("");
+  const [isCreatingSub, setIsCreatingSub] = useState(false);
+  const [subModalError, setSubModalError] = useState("");
+
+  // Fetch live subcategories from API on mount
+  useEffect(() => {
+    async function loadSubcategories() {
+      try {
+        const res = await fetch("/api/subcategories");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.subcategories) {
+            setSubcategoriesMap((prev) => {
+              const merged: Record<string, string[]> = { ...prev };
+              for (const [cat, list] of Object.entries(data.subcategories as Record<string, string[]>)) {
+                const combined = Array.from(new Set([...(prev[cat] || []), ...list]));
+                merged[cat] = combined;
+              }
+              // Ensure initialData's subcategory is present
+              if (initialData?.category && initialData?.subCategory) {
+                if (!merged[initialData.category]?.includes(initialData.subCategory)) {
+                  merged[initialData.category] = [
+                    ...(merged[initialData.category] || []),
+                    initialData.subCategory,
+                  ];
+                }
+              }
+              return merged;
+            });
+          }
+        }
+      } catch (err) {
+        console.warn("Could not load dynamic subcategories, using defaults:", err);
+      }
+    }
+    loadSubcategories();
+  }, [initialData]);
+
   const [description, setDescription] = useState(initialData?.description || "");
   const [shortDescription, setShortDescription] = useState(
     initialData?.shortDescription || ""
@@ -92,9 +148,9 @@ export default function ProductForm({
 
   const [realImages, setRealImages] = useState<string[]>(
     initialData?.realImages && initialData.realImages.length > 0
-      ? initialData.realImages.map(normalizeImageUrl).filter(Boolean)
+      ? initialData.realImages.map((img) => normalizeImageUrl(img)).filter(Boolean)
       : initialData?.images && initialData.images.length > 0
-      ? initialData.images.map(normalizeImageUrl).filter(Boolean)
+      ? initialData.images.map((img) => normalizeImageUrl(img)).filter(Boolean)
       : initialData?.mainImage
       ? [normalizeImageUrl(initialData.mainImage)]
       : []
@@ -107,8 +163,77 @@ export default function ProductForm({
   // Update subcategories when category changes
   const handleCategoryChange = (newCat: ProductCategory) => {
     setCategory(newCat);
-    const availableSubCats = CATEGORY_SUBCATEGORIES[newCat] || [];
+    const availableSubCats = subcategoriesMap[newCat] || CATEGORY_SUBCATEGORIES[newCat] || [];
     setSubCategory(availableSubCats[0] || "");
+  };
+
+  const handleSubCategorySelect = (value: string) => {
+    if (value === "__add_new__") {
+      setNewSubName("");
+      setSubModalError("");
+      setIsAddSubModalOpen(true);
+    } else {
+      setSubCategory(value);
+    }
+  };
+
+  const handleCreateSubcategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubModalError("");
+
+    const trimmed = newSubName.trim();
+    if (!trimmed) {
+      setSubModalError("Please enter a subcategory name.");
+      return;
+    }
+    if (trimmed.length < 2) {
+      setSubModalError("Subcategory name must be at least 2 characters.");
+      return;
+    }
+
+    const categoryLabel = CATEGORY_OPTIONS.find((c) => c.id === category)?.label || category;
+    const currentList = subcategoriesMap[category] || [];
+    if (currentList.some((s) => s.toLowerCase() === trimmed.toLowerCase())) {
+      setSubModalError(`Subcategory "${trimmed}" already exists under ${categoryLabel}.`);
+      return;
+    }
+
+    setIsCreatingSub(true);
+
+    try {
+      const res = await fetch("/api/admin/subcategories", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          category,
+          name: trimmed,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to create subcategory.");
+      }
+
+      const createdName = data.subcategory?.name || trimmed;
+
+      // Update local subcategories map
+      setSubcategoriesMap((prev) => ({
+        ...prev,
+        [category]: [...(prev[category] || []), createdName],
+      }));
+
+      // Immediately select the newly created subcategory
+      setSubCategory(createdName);
+      setIsAddSubModalOpen(false);
+      setNewSubName("");
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Error creating subcategory";
+      setSubModalError(msg);
+    } finally {
+      setIsCreatingSub(false);
+    }
   };
 
   const handleAddDetail = () => {
@@ -160,7 +285,7 @@ export default function ProductForm({
 
     try {
       const normShowcase = showcaseImage.trim() ? normalizeImageUrl(showcaseImage.trim()) : undefined;
-      const normReal = realImages.map(normalizeImageUrl).filter(Boolean);
+      const normReal = realImages.map((img) => normalizeImageUrl(img)).filter(Boolean);
       const primaryImage = normShowcase || normReal[0] || "";
       const allRealImages = normReal.length > 0 ? normReal : (primaryImage ? [primaryImage] : []);
 
@@ -341,19 +466,36 @@ export default function ProductForm({
 
               {/* Subcategory */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-[#231610] uppercase tracking-wider">
-                  Subcategory
-                </label>
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-semibold text-[#231610] uppercase tracking-wider">
+                    Subcategory
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setNewSubName("");
+                      setSubModalError("");
+                      setIsAddSubModalOpen(true);
+                    }}
+                    className="text-[11px] text-[#9C7342] hover:text-[#6A1A24] font-medium flex items-center gap-1 cursor-pointer transition-colors"
+                  >
+                    <Plus className="w-3 h-3" />
+                    <span>Add New</span>
+                  </button>
+                </div>
                 <select
                   value={subCategory}
-                  onChange={(e) => setSubCategory(e.target.value)}
-                  className="w-full bg-[#FAF7F3] text-[#231610] text-sm px-4 py-3 rounded-xl border border-[#EAE2D8] focus:border-[#B89366] focus:outline-none transition-all"
+                  onChange={(e) => handleSubCategorySelect(e.target.value)}
+                  className="w-full bg-[#FAF7F3] text-[#231610] text-sm px-4 py-3 rounded-xl border border-[#EAE2D8] focus:border-[#B89366] focus:outline-none transition-all cursor-pointer"
                 >
-                  {(CATEGORY_SUBCATEGORIES[category] || []).map((sub) => (
+                  {(subcategoriesMap[category] || []).map((sub) => (
                     <option key={sub} value={sub}>
                       {sub}
                     </option>
                   ))}
+                  <option value="__add_new__" className="text-[#9C7342] font-semibold bg-[#FAF4ED]">
+                    + Add New Subcategory
+                  </option>
                 </select>
               </div>
             </div>
@@ -658,6 +800,104 @@ export default function ProductForm({
           </div>
         </div>
       </div>
+
+      {/* Add New Subcategory Modal */}
+      {isAddSubModalOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-200"
+          onClick={() => !isCreatingSub && setIsAddSubModalOpen(false)}
+        >
+          <div
+            className="w-full max-w-md bg-[#FFFDFB] border border-[#EAE2D8] rounded-2xl p-6 sm:p-7 shadow-2xl space-y-5 animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-[#EAE2D8]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[#B89366]/15 text-[#B89366] flex items-center justify-center">
+                  <FolderPlus className="w-4 h-4 stroke-[1.8]" />
+                </div>
+                <h3 className="font-serif-luxury text-lg font-semibold text-[#231610]">
+                  ADD NEW SUBCATEGORY
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => !isCreatingSub && setIsAddSubModalOpen(false)}
+                className="p-1.5 text-[#7A6F68] hover:text-[#231610] rounded-lg hover:bg-[#FAF7F3] transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Error in modal */}
+            {subModalError && (
+              <div className="p-3 rounded-xl bg-[#6A1A24]/10 border border-[#6A1A24]/20 flex items-start gap-2.5 text-[#6A1A24] text-xs">
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <p>{subModalError}</p>
+              </div>
+            )}
+
+            {/* Category Display */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-[#8C7E75] uppercase tracking-wider">
+                Category
+              </label>
+              <div className="w-full bg-[#FAF7F3] text-[#231610] text-sm px-4 py-2.5 rounded-xl border border-[#EAE2D8] font-medium select-none">
+                {CATEGORY_OPTIONS.find((c) => c.id === category)?.label || category}
+              </div>
+            </div>
+
+            {/* Subcategory Name Input */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-[#231610] uppercase tracking-wider">
+                Subcategory Name <span className="text-[#6A1A24]">*</span>
+              </label>
+              <input
+                type="text"
+                value={newSubName}
+                onChange={(e) => setNewSubName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleCreateSubcategory(e);
+                  }
+                }}
+                placeholder="e.g. Bridal Jewellery"
+                autoFocus
+                className="w-full bg-[#FAF7F3] text-[#231610] text-sm px-4 py-3 rounded-xl border border-[#EAE2D8] focus:border-[#B89366] focus:ring-2 focus:ring-[#C5A47E]/20 focus:outline-none transition-all placeholder:text-[#A89E96]"
+              />
+            </div>
+
+            {/* Modal Actions */}
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <button
+                type="button"
+                disabled={isCreatingSub}
+                onClick={() => setIsAddSubModalOpen(false)}
+                className="px-4 py-2.5 rounded-xl border border-[#D8CEBE] text-xs sm:text-sm font-medium text-[#5A4E46] hover:bg-[#F3ECE4] transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isCreatingSub}
+                onClick={handleCreateSubcategory}
+                className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#B89366] to-[#9C7342] hover:from-[#A88255] hover:to-[#8C6332] text-white text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all shadow-md flex items-center gap-2 cursor-pointer disabled:opacity-60"
+              >
+                {isCreatingSub ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Adding...</span>
+                  </>
+                ) : (
+                  <span>Add Subcategory</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </form>
   );
 }

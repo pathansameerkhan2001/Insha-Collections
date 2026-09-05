@@ -411,6 +411,64 @@ class ProductStore {
     return true;
   }
 
+  public countBySubCategory(category: ProductCategory, subCategoryName: string): number {
+    const items = this.ensureDataLoaded();
+    const target = subCategoryName.trim().toLowerCase();
+    return items.filter(
+      (p) => p.category === category && p.subCategory?.trim().toLowerCase() === target
+    ).length;
+  }
+
+  public updateProductSubcategory(
+    category: ProductCategory,
+    oldSubCategory: string,
+    newSubCategory: string
+  ): number {
+    const items = this.ensureDataLoaded();
+    const targetOld = oldSubCategory.trim().toLowerCase();
+    const trimmedNew = newSubCategory.trim();
+    const now = new Date().toISOString();
+
+    let affectedCount = 0;
+    const updatedList = items.map((p) => {
+      if (p.category === category && p.subCategory?.trim().toLowerCase() === targetOld) {
+        affectedCount++;
+        return {
+          ...p,
+          subCategory: trimmedNew,
+          updatedAt: now,
+        };
+      }
+      return p;
+    });
+
+    if (affectedCount > 0) {
+      this.productsCache = updatedList;
+      this.saveToFile(updatedList);
+    }
+
+    return affectedCount;
+  }
+
+  public reassignProductSubcategory(
+    category: ProductCategory,
+    fromSubCategory: string,
+    toSubCategory: string
+  ): number {
+    return this.updateProductSubcategory(category, fromSubCategory, toSubCategory);
+  }
+
+  public getDistinctSubCategoriesByCategory(category: ProductCategory): string[] {
+    const items = this.ensureDataLoaded();
+    const subCats = new Set<string>();
+    for (const p of items) {
+      if (p.category === category && p.subCategory && p.subCategory.trim()) {
+        subCats.add(p.subCategory.trim());
+      }
+    }
+    return Array.from(subCats);
+  }
+
   public getCategorySummary(): Record<string, number> {
     const items = this.ensureDataLoaded();
     const summary: Record<string, number> = {
