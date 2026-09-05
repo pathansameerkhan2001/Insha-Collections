@@ -17,6 +17,7 @@ import {
   Calendar,
   Clock,
   Filter,
+  Zap,
 } from "lucide-react";
 import {
   ProductItem,
@@ -33,20 +34,37 @@ import ProductQuickViewModal from "./ProductQuickViewModal";
 import AppointmentModal from "./AppointmentModal";
 import { getStorefrontImageUrl, LUXURY_BLUR_DATA_URL } from "@/lib/products/productTypes";
 
-// Bow SVG Icon
-function BowIcon({ className = "w-5 h-5" }: { className?: string }) {
+function BowIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
     <svg
-      className={className}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
+      className={className}
     >
-      <circle cx="12" cy="12" r="2.5" />
-      <path d="M9.5 12C5.5 8.5 2 9.5 2 12s3.5 3.5 7.5 0z" />
+      <path d="M12 12c-2-3-6-4-8-2s-1 6 2 7c3 1 6-2 6-5z" />
+      <path d="M12 12c2-3 6-4 8-2s1 6-2 7c-3 1-6-2-6-5z" />
+      <circle cx="12" cy="12" r="2" />
+    </svg>
+  );
+}
+
+function WeaveIcon({ className = "w-4 h-4" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M2 9h20M2 15h20M9 2v20M15 2v20" />
+      <path d="M9.5 12c-4-3.5-7.5-2.5-7.5 0s3.5 3.5 7.5 0z" />
       <path d="M14.5 12c4-3.5 7.5-2.5 7.5 0s-3.5 3.5-7.5 0z" />
       <path d="M10.5 14L8 21" />
       <path d="M13.5 14L16 21" />
@@ -69,6 +87,7 @@ interface ShopByCategoryProps {
   onTabChange?: (tabId: string) => void;
   onSubCategoryChange?: (sub: string) => void;
   onAddToCart?: (product: ProductItem) => void;
+  onBuyNow?: (product: ProductItem) => void;
   onToggleWishlist?: (productId: string) => void;
   wishlistState?: Record<string, boolean>;
 }
@@ -79,6 +98,7 @@ export default function ShopByCategory({
   onTabChange,
   onSubCategoryChange,
   onAddToCart,
+  onBuyNow,
   onToggleWishlist,
   wishlistState,
 }: ShopByCategoryProps) {
@@ -725,34 +745,65 @@ export default function ShopByCategory({
                       </p>
                     </div>
 
-                    {/* Price & Cart Action */}
-                    <div className="flex items-center justify-between pt-2.5 sm:pt-3 mt-2 border-t border-[#F2ECE4]">
+                    {/* Price & Discount */}
+                    <div className="flex items-baseline justify-between pt-2 sm:pt-2.5 mt-2 border-t border-[#F2ECE4]">
                       <div className="flex items-baseline gap-1.5">
-                        <span className="text-sm sm:text-base md:text-[17px] font-bold text-[#231610] font-sans tracking-tight">
+                        <span className="text-sm sm:text-base md:text-[16.5px] font-bold text-[#231610] font-sans tracking-tight">
                           ₹{product.price.toLocaleString("en-IN")}
                         </span>
                         {product.originalPrice && (
-                          <span className="text-[11px] sm:text-xs text-[#9E948B] line-through font-normal">
+                          <span className="text-[10.5px] sm:text-xs text-[#9E948B] line-through font-normal">
                             ₹{product.originalPrice.toLocaleString("en-IN")}
                           </span>
                         )}
                       </div>
+                      {product.originalPrice && (
+                        <span className="text-[9px] sm:text-[9.5px] font-bold text-[#6A1A24] bg-[#6A1A24]/10 px-1.5 py-0.5 rounded">
+                          {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                        </span>
+                      )}
+                    </div>
 
+                    {/* Distinct Two Action Buttons: ADD TO BAG & BUY NOW */}
+                    <div className="grid grid-cols-2 gap-1 sm:gap-1.5 mt-2.5">
+                      {/* ADD TO BAG (Secondary) */}
                       <button
                         type="button"
                         onClick={(e) => handleCartAdd(product, 1, e)}
                         aria-label={`Add ${product.name} to bag`}
-                        className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border flex items-center justify-center transition-all duration-200 focus:outline-none active:scale-95 shadow-sm cursor-pointer ${
+                        className={`py-1.5 px-1.5 sm:px-2 rounded-lg border text-[9.5px] sm:text-[10.5px] font-semibold tracking-wider uppercase transition-all duration-200 focus:outline-none active:scale-95 flex items-center justify-center gap-1 cursor-pointer truncate ${
                           isAdded
                             ? "bg-[#231610] text-[#FAF7F3] border-[#231610]"
-                            : "border-[#C5A47E]/60 bg-[#FAF7F3] hover:bg-[#C5A47E] text-[#9C7A50] hover:text-white"
+                            : "border-[#C5A47E]/70 bg-[#FAF7F3] hover:bg-[#FAF0E4] text-[#9C7A50] hover:text-[#231610]"
                         }`}
                       >
                         {isAdded ? (
-                          <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[2]" />
+                          <>
+                            <Check className="w-3 h-3 stroke-[2] shrink-0" />
+                            <span className="truncate">ADDED</span>
+                          </>
                         ) : (
-                          <ShoppingCart className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[1.5]" />
+                          <>
+                            <ShoppingCart className="w-3 h-3 stroke-[1.75] shrink-0" />
+                            <span className="truncate">ADD TO BAG</span>
+                          </>
                         )}
+                      </button>
+
+                      {/* BUY NOW (Primary Prominent) */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onBuyNow) {
+                            onBuyNow(product);
+                          }
+                        }}
+                        aria-label={`Buy ${product.name} now`}
+                        className="py-1.5 px-1.5 sm:px-2 rounded-lg bg-[#231610] hover:bg-[#BA7442] text-[#FAF7F3] text-[9.5px] sm:text-[10.5px] font-semibold tracking-wider uppercase transition-all duration-200 shadow-xs hover:shadow flex items-center justify-center gap-1 cursor-pointer active:scale-95 truncate"
+                      >
+                        <Zap className="w-3 h-3 text-[#E0C097] shrink-0" />
+                        <span className="truncate">BUY NOW</span>
                       </button>
                     </div>
                   </div>
@@ -771,31 +822,14 @@ export default function ShopByCategory({
               <span className="text-[#C5A47E] text-xs select-none">✧</span>
             </div>
 
-            {/* Functional View All Button */}
-            <button
-              type="button"
-              onClick={handleViewAllToggle}
-              className="inline-flex items-center justify-center gap-2 px-6 sm:px-9 py-3 sm:py-3.5 rounded-lg border border-[#C5A47E] bg-[#FAF7F3] hover:bg-[#231610] text-[#231610] hover:text-[#FAF7F3] text-xs sm:text-[13px] font-semibold tracking-[0.18em] uppercase font-sans transition-all duration-300 shadow-sm hover:shadow-md group/btn whitespace-nowrap cursor-pointer"
-            >
-              <span>
-                {activeTab === "beauty"
-                  ? isExpanded
-                    ? "SHOW FEATURED SERVICES"
-                    : "VIEW ALL SERVICES"
-                  : activeTab === "all"
-                  ? isExpanded
-                    ? "SHOW FEATURED ONLY"
-                    : "VIEW ALL PRODUCTS"
-                  : "VIEW ALL PRODUCTS"}
+            {/* Middle decorative button */}
+            <div className="flex items-center gap-2 px-5 sm:px-8 py-2.5 sm:py-3 rounded-full border border-[#C5A47E]/60 bg-[#FAF7F3] shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C5A47E]" />
+              <span className="text-xs sm:text-sm font-serif-luxury tracking-[0.2em] uppercase text-[#231610] font-medium">
+                {displayedItems.length} Royal Creations Displayed
               </span>
-              <ArrowRight
-                className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-200 ${
-                  isExpanded && (activeTab === "beauty" || activeTab === "all")
-                    ? "rotate-90"
-                    : "group-hover/btn:translate-x-1"
-                }`}
-              />
-            </button>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C5A47E]" />
+            </div>
 
             {/* Right flourish */}
             <div className="flex items-center gap-1.5 flex-1 justify-start">
@@ -812,6 +846,7 @@ export default function ShopByCategory({
         isOpen={!!quickViewProduct}
         onClose={() => setQuickViewProduct(null)}
         onAddToCart={handleCartAdd}
+        onBuyNow={onBuyNow}
         isWishlisted={
           quickViewProduct ? !!wishlist[quickViewProduct.id] : false
         }

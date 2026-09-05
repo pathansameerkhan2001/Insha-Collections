@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384, 400, 800],
-    qualities: [75, 80, 85, 90, 95, 100],
+    qualities: [75, 80, 82, 84, 85, 88, 90, 95, 100],
     localPatterns: [
       {
         pathname: "/api/images/s3/**",

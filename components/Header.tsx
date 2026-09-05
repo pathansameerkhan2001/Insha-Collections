@@ -11,6 +11,7 @@ interface HeaderProps {
   cartCount?: number;
   onOpenWishlist?: () => void;
   onOpenCart?: () => void;
+  onOpenSearch?: () => void;
   onSelectCategory?: (categoryId: string, subCategory?: string) => void;
   onOpenStoreLocator?: () => void;
   onOpenAboutUs?: () => void;
@@ -22,6 +23,7 @@ export default function Header({
   cartCount = 0,
   onOpenWishlist,
   onOpenCart,
+  onOpenSearch,
   onSelectCategory,
   onOpenStoreLocator,
   onOpenAboutUs,
@@ -73,11 +75,15 @@ export default function Header({
             <button
               type="button"
               onClick={() => {
-                if (onSelectCategory) {
-                  onSelectCategory("all", "All");
+                if (onOpenSearch) {
+                  onOpenSearch();
+                } else {
+                  if (onSelectCategory) {
+                    onSelectCategory("all", "All");
+                  }
+                  const elem = document.getElementById("shop-by-category");
+                  if (elem) elem.scrollIntoView({ behavior: "smooth" });
                 }
-                const elem = document.getElementById("shop-by-category");
-                if (elem) elem.scrollIntoView({ behavior: "smooth" });
               }}
               className="hover:text-[#B89366] transition-colors duration-200 p-1 sm:p-1.5 focus:outline-none cursor-pointer"
               aria-label="Search collection"

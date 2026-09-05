@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   X,
@@ -14,6 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Camera,
+  Zap,
 } from "lucide-react";
 import { ProductItem } from "@/data/catalog";
 import { getQuickViewImageUrls, LUXURY_BLUR_DATA_URL } from "@/lib/products/productTypes";
@@ -23,6 +24,7 @@ interface ProductQuickViewModalProps {
   isOpen: boolean;
   onClose: () => void;
   onAddToCart: (product: ProductItem, qty: number) => void;
+  onBuyNow?: (product: ProductItem, qty: number) => void;
   isWishlisted: boolean;
   onToggleWishlist: (productId: string) => void;
 }
@@ -32,6 +34,7 @@ export default function ProductQuickViewModal({
   isOpen,
   onClose,
   onAddToCart,
+  onBuyNow,
   isWishlisted,
   onToggleWishlist,
 }: ProductQuickViewModalProps) {
@@ -47,10 +50,23 @@ export default function ProductQuickViewModal({
     setQuantity(1);
   }
 
+  // Handle Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !product) return null;
 
-  // Resolve Real Product Images for Quick View (Original photos take precedence)
+  // Resolve Real Product Images for Quick View (800w for main preview, 400w for thumbnails)
   const realImageUrls = getQuickViewImageUrls(product, 800);
+  const thumbnailUrls = getQuickViewImageUrls(product, 400);
   const activeImage = realImageUrls[activeImageIndex] || product.image;
 
   const handleAdd = () => {
@@ -96,7 +112,7 @@ export default function ProductQuickViewModal({
                 src={activeImage}
                 alt={`${product.name} - Real Photo ${activeImageIndex + 1}`}
                 fill
-                quality={88}
+                quality={85}
                 priority
                 placeholder="blur"
                 blurDataURL={LUXURY_BLUR_DATA_URL}
@@ -166,10 +182,11 @@ export default function ProductQuickViewModal({
                     }`}
                   >
                     <Image
-                      src={imgUrl}
+                      src={thumbnailUrls[idx] || imgUrl}
                       alt={`Thumbnail ${idx + 1}`}
                       fill
-                      quality={80}
+                      loading="lazy"
+                      quality={75}
                       placeholder="blur"
                       blurDataURL={LUXURY_BLUR_DATA_URL}
                       className="object-cover"
@@ -241,38 +258,61 @@ export default function ProductQuickViewModal({
               )}
             </div>
 
-            {/* Actions: Quantity + Add to Cart + Wishlist */}
+            {/* Actions: Quantity + Wishlist + Add to Bag + Buy Now */}
             <div className="pt-4 border-t border-[#EAE2D8] space-y-3">
-              <div className="flex items-center gap-3">
-                {/* Quantity Controls */}
-                <div className="flex items-center border border-[#C5A47E]/60 rounded-lg bg-white overflow-hidden">
-                  <button
-                    type="button"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="px-3 py-2 text-sm font-semibold text-[#231610] hover:bg-[#FAF7F3] transition-colors cursor-pointer"
-                  >
-                    -
-                  </button>
-                  <span className="px-3 py-2 text-xs font-bold text-[#231610] min-w-[28px] text-center">
-                    {quantity}
+              {/* Row 1: Quantity & Wishlist */}
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold text-[#8C7E75] uppercase tracking-wider">
+                    Quantity:
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => setQuantity(quantity + 1)}
-                    className="px-3 py-2 text-sm font-semibold text-[#231610] hover:bg-[#FAF7F3] transition-colors cursor-pointer"
-                  >
-                    +
-                  </button>
+                  <div className="flex items-center border border-[#C5A47E]/60 rounded-lg bg-white overflow-hidden shadow-xs">
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                      className="px-3 py-1.5 text-sm font-semibold text-[#231610] hover:bg-[#FAF7F3] transition-colors cursor-pointer"
+                    >
+                      -
+                    </button>
+                    <span className="px-3 py-1.5 text-xs font-bold text-[#231610] min-w-[28px] text-center">
+                      {quantity}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setQuantity(quantity + 1)}
+                      className="px-3 py-1.5 text-sm font-semibold text-[#231610] hover:bg-[#FAF7F3] transition-colors cursor-pointer"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
 
-                {/* Add to Cart Button */}
+                {/* Wishlist Button */}
+                <button
+                  type="button"
+                  onClick={() => onToggleWishlist(product.id)}
+                  aria-label="Wishlist"
+                  className={`px-3.5 py-1.5 rounded-lg border flex items-center gap-1.5 text-xs font-semibold tracking-wider uppercase transition-colors cursor-pointer shadow-xs ${
+                    isWishlisted
+                      ? "bg-[#6A1A24] text-white border-[#6A1A24]"
+                      : "border-[#C5A47E]/60 bg-white text-[#231610] hover:text-[#BA7442]"
+                  }`}
+                >
+                  <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} />
+                  <span>{isWishlisted ? "Saved" : "Save"}</span>
+                </button>
+              </div>
+
+              {/* Row 2: Two Clear Action Buttons: ADD TO BAG & BUY NOW */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                {/* ADD TO BAG (Secondary) */}
                 <button
                   type="button"
                   onClick={handleAdd}
-                  className={`flex-1 py-3 px-5 rounded-lg flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all duration-200 shadow-sm cursor-pointer ${
+                  className={`py-3 px-3 rounded-xl flex items-center justify-center gap-2 text-xs sm:text-[13px] font-semibold tracking-wider uppercase transition-all duration-200 shadow-xs cursor-pointer active:scale-98 ${
                     isAdded
-                      ? "bg-[#231610] text-[#FAF7F3]"
-                      : "bg-[#A57D4E] hover:bg-[#8C6839] text-white"
+                      ? "bg-[#231610] text-[#FAF7F3] border border-[#231610]"
+                      : "bg-[#FAF7F3] hover:bg-[#FAF0E4] text-[#9C7A50] hover:text-[#231610] border border-[#C5A47E]/80"
                   }`}
                 >
                   {isAdded ? (
@@ -282,24 +322,27 @@ export default function ProductQuickViewModal({
                     </>
                   ) : (
                     <>
-                      <ShoppingCart className="w-4 h-4 stroke-[1.5]" />
+                      <ShoppingCart className="w-4 h-4 stroke-[1.75]" />
                       <span>Add to Bag (₹{(product.price * quantity).toLocaleString("en-IN")})</span>
                     </>
                   )}
                 </button>
 
-                {/* Wishlist Button */}
+                {/* BUY NOW (Primary Prominent) */}
                 <button
                   type="button"
-                  onClick={() => onToggleWishlist(product.id)}
-                  aria-label="Wishlist"
-                  className={`p-3 rounded-lg border flex items-center justify-center transition-colors cursor-pointer ${
-                    isWishlisted
-                      ? "bg-[#6A1A24] text-white border-[#6A1A24]"
-                      : "border-[#C5A47E]/60 bg-white text-[#231610] hover:text-[#C5A47E]"
-                  }`}
+                  onClick={() => {
+                    if (onBuyNow) {
+                      onBuyNow(product, quantity);
+                      onClose();
+                    } else {
+                      handleAdd();
+                    }
+                  }}
+                  className="py-3 px-3 rounded-xl bg-[#231610] hover:bg-[#BA7442] text-[#FAF7F3] text-xs sm:text-[13px] font-semibold tracking-wider uppercase transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-2 cursor-pointer active:scale-98"
                 >
-                  <Heart className={`w-4 h-4 ${isWishlisted ? "fill-current" : ""}`} />
+                  <Zap className="w-4 h-4 text-[#E0C097]" />
+                  <span>Buy Now (₹{(product.price * quantity).toLocaleString("en-IN")})</span>
                 </button>
               </div>
 

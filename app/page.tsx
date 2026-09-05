@@ -12,6 +12,8 @@ import CheckoutModal from "@/components/CheckoutModal";
 import WishlistDrawer from "@/components/WishlistDrawer";
 import StoreLocatorModal from "@/components/StoreLocatorModal";
 import AboutUsModal from "@/components/AboutUsModal";
+import SearchModal from "@/components/SearchModal";
+import ProductQuickViewModal from "@/components/ProductQuickViewModal";
 import {
   ProductItem,
   JEWELLERY_PRODUCTS,
@@ -39,6 +41,9 @@ export default function Home() {
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isStoreLocatorOpen, setIsStoreLocatorOpen] = useState(false);
   const [isAboutUsOpen, setIsAboutUsOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [directCheckoutItems, setDirectCheckoutItems] = useState<CartEntry[]>([]);
+  const [searchQuickViewProduct, setSearchQuickViewProduct] = useState<ProductItem | null>(null);
 
   useEffect(() => {
     fetch("/api/products")
@@ -78,18 +83,24 @@ export default function Home() {
   const [selectedSubCategory, setSelectedSubCategory] = useState<string>("All");
 
   // Cart operations
-  const handleAddToCart = (product: ProductItem) => {
+  const handleAddToCart = (product: ProductItem, qty: number = 1) => {
     setCart((prev) => {
       const existing = prev.find((item) => item.product.id === product.id);
       if (existing) {
         return prev.map((item) =>
           item.product.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + qty }
             : item
         );
       }
-      return [...prev, { product, quantity: 1 }];
+      return [...prev, { product, quantity: qty }];
     });
+  };
+
+  // Buy Now direct checkout flow (doesn't overwrite existing cart)
+  const handleBuyNow = (product: ProductItem, qty: number = 1) => {
+    setDirectCheckoutItems([{ product, quantity: qty }]);
+    setIsCheckoutOpen(true);
   };
 
   const handleUpdateCartQty = (productId: string, delta: number) => {
@@ -110,6 +121,35 @@ export default function Home() {
     setCart((prev) => prev.filter((item) => item.product.id !== productId));
   };
 
+  // Checkout item handlers that support both direct Buy Now and cart checkout
+  const activeCheckoutItems = directCheckoutItems.length > 0 ? directCheckoutItems : cart;
+
+  const handleUpdateCheckoutQty = (productId: string, delta: number) => {
+    if (directCheckoutItems.length > 0) {
+      setDirectCheckoutItems((prev) =>
+        prev
+          .map((item) => {
+            if (item.product.id === productId) {
+              const newQty = item.quantity + delta;
+              return newQty > 0 ? { ...item, quantity: newQty } : null;
+            }
+            return item;
+          })
+          .filter(Boolean) as CartEntry[]
+      );
+    } else {
+      handleUpdateCartQty(productId, delta);
+    }
+  };
+
+  const handleRemoveCheckoutItem = (productId: string) => {
+    if (directCheckoutItems.length > 0) {
+      setDirectCheckoutItems((prev) => prev.filter((item) => item.product.id !== productId));
+    } else {
+      handleRemoveCartItem(productId);
+    }
+  };
+
   // Wishlist operations
   const handleToggleWishlist = (productId: string) => {
     setWishlistIds((prev) => ({
@@ -119,7 +159,7 @@ export default function Home() {
   };
 
   const handleMoveWishlistToCart = (product: ProductItem) => {
-    handleAddToCart(product);
+    handleAddToCart(product, 1);
     handleToggleWishlist(product.id);
   };
 
@@ -155,6 +195,7 @@ export default function Home() {
         cartCount={totalCartCount}
         onOpenWishlist={() => setIsWishlistOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
+        onOpenSearch={() => setIsSearchOpen(true)}
         onSelectCategory={handleSelectCategory}
         onOpenStoreLocator={() => setIsStoreLocatorOpen(true)}
         onOpenAboutUs={() => setIsAboutUsOpen(true)}
@@ -174,7 +215,8 @@ export default function Home() {
           setSelectedSubCategory("All");
         }}
         onSubCategoryChange={(sub) => setSelectedSubCategory(sub)}
-        onAddToCart={handleAddToCart}
+        onAddToCart={(product) => handleAddToCart(product, 1)}
+        onBuyNow={handleBuyNow}
         onToggleWishlist={handleToggleWishlist}
         wishlistState={wishlistIds}
       />
@@ -190,6 +232,7 @@ export default function Home() {
         onRemoveItem={handleRemoveCartItem}
         onProceedToCheckout={() => {
           setIsCartOpen(false);
+          setDirectCheckoutItems(cart);
           setIsCheckoutOpen(true);
         }}
       />
@@ -197,15 +240,25 @@ export default function Home() {
       {/* WhatsApp Checkout Modal */}
       <CheckoutModal
         isOpen={isCheckoutOpen}
-        onClose={() => setIsCheckoutOpen(false)}
-        items={cart}
-        onUpdateQty={handleUpdateCartQty}
-        onRemoveItem={handleRemoveCartItem}
+        onClose={() => {
+          setIsCheckoutOpen(false);
+          setDirectCheckoutItems([]);
+        }}
+        items={activeCheckoutItems}
+        onUpdateQty={handleUpdateCheckoutQty}
+        onRemoveItem={handleRemoveCheckoutItem}
         onBackToCart={() => {
           setIsCheckoutOpen(false);
+          setDirectCheckoutItems([]);
           setIsCartOpen(true);
         }}
-        onClearCart={() => setCart([])}
+        onClearCart={() => {
+          if (directCheckoutItems.length > 0) {
+            setDirectCheckoutItems([]);
+          } else {
+            setCart([]);
+          }
+        }}
       />
 
       <WishlistDrawer
@@ -225,6 +278,29 @@ export default function Home() {
       <AboutUsModal
         isOpen={isAboutUsOpen}
         onClose={() => setIsAboutUsOpen(false)}
+      />
+
+      {/* Instant Search Modal */}
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        products={allProductsList}
+        onSelectProduct={(product) => {
+          setSearchQuickViewProduct(product);
+        }}
+      />
+
+      {/* Quick View Triggered from Search */}
+      <ProductQuickViewModal
+        product={searchQuickViewProduct}
+        isOpen={!!searchQuickViewProduct}
+        onClose={() => setSearchQuickViewProduct(null)}
+        onAddToCart={(p, qty) => handleAddToCart(p, qty)}
+        onBuyNow={handleBuyNow}
+        isWishlisted={
+          searchQuickViewProduct ? !!wishlistIds[searchQuickViewProduct.id] : false
+        }
+        onToggleWishlist={handleToggleWishlist}
       />
     </main>
   );

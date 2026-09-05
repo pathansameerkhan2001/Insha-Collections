@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import {
@@ -11,7 +11,7 @@ import { ProductRecord } from "@/lib/products/productTypes";
 
 export const maxDuration = 60; // 60s timeout for Next.js route handler if running bulk
 
-export async function POST(req: NextRequest) {
+export async function POST() {
   try {
     const productsFilePath = path.join(process.cwd(), ".data", "products.json");
     if (!fs.existsSync(productsFilePath)) {
@@ -71,10 +71,9 @@ export async function POST(req: NextRequest) {
           if (isS3 && (s3Key.startsWith("products/") || !s3Key.startsWith("/"))) {
             // Fetch from S3
             const s3Obj = await getS3Object(s3Key);
-            const { variants, blurDataURL, width, height } = await optimizeImageBuffer(s3Obj.buffer);
+            const { variants } = await optimizeImageBuffer(s3Obj.buffer);
 
             // Compute optimized keys
-            const keyWithoutExt = s3Key.replace(/\.[^.]+$/, "");
             const baseFolder = path.dirname(s3Key);
             const baseFileName = path.basename(s3Key, path.extname(s3Key));
 

@@ -164,26 +164,26 @@ export default function SidebarMenu({
             </div>
           </div>
 
-          <h2 className="font-serif-luxury text-[15px] sm:text-[16px] tracking-[0.16em] uppercase text-[#231610] font-normal text-center mt-3">
+          <h2 className="font-serif-luxury text-[15px] sm:text-[16px] tracking-[0.16em] uppercase text-[#1C110B] font-semibold text-center mt-3">
             INSHA COLLECTIONS
           </h2>
-          <p className="text-[10px] sm:text-[10.5px] uppercase tracking-[0.24em] text-[#8C7E75] text-center font-sans mt-0.5">
+          <p className="text-[10px] sm:text-[10.5px] uppercase tracking-[0.24em] text-[#5C4A40] text-center font-sans font-medium mt-0.5">
             TIMELESS • ELEGANT • YOU
           </p>
         </div>
 
         {/* Scrollable Navigation List */}
-        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-1 divide-y divide-[#EAE2D8]/60 text-sm">
+        <div className="flex-1 overflow-y-auto px-5 py-4 space-y-1 divide-y divide-[#EAE2D8]/80 text-sm">
           {/* 1. HOME */}
           <div className="py-1">
             <button
               type="button"
               onClick={handleHomeClick}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-[#F3ECE4]/60 transition-colors group cursor-pointer"
+              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-[#F3ECE4]/80 transition-colors group cursor-pointer"
             >
               <div className="flex items-center gap-3.5">
-                <Home className="w-5 h-5 text-[#C5A47E] stroke-[1.4] group-hover:scale-105 transition-transform" />
-                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#231610] font-normal group-hover:text-[#9C5A2C] transition-colors">
+                <Home className="w-5 h-5 text-[#BA7442] stroke-[1.6] group-hover:scale-105 transition-transform" />
+                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#1C110B] font-medium group-hover:text-[#BA7442] transition-colors">
                   HOME
                 </span>
               </div>
@@ -195,11 +195,11 @@ export default function SidebarMenu({
             <button
               type="button"
               onClick={handleShopByCategoryClick}
-              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-[#F3ECE4]/60 transition-colors group cursor-pointer"
+              className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-left hover:bg-[#F3ECE4]/80 transition-colors group cursor-pointer"
             >
               <div className="flex items-center gap-3.5">
-                <LayoutGrid className="w-5 h-5 text-[#C5A47E] stroke-[1.4] group-hover:scale-105 transition-transform" />
-                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#231610] font-normal group-hover:text-[#9C5A2C] transition-colors">
+                <LayoutGrid className="w-5 h-5 text-[#BA7442] stroke-[1.6] group-hover:scale-105 transition-transform" />
+                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#1C110B] font-medium group-hover:text-[#BA7442] transition-colors">
                   SHOP BY CATEGORY
                 </span>
               </div>
@@ -208,14 +208,14 @@ export default function SidebarMenu({
 
           {/* 3. JEWELLERY (+) */}
           <div className="py-1">
-            <div className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#F3ECE4]/60 transition-colors group">
+            <div className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#F3ECE4]/80 transition-colors group">
               <button
                 type="button"
                 onClick={() => handleCategoryClick("jewellery")}
                 className="flex items-center gap-3.5 flex-1 text-left cursor-pointer"
               >
-                <Gem className="w-5 h-5 text-[#C5A47E] stroke-[1.4] group-hover:scale-105 transition-transform" />
-                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#231610] font-normal group-hover:text-[#9C5A2C] transition-colors">
+                <Gem className="w-5 h-5 text-[#BA7442] stroke-[1.6] group-hover:scale-105 transition-transform" />
+                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#1C110B] font-medium group-hover:text-[#BA7442] transition-colors">
                   JEWELLERY
                 </span>
               </button>
@@ -223,25 +223,25 @@ export default function SidebarMenu({
                 type="button"
                 onClick={(e) => toggleCategory("jewellery", e)}
                 aria-label="Toggle jewellery subcategories"
-                className="p-1 text-[#7A6F68] hover:text-[#231610] transition-colors cursor-pointer"
+                className="p-1 text-[#5C4A40] hover:text-[#1C110B] transition-colors cursor-pointer"
               >
                 {expandedCats["jewellery"] ? (
-                  <Minus className="w-4 h-4 stroke-[1.8] text-[#C5A47E]" />
+                  <Minus className="w-4 h-4 stroke-[2] text-[#BA7442]" />
                 ) : (
-                  <Plus className="w-4 h-4 stroke-[1.8] text-[#8C7E75]" />
+                  <Plus className="w-4 h-4 stroke-[2] text-[#5C4A40]" />
                 )}
               </button>
             </div>
 
             {/* Expanded Subcategories */}
             {expandedCats["jewellery"] && (
-              <div className="pl-11 pr-3 py-1 space-y-1 bg-[#FAF4ED]/50 rounded-lg animate-in fade-in slide-in-from-top-1 duration-150">
+              <div className="pl-11 pr-3 py-1.5 space-y-1 bg-[#FAF4ED] rounded-lg animate-in fade-in slide-in-from-top-1 duration-150 border border-[#EAE2D8]/60">
                 {(subcategoriesMap.jewellery || CATEGORY_SUBCATEGORIES.jewellery).map((sub) => (
                   <button
                     key={sub}
                     type="button"
                     onClick={() => handleSubCategoryClick("jewellery", sub)}
-                    className="block w-full text-left py-1 text-xs text-[#5A4D45] hover:text-[#9C5A2C] font-sans font-medium transition-colors"
+                    className="block w-full text-left py-1 text-[12.5px] text-[#3B2C24] hover:text-[#BA7442] font-sans font-semibold transition-colors"
                   >
                     • {sub}
                   </button>
@@ -252,14 +252,14 @@ export default function SidebarMenu({
 
           {/* 4. KOREAN ITEMS (+) */}
           <div className="py-1">
-            <div className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#F3ECE4]/60 transition-colors group">
+            <div className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#F3ECE4]/80 transition-colors group">
               <button
                 type="button"
                 onClick={() => handleCategoryClick("korean")}
                 className="flex items-center gap-3.5 flex-1 text-left cursor-pointer"
               >
-                <BowIcon className="w-5 h-5 text-[#C5A47E] group-hover:scale-105 transition-transform" />
-                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#231610] font-normal group-hover:text-[#9C5A2C] transition-colors">
+                <BowIcon className="w-5 h-5 text-[#BA7442] group-hover:scale-105 transition-transform" />
+                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#1C110B] font-medium group-hover:text-[#BA7442] transition-colors">
                   KOREAN ITEMS
                 </span>
               </button>
@@ -267,24 +267,24 @@ export default function SidebarMenu({
                 type="button"
                 onClick={(e) => toggleCategory("korean", e)}
                 aria-label="Toggle korean items subcategories"
-                className="p-1 text-[#7A6F68] hover:text-[#231610] transition-colors cursor-pointer"
+                className="p-1 text-[#5C4A40] hover:text-[#1C110B] transition-colors cursor-pointer"
               >
                 {expandedCats["korean"] ? (
-                  <Minus className="w-4 h-4 stroke-[1.8] text-[#C5A47E]" />
+                  <Minus className="w-4 h-4 stroke-[2] text-[#BA7442]" />
                 ) : (
-                  <Plus className="w-4 h-4 stroke-[1.8] text-[#8C7E75]" />
+                  <Plus className="w-4 h-4 stroke-[2] text-[#5C4A40]" />
                 )}
               </button>
             </div>
 
             {expandedCats["korean"] && (
-              <div className="pl-11 pr-3 py-1 space-y-1 bg-[#FAF4ED]/50 rounded-lg animate-in fade-in slide-in-from-top-1 duration-150">
+              <div className="pl-11 pr-3 py-1.5 space-y-1 bg-[#FAF4ED] rounded-lg animate-in fade-in slide-in-from-top-1 duration-150 border border-[#EAE2D8]/60">
                 {(subcategoriesMap.korean || CATEGORY_SUBCATEGORIES.korean).map((sub) => (
                   <button
                     key={sub}
                     type="button"
                     onClick={() => handleSubCategoryClick("korean", sub)}
-                    className="block w-full text-left py-1 text-xs text-[#5A4D45] hover:text-[#9C5A2C] font-sans font-medium transition-colors"
+                    className="block w-full text-left py-1 text-[12.5px] text-[#3B2C24] hover:text-[#BA7442] font-sans font-semibold transition-colors"
                   >
                     • {sub}
                   </button>
@@ -295,14 +295,14 @@ export default function SidebarMenu({
 
           {/* 5. READYMADE DRESSES (+) */}
           <div className="py-1">
-            <div className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#F3ECE4]/60 transition-colors group">
+            <div className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#F3ECE4]/80 transition-colors group">
               <button
                 type="button"
                 onClick={() => handleCategoryClick("dresses")}
                 className="flex items-center gap-3.5 flex-1 text-left cursor-pointer"
               >
-                <Shirt className="w-5 h-5 text-[#C5A47E] stroke-[1.4] group-hover:scale-105 transition-transform" />
-                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#231610] font-normal group-hover:text-[#9C5A2C] transition-colors">
+                <Shirt className="w-5 h-5 text-[#BA7442] stroke-[1.6] group-hover:scale-105 transition-transform" />
+                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#1C110B] font-medium group-hover:text-[#BA7442] transition-colors">
                   READYMADE DRESSES
                 </span>
               </button>
@@ -310,24 +310,24 @@ export default function SidebarMenu({
                 type="button"
                 onClick={(e) => toggleCategory("dresses", e)}
                 aria-label="Toggle readymade dresses subcategories"
-                className="p-1 text-[#7A6F68] hover:text-[#231610] transition-colors cursor-pointer"
+                className="p-1 text-[#5C4A40] hover:text-[#1C110B] transition-colors cursor-pointer"
               >
                 {expandedCats["dresses"] ? (
-                  <Minus className="w-4 h-4 stroke-[1.8] text-[#C5A47E]" />
+                  <Minus className="w-4 h-4 stroke-[2] text-[#BA7442]" />
                 ) : (
-                  <Plus className="w-4 h-4 stroke-[1.8] text-[#8C7E75]" />
+                  <Plus className="w-4 h-4 stroke-[2] text-[#5C4A40]" />
                 )}
               </button>
             </div>
 
             {expandedCats["dresses"] && (
-              <div className="pl-11 pr-3 py-1 space-y-1 bg-[#FAF4ED]/50 rounded-lg animate-in fade-in slide-in-from-top-1 duration-150">
+              <div className="pl-11 pr-3 py-1.5 space-y-1 bg-[#FAF4ED] rounded-lg animate-in fade-in slide-in-from-top-1 duration-150 border border-[#EAE2D8]/60">
                 {(subcategoriesMap.dresses || CATEGORY_SUBCATEGORIES.dresses).map((sub) => (
                   <button
                     key={sub}
                     type="button"
                     onClick={() => handleSubCategoryClick("dresses", sub)}
-                    className="block w-full text-left py-1 text-xs text-[#5A4D45] hover:text-[#9C5A2C] font-sans font-medium transition-colors"
+                    className="block w-full text-left py-1 text-[12.5px] text-[#3B2C24] hover:text-[#BA7442] font-sans font-semibold transition-colors"
                   >
                     • {sub}
                   </button>
@@ -338,14 +338,14 @@ export default function SidebarMenu({
 
           {/* 6. DRESS MATERIALS (+) */}
           <div className="py-1">
-            <div className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#F3ECE4]/60 transition-colors group">
+            <div className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#F3ECE4]/80 transition-colors group">
               <button
                 type="button"
                 onClick={() => handleCategoryClick("materials")}
                 className="flex items-center gap-3.5 flex-1 text-left cursor-pointer"
               >
-                <Layers className="w-5 h-5 text-[#C5A47E] stroke-[1.4] group-hover:scale-105 transition-transform" />
-                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#231610] font-normal group-hover:text-[#9C5A2C] transition-colors">
+                <Layers className="w-5 h-5 text-[#BA7442] stroke-[1.6] group-hover:scale-105 transition-transform" />
+                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#1C110B] font-medium group-hover:text-[#BA7442] transition-colors">
                   DRESS MATERIALS
                 </span>
               </button>
@@ -353,24 +353,24 @@ export default function SidebarMenu({
                 type="button"
                 onClick={(e) => toggleCategory("materials", e)}
                 aria-label="Toggle dress materials subcategories"
-                className="p-1 text-[#7A6F68] hover:text-[#231610] transition-colors cursor-pointer"
+                className="p-1 text-[#5C4A40] hover:text-[#1C110B] transition-colors cursor-pointer"
               >
                 {expandedCats["materials"] ? (
-                  <Minus className="w-4 h-4 stroke-[1.8] text-[#C5A47E]" />
+                  <Minus className="w-4 h-4 stroke-[2] text-[#BA7442]" />
                 ) : (
-                  <Plus className="w-4 h-4 stroke-[1.8] text-[#8C7E75]" />
+                  <Plus className="w-4 h-4 stroke-[2] text-[#5C4A40]" />
                 )}
               </button>
             </div>
 
             {expandedCats["materials"] && (
-              <div className="pl-11 pr-3 py-1 space-y-1 bg-[#FAF4ED]/50 rounded-lg animate-in fade-in slide-in-from-top-1 duration-150">
+              <div className="pl-11 pr-3 py-1.5 space-y-1 bg-[#FAF4ED] rounded-lg animate-in fade-in slide-in-from-top-1 duration-150 border border-[#EAE2D8]/60">
                 {(subcategoriesMap.materials || CATEGORY_SUBCATEGORIES.materials).map((sub) => (
                   <button
                     key={sub}
                     type="button"
                     onClick={() => handleSubCategoryClick("materials", sub)}
-                    className="block w-full text-left py-1 text-xs text-[#5A4D45] hover:text-[#9C5A2C] font-sans font-medium transition-colors"
+                    className="block w-full text-left py-1 text-[12.5px] text-[#3B2C24] hover:text-[#BA7442] font-sans font-semibold transition-colors"
                   >
                     • {sub}
                   </button>
@@ -381,14 +381,14 @@ export default function SidebarMenu({
 
           {/* 7. HANDLOOMS (+) */}
           <div className="py-1">
-            <div className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#F3ECE4]/60 transition-colors group">
+            <div className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#F3ECE4]/80 transition-colors group">
               <button
                 type="button"
                 onClick={() => handleCategoryClick("handlooms")}
                 className="flex items-center gap-3.5 flex-1 text-left cursor-pointer"
               >
-                <WeaveIcon className="w-5 h-5 text-[#C5A47E] group-hover:scale-105 transition-transform" />
-                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#231610] font-normal group-hover:text-[#9C5A2C] transition-colors">
+                <WeaveIcon className="w-5 h-5 text-[#BA7442] group-hover:scale-105 transition-transform" />
+                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#1C110B] font-medium group-hover:text-[#BA7442] transition-colors">
                   HANDLOOMS
                 </span>
               </button>
@@ -396,24 +396,24 @@ export default function SidebarMenu({
                 type="button"
                 onClick={(e) => toggleCategory("handlooms", e)}
                 aria-label="Toggle handlooms subcategories"
-                className="p-1 text-[#7A6F68] hover:text-[#231610] transition-colors cursor-pointer"
+                className="p-1 text-[#5C4A40] hover:text-[#1C110B] transition-colors cursor-pointer"
               >
                 {expandedCats["handlooms"] ? (
-                  <Minus className="w-4 h-4 stroke-[1.8] text-[#C5A47E]" />
+                  <Minus className="w-4 h-4 stroke-[2] text-[#BA7442]" />
                 ) : (
-                  <Plus className="w-4 h-4 stroke-[1.8] text-[#8C7E75]" />
+                  <Plus className="w-4 h-4 stroke-[2] text-[#5C4A40]" />
                 )}
               </button>
             </div>
 
             {expandedCats["handlooms"] && (
-              <div className="pl-11 pr-3 py-1 space-y-1 bg-[#FAF4ED]/50 rounded-lg animate-in fade-in slide-in-from-top-1 duration-150">
+              <div className="pl-11 pr-3 py-1.5 space-y-1 bg-[#FAF4ED] rounded-lg animate-in fade-in slide-in-from-top-1 duration-150 border border-[#EAE2D8]/60">
                 {(subcategoriesMap.handlooms || CATEGORY_SUBCATEGORIES.handlooms).map((sub) => (
                   <button
                     key={sub}
                     type="button"
                     onClick={() => handleSubCategoryClick("handlooms", sub)}
-                    className="block w-full text-left py-1 text-xs text-[#5A4D45] hover:text-[#9C5A2C] font-sans font-medium transition-colors"
+                    className="block w-full text-left py-1 text-[12.5px] text-[#3B2C24] hover:text-[#BA7442] font-sans font-semibold transition-colors"
                   >
                     • {sub}
                   </button>
@@ -424,14 +424,14 @@ export default function SidebarMenu({
 
           {/* 8. BEAUTY & SALON (+) */}
           <div className="py-1">
-            <div className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#F3ECE4]/60 transition-colors group">
+            <div className="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-[#F3ECE4]/80 transition-colors group">
               <button
                 type="button"
                 onClick={() => handleCategoryClick("beauty")}
                 className="flex items-center gap-3.5 flex-1 text-left cursor-pointer"
               >
-                <Flower2 className="w-5 h-5 text-[#C5A47E] stroke-[1.4] group-hover:scale-105 transition-transform" />
-                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#231610] font-normal group-hover:text-[#9C5A2C] transition-colors">
+                <Flower2 className="w-5 h-5 text-[#BA7442] stroke-[1.6] group-hover:scale-105 transition-transform" />
+                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#1C110B] font-medium group-hover:text-[#BA7442] transition-colors">
                   BEAUTY & SALON
                 </span>
               </button>
@@ -439,24 +439,24 @@ export default function SidebarMenu({
                 type="button"
                 onClick={(e) => toggleCategory("beauty", e)}
                 aria-label="Toggle beauty & salon subcategories"
-                className="p-1 text-[#7A6F68] hover:text-[#231610] transition-colors cursor-pointer"
+                className="p-1 text-[#5C4A40] hover:text-[#1C110B] transition-colors cursor-pointer"
               >
                 {expandedCats["beauty"] ? (
-                  <Minus className="w-4 h-4 stroke-[1.8] text-[#C5A47E]" />
+                  <Minus className="w-4 h-4 stroke-[2] text-[#BA7442]" />
                 ) : (
-                  <Plus className="w-4 h-4 stroke-[1.8] text-[#8C7E75]" />
+                  <Plus className="w-4 h-4 stroke-[2] text-[#5C4A40]" />
                 )}
               </button>
             </div>
 
             {expandedCats["beauty"] && (
-              <div className="pl-11 pr-3 py-1 space-y-1 bg-[#FAF4ED]/50 rounded-lg animate-in fade-in slide-in-from-top-1 duration-150">
+              <div className="pl-11 pr-3 py-1.5 space-y-1 bg-[#FAF4ED] rounded-lg animate-in fade-in slide-in-from-top-1 duration-150 border border-[#EAE2D8]/60">
                 {(subcategoriesMap.beauty || CATEGORY_SUBCATEGORIES.beauty).map((sub) => (
                   <button
                     key={sub}
                     type="button"
                     onClick={() => handleSubCategoryClick("beauty", sub)}
-                    className="block w-full text-left py-1 text-xs text-[#5A4D45] hover:text-[#9C5A2C] font-sans font-medium transition-colors"
+                    className="block w-full text-left py-1 text-[12.5px] text-[#3B2C24] hover:text-[#BA7442] font-sans font-semibold transition-colors"
                   >
                     • {sub}
                   </button>
@@ -473,15 +473,15 @@ export default function SidebarMenu({
                 onOpenWishlist();
                 onClose();
               }}
-              className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left hover:bg-[#F3ECE4]/60 transition-colors group cursor-pointer"
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left hover:bg-[#F3ECE4]/80 transition-colors group cursor-pointer"
             >
               <div className="flex items-center gap-3.5">
-                <Heart className="w-5 h-5 text-[#C5A47E] stroke-[1.4] group-hover:scale-105 transition-transform" />
-                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#231610] font-normal group-hover:text-[#9C5A2C] transition-colors">
+                <Heart className="w-5 h-5 text-[#BA7442] stroke-[1.6] group-hover:scale-105 transition-transform" />
+                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#1C110B] font-medium group-hover:text-[#BA7442] transition-colors">
                   WISHLIST
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#8C7E75] stroke-[1.5]" />
+              <ChevronRight className="w-4 h-4 text-[#5C4A40] stroke-[1.8]" />
             </button>
           </div>
 
@@ -493,15 +493,15 @@ export default function SidebarMenu({
                 onOpenStoreLocator();
                 onClose();
               }}
-              className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left hover:bg-[#F3ECE4]/60 transition-colors group cursor-pointer"
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left hover:bg-[#F3ECE4]/80 transition-colors group cursor-pointer"
             >
               <div className="flex items-center gap-3.5">
-                <MapPin className="w-5 h-5 text-[#C5A47E] stroke-[1.4] group-hover:scale-105 transition-transform" />
-                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#231610] font-normal group-hover:text-[#9C5A2C] transition-colors">
+                <MapPin className="w-5 h-5 text-[#BA7442] stroke-[1.6] group-hover:scale-105 transition-transform" />
+                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#1C110B] font-medium group-hover:text-[#BA7442] transition-colors">
                   STORE LOCATOR
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#8C7E75] stroke-[1.5]" />
+              <ChevronRight className="w-4 h-4 text-[#5C4A40] stroke-[1.8]" />
             </button>
           </div>
 
@@ -513,15 +513,15 @@ export default function SidebarMenu({
                 onOpenAboutUs();
                 onClose();
               }}
-              className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left hover:bg-[#F3ECE4]/60 transition-colors group cursor-pointer"
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left hover:bg-[#F3ECE4]/80 transition-colors group cursor-pointer"
             >
               <div className="flex items-center gap-3.5">
-                <Info className="w-5 h-5 text-[#C5A47E] stroke-[1.4] group-hover:scale-105 transition-transform" />
-                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#231610] font-normal group-hover:text-[#9C5A2C] transition-colors">
+                <Info className="w-5 h-5 text-[#BA7442] stroke-[1.6] group-hover:scale-105 transition-transform" />
+                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#1C110B] font-medium group-hover:text-[#BA7442] transition-colors">
                   ABOUT US
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#8C7E75] stroke-[1.5]" />
+              <ChevronRight className="w-4 h-4 text-[#5C4A40] stroke-[1.8]" />
             </button>
           </div>
 
@@ -533,70 +533,70 @@ export default function SidebarMenu({
                 onOpenContactUs();
                 onClose();
               }}
-              className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left hover:bg-[#F3ECE4]/60 transition-colors group cursor-pointer"
+              className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left hover:bg-[#F3ECE4]/80 transition-colors group cursor-pointer"
             >
               <div className="flex items-center gap-3.5">
-                <Phone className="w-5 h-5 text-[#C5A47E] stroke-[1.4] group-hover:scale-105 transition-transform" />
-                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#231610] font-normal group-hover:text-[#9C5A2C] transition-colors">
+                <Phone className="w-5 h-5 text-[#BA7442] stroke-[1.6] group-hover:scale-105 transition-transform" />
+                <span className="text-[13.5px] sm:text-[14.5px] font-serif-luxury uppercase tracking-[0.14em] text-[#1C110B] font-medium group-hover:text-[#BA7442] transition-colors">
                   CONTACT US
                 </span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#8C7E75] stroke-[1.5]" />
+              <ChevronRight className="w-4 h-4 text-[#5C4A40] stroke-[1.8]" />
             </button>
           </div>
         </div>
 
-        {/* Bottom Feature Badges Bar (Exact 4 Columns Matching Reference) */}
+        {/* Bottom Feature Badges Bar */}
         <div className="bg-[#F6EFE7] border-t border-[#EAE2D8] py-4 px-2 sm:px-3">
           <div className="grid grid-cols-4 gap-1 sm:gap-2 text-center">
             {/* 1. Free Shipping */}
             <div className="flex flex-col items-center justify-center p-1">
-              <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-[#BA7442] stroke-[1.4] mb-1" />
-              <span className="text-[8px] sm:text-[9px] font-bold text-[#231610] uppercase tracking-wider leading-none">
+              <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-[#BA7442] stroke-[1.6] mb-1" />
+              <span className="text-[8px] sm:text-[9px] font-bold text-[#1C110B] uppercase tracking-wider leading-none">
                 FREE
                 <br />
                 SHIPPING
               </span>
-              <span className="text-[7px] sm:text-[7.5px] text-[#7A6F68] font-normal leading-tight mt-1 line-clamp-2">
+              <span className="text-[7px] sm:text-[7.5px] text-[#5C4A40] font-medium leading-tight mt-1 line-clamp-2">
                 On orders above ₹999
               </span>
             </div>
 
             {/* 2. Easy Returns */}
             <div className="flex flex-col items-center justify-center p-1">
-              <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5 text-[#BA7442] stroke-[1.4] mb-1" />
-              <span className="text-[8px] sm:text-[9px] font-bold text-[#231610] uppercase tracking-wider leading-none">
+              <RotateCcw className="w-4 h-4 sm:w-5 sm:h-5 text-[#BA7442] stroke-[1.6] mb-1" />
+              <span className="text-[8px] sm:text-[9px] font-bold text-[#1C110B] uppercase tracking-wider leading-none">
                 EASY
                 <br />
                 RETURNS
               </span>
-              <span className="text-[7px] sm:text-[7.5px] text-[#7A6F68] font-normal leading-tight mt-1 line-clamp-2">
+              <span className="text-[7px] sm:text-[7.5px] text-[#5C4A40] font-medium leading-tight mt-1 line-clamp-2">
                 Hassle-free returns
               </span>
             </div>
 
             {/* 3. Secure Payments */}
             <div className="flex flex-col items-center justify-center p-1">
-              <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-[#BA7442] stroke-[1.4] mb-1" />
-              <span className="text-[8px] sm:text-[9px] font-bold text-[#231610] uppercase tracking-wider leading-none">
+              <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 text-[#BA7442] stroke-[1.6] mb-1" />
+              <span className="text-[8px] sm:text-[9px] font-bold text-[#1C110B] uppercase tracking-wider leading-none">
                 SECURE
                 <br />
                 PAYMENTS
               </span>
-              <span className="text-[7px] sm:text-[7.5px] text-[#7A6F68] font-normal leading-tight mt-1 line-clamp-2">
+              <span className="text-[7px] sm:text-[7.5px] text-[#5C4A40] font-medium leading-tight mt-1 line-clamp-2">
                 100% secure checkout
               </span>
             </div>
 
             {/* 4. Support */}
             <div className="flex flex-col items-center justify-center p-1">
-              <Headphones className="w-4 h-4 sm:w-5 sm:h-5 text-[#BA7442] stroke-[1.4] mb-1" />
-              <span className="text-[8px] sm:text-[9px] font-bold text-[#231610] uppercase tracking-wider leading-none">
+              <Headphones className="w-4 h-4 sm:w-5 sm:h-5 text-[#BA7442] stroke-[1.6] mb-1" />
+              <span className="text-[8px] sm:text-[9px] font-bold text-[#1C110B] uppercase tracking-wider leading-none">
                 SUPPORT
                 <br />
                 WE ARE HERE
               </span>
-              <span className="text-[7px] sm:text-[7.5px] text-[#7A6F68] font-normal leading-tight mt-1 line-clamp-2">
+              <span className="text-[7px] sm:text-[7.5px] text-[#5C4A40] font-medium leading-tight mt-1 line-clamp-2">
                 We are here to help
               </span>
             </div>

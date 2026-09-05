@@ -1,13 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import sharp from "sharp";
 import crypto from "crypto";
-import { getS3Object, convertHeicToJpeg, isS3Configured, uploadToS3Direct } from "@/lib/aws/s3Service";
+import { getS3Object, convertHeicToJpeg, uploadToS3Direct, isS3Configured } from "@/lib/aws/s3Service";
 
 interface RouteParams {
   params: Promise<{
     key: string[];
   }>;
 }
+
+interface CachedImageEntry {
+  buffer: Buffer;
+  contentType: string;
+  etag: string;
+  cachedAt: number;
+}
+
+// High-speed In-Memory LRU Cache for sub-millisecond repeated responses (< 1ms)
+const MEMORY_CACHE = new Map<string, CachedImageEntry>();
+const MAX_MEMORY_ITEMS = 500;
+
+function setMemoryCache(key: string, entry: CachedImageEntry) {
+  if (MEMORY_CACHE.size >= MAX_MEMORY_ITEMS) {
+    const oldestKey = MEMORY_CACHE.keys().next().value;
+    if (oldestKey) MEMORY_CACHE.delete(oldestKey);
+  }
+  MEMORY_CACHE.set(key, entry);
+}
+
+// Deduplicate in-flight promises so multiple simultaneous requests for the same image don't do duplicate work
+const IN_FLIGHT_PROMISES = new Map<string, Promise<{ buffer: Buffer; contentType: string; etag: string }>>();
 
 export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
@@ -16,8 +38,9 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       return new NextResponse("Invalid S3 image key", { status: 400 });
     }
 
+    // Force POSIX path formatting (forward slashes only)
     const rawKey = resolvedParams.key.map(decodeURIComponent).join("/");
-    const s3Key = rawKey.split("?")[0].split("#")[0].replace(/^\/+/, "");
+    const s3Key = rawKey.split("?")[0].split("#")[0].replace(/\\/g, "/").replace(/^\/+/, "");
     const searchParams = req.nextUrl.searchParams;
 
     let requestedWidth = searchParams.get("w") ? parseInt(searchParams.get("w")!, 10) : null;
@@ -36,113 +59,208 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       }
     }
 
-    // Check if client provided conditional ETag
+    const memoryCacheKey = `${s3Key}:w=${requestedWidth || "orig"}:q=${requestedQuality || "def"}`;
+
+    // 1. In-Memory Cache Check (< 1ms response)
     const ifNoneMatch = req.headers.get("if-none-match");
-
-    // Case 1: The key itself is already an optimized WebP derivative
-    if (s3Key.includes("/optimized/") && s3Key.toLowerCase().endsWith(".webp")) {
-      const s3Data = await getS3Object(s3Key);
-
-      if (s3Data.etag && ifNoneMatch && ifNoneMatch === s3Data.etag) {
+    const cachedEntry = MEMORY_CACHE.get(memoryCacheKey);
+    if (cachedEntry) {
+      if (ifNoneMatch && ifNoneMatch === cachedEntry.etag) {
         return new NextResponse(null, { status: 304 });
       }
 
-      const headers: Record<string, string> = {
-        "Content-Type": "image/webp",
-        "Content-Length": String(s3Data.buffer.byteLength),
-        "Cache-Control": "public, max-age=31536000, immutable",
-        "Vary": "Accept",
-      };
-      if (s3Data.etag) headers["ETag"] = s3Data.etag;
-
-      return new NextResponse(new Uint8Array(s3Data.buffer), {
+      return new NextResponse(new Uint8Array(cachedEntry.buffer), {
         status: 200,
-        headers,
+        headers: {
+          "Content-Type": cachedEntry.contentType,
+          "Content-Length": String(cachedEntry.buffer.byteLength),
+          "Cache-Control": "public, max-age=31536000, immutable",
+          "ETag": cachedEntry.etag,
+          "Vary": "Accept",
+          "X-Image-Cache": "HIT-MEMORY",
+        },
       });
     }
 
-    // Case 2: Target width requested and an optimized derivative might already exist in S3
-    if (requestedWidth && (requestedWidth === 400 || requestedWidth === 800 || requestedWidth === 1200 || requestedWidth === 1600)) {
-      const potentialOptimizedKey = s3Key
-        .replace("/original/", "/optimized/")
-        .replace(/\.[^.]+$/, `-${requestedWidth}w.webp`);
+    // 2. Direct S3 WebP Request
+    if (s3Key.toLowerCase().endsWith(".webp")) {
+      const s3Data = await getS3Object(s3Key);
+      const generatedEtag = s3Data.etag || `"${crypto.createHash("md5").update(s3Data.buffer).digest("hex")}"`;
 
-      if (potentialOptimizedKey !== s3Key && potentialOptimizedKey.includes("/optimized/")) {
+      setMemoryCache(memoryCacheKey, {
+        buffer: s3Data.buffer,
+        contentType: "image/webp",
+        etag: generatedEtag,
+        cachedAt: Date.now(),
+      });
+
+      if (ifNoneMatch && ifNoneMatch === generatedEtag) {
+        return new NextResponse(null, { status: 304 });
+      }
+
+      return new NextResponse(new Uint8Array(s3Data.buffer), {
+        status: 200,
+        headers: {
+          "Content-Type": "image/webp",
+          "Content-Length": String(s3Data.buffer.byteLength),
+          "Cache-Control": "public, max-age=31536000, immutable",
+          "ETag": generatedEtag,
+          "Vary": "Accept",
+          "X-Image-Cache": "HIT-S3-DIRECT",
+        },
+      });
+    }
+
+    // 3. Pre-Optimized S3 Derivative Check (using strict POSIX pathing)
+    if (requestedWidth && (requestedWidth === 400 || requestedWidth === 800 || requestedWidth === 1200 || requestedWidth === 1600)) {
+      const parts = s3Key.split("/");
+      const fileName = parts.pop() || "";
+      const baseDir = parts.join("/");
+      const dotIdx = fileName.lastIndexOf(".");
+      const baseName = dotIdx !== -1 ? fileName.slice(0, dotIdx) : fileName;
+
+      // Candidate derivative keys
+      const candidateKeys = [
+        baseDir ? `${baseDir}/${baseName}-${requestedWidth}w.webp` : `${baseName}-${requestedWidth}w.webp`,
+        baseDir ? `${baseDir}/optimized/${baseName}-${requestedWidth}w.webp` : `optimized/${baseName}-${requestedWidth}w.webp`,
+        baseDir.includes("/original") ? `${baseDir.replace("/original", "/optimized")}/${baseName}-${requestedWidth}w.webp` : null,
+      ].filter((k): k is string => Boolean(k));
+
+      for (const candKey of candidateKeys) {
         try {
-          const cachedS3Data = await getS3Object(potentialOptimizedKey);
-          if (cachedS3Data.etag && ifNoneMatch && ifNoneMatch === cachedS3Data.etag) {
+          const preOptS3Data = await getS3Object(candKey);
+          const candEtag = preOptS3Data.etag || `"${crypto.createHash("md5").update(preOptS3Data.buffer).digest("hex")}"`;
+
+          setMemoryCache(memoryCacheKey, {
+            buffer: preOptS3Data.buffer,
+            contentType: "image/webp",
+            etag: candEtag,
+            cachedAt: Date.now(),
+          });
+
+          if (ifNoneMatch && ifNoneMatch === candEtag) {
             return new NextResponse(null, { status: 304 });
           }
 
-          const headers: Record<string, string> = {
-            "Content-Type": "image/webp",
-            "Content-Length": String(cachedS3Data.buffer.byteLength),
-            "Cache-Control": "public, max-age=31536000, immutable",
-            "Vary": "Accept",
-          };
-          if (cachedS3Data.etag) headers["ETag"] = cachedS3Data.etag;
-
-          return new NextResponse(new Uint8Array(cachedS3Data.buffer), {
+          return new NextResponse(new Uint8Array(preOptS3Data.buffer), {
             status: 200,
-            headers,
+            headers: {
+              "Content-Type": "image/webp",
+              "Content-Length": String(preOptS3Data.buffer.byteLength),
+              "Cache-Control": "public, max-age=31536000, immutable",
+              "ETag": candEtag,
+              "Vary": "Accept",
+              "X-Image-Cache": "HIT-S3-DERIVATIVE",
+            },
           });
         } catch {
-          // Pre-optimized derivative not found; continue to on-the-fly Sharp optimization
+          // Pre-optimized derivative not found; try next or generate
         }
       }
     }
 
-    // Case 3: Fetch original image and optimize on-the-fly using Sharp
-    const s3Data = await getS3Object(s3Key);
-    let imageBuffer = s3Data.buffer;
-    const lowerKey = s3Key.toLowerCase();
+    // 4. Generate Derivative on the fly, save to S3 permanently, and return
+    let inFlight = IN_FLIGHT_PROMISES.get(memoryCacheKey);
+    if (!inFlight) {
+      inFlight = (async () => {
+        const s3Data = await getS3Object(s3Key);
+        let imageBuffer = s3Data.buffer;
+        const lowerKey = s3Key.toLowerCase();
 
-    // Check if source is HEIC/HEIF
-    const isHeic =
-      lowerKey.endsWith(".heic") ||
-      lowerKey.endsWith(".heif") ||
-      s3Data.contentType.toLowerCase().includes("heic") ||
-      s3Data.contentType.toLowerCase().includes("heif");
+        // Check if source is HEIC/HEIF
+        const isHeic =
+          lowerKey.endsWith(".heic") ||
+          lowerKey.endsWith(".heif") ||
+          s3Data.contentType.toLowerCase().includes("heic") ||
+          s3Data.contentType.toLowerCase().includes("heif");
 
-    if (isHeic) {
-      try {
-        imageBuffer = await convertHeicToJpeg(imageBuffer);
-      } catch (convErr) {
-        console.warn(`[Image Proxy] HEIC conversion fallback for ${s3Key}:`, convErr);
-      }
+        if (isHeic) {
+          try {
+            imageBuffer = await convertHeicToJpeg(imageBuffer);
+          } catch (convErr) {
+            console.warn(`[Image Proxy] HEIC conversion fallback for ${s3Key}:`, convErr);
+          }
+        }
+
+        const targetW = requestedWidth || 1200;
+        const targetQuality = requestedQuality ? Math.min(Math.max(requestedQuality, 60), 95) : 84;
+
+        const webpBuffer = await sharp(imageBuffer)
+          .rotate()
+          .resize(targetW, null, {
+            withoutEnlargement: true,
+            fit: "inside",
+          })
+          .webp({ quality: targetQuality, effort: 4 })
+          .toBuffer();
+
+        const generatedEtag = `"${crypto.createHash("md5").update(webpBuffer).digest("hex")}"`;
+
+        // Save generated derivative back to S3 in the background so future requests never need Sharp
+        if (isS3Configured() && requestedWidth) {
+          const parts = s3Key.split("/");
+          const fileName = parts.pop() || "";
+          const baseDir = parts.join("/");
+          const dotIdx = fileName.lastIndexOf(".");
+          const baseName = dotIdx !== -1 ? fileName.slice(0, dotIdx) : fileName;
+          const derivativeS3Key = baseDir
+            ? `${baseDir}/${baseName}-${requestedWidth}w.webp`
+            : `${baseName}-${requestedWidth}w.webp`;
+
+          const region = process.env.AWS_REGION || "ap-southeast-2";
+          const bucket = process.env.AWS_S3_BUCKET_NAME || "insha-collection-assets";
+          const accessKey = process.env.AWS_ACCESS_KEY_ID!.trim();
+          const secretKey = process.env.AWS_SECRET_ACCESS_KEY!.trim();
+
+          // Fire and forget upload so client response is not delayed
+          uploadToS3Direct(
+            webpBuffer,
+            derivativeS3Key,
+            "image/webp",
+            bucket,
+            region,
+            accessKey,
+            secretKey,
+            "public, max-age=31536000, immutable"
+          ).catch((upErr) => {
+            console.warn(`[Image Proxy] Could not persist generated derivative ${derivativeS3Key}:`, upErr);
+          });
+        }
+
+        return {
+          buffer: webpBuffer,
+          contentType: "image/webp",
+          etag: generatedEtag,
+        };
+      })();
+
+      IN_FLIGHT_PROMISES.set(memoryCacheKey, inFlight);
     }
 
-    // Process with Sharp into WebP
-    let sharpInstance = sharp(imageBuffer).rotate();
+    const result = await inFlight;
+    IN_FLIGHT_PROMISES.delete(memoryCacheKey);
 
-    // Apply target width resizing if specified, or constrain enormous raw originals (>1600px)
-    const targetW = requestedWidth || 1200;
-    sharpInstance = sharpInstance.resize(targetW, null, {
-      withoutEnlargement: true,
-      fit: "inside",
+    setMemoryCache(memoryCacheKey, {
+      buffer: result.buffer,
+      contentType: result.contentType,
+      etag: result.etag,
+      cachedAt: Date.now(),
     });
 
-    const targetQuality = requestedQuality ? Math.min(Math.max(requestedQuality, 60), 95) : 82;
-    const webpBuffer = await sharpInstance.webp({ quality: targetQuality, effort: 4 }).toBuffer();
-
-    // Compute strong ETag for cached delivery
-    const generatedEtag = `"${crypto.createHash("md5").update(webpBuffer).digest("hex")}"`;
-
-    if (ifNoneMatch && ifNoneMatch === generatedEtag) {
+    if (ifNoneMatch && ifNoneMatch === result.etag) {
       return new NextResponse(null, { status: 304 });
     }
 
-    const headers: Record<string, string> = {
-      "Content-Type": "image/webp",
-      "Content-Length": String(webpBuffer.byteLength),
-      "Cache-Control": "public, max-age=31536000, immutable",
-      "ETag": generatedEtag,
-      "Vary": "Accept",
-    };
-
-    return new NextResponse(new Uint8Array(webpBuffer), {
+    return new NextResponse(new Uint8Array(result.buffer), {
       status: 200,
-      headers,
+      headers: {
+        "Content-Type": "image/webp",
+        "Content-Length": String(result.buffer.byteLength),
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "ETag": result.etag,
+        "Vary": "Accept",
+        "X-Image-Cache": "MISS-GENERATED-AND-STORED",
+      },
     });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "Failed to load image";
@@ -150,3 +268,4 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
     return new NextResponse(`Image not found or error loading: ${msg}`, { status: 404 });
   }
 }
+

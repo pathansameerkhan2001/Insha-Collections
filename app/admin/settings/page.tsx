@@ -18,7 +18,6 @@ import {
   FolderPlus,
   Zap,
   Sparkles,
-  Image as ImageIcon,
 } from "lucide-react";
 import { ProductCategory } from "@/lib/products/productTypes";
 
@@ -58,23 +57,19 @@ export default function AdminSettingsPage() {
 
   // Image optimization state
   const [isOptimizingImages, setIsOptimizingImages] = useState(false);
-  const [optimizeResult, setOptimizeResult] = useState<string | null>(null);
 
   const handleBatchOptimizeImages = async () => {
     setIsOptimizingImages(true);
-    setOptimizeResult(null);
     try {
       const res = await fetch("/api/admin/images/optimize-catalog", { method: "POST" });
       const data = await res.json();
       if (data.success) {
-        setOptimizeResult(data.message);
         setStatusMessage({ type: "success", text: data.message });
       } else {
         throw new Error(data.error || "Optimization failed.");
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Image optimization failed";
-      setOptimizeResult(msg);
       setStatusMessage({ type: "error", text: msg });
     } finally {
       setIsOptimizingImages(false);

@@ -1,5 +1,4 @@
 import { subcategoryStore } from "../lib/categories/subcategoryStore";
-import { productStore } from "../lib/products/productStore";
 
 async function runTests() {
   console.log("=== STARTING SUBCATEGORY SYSTEM TESTS ===");
@@ -14,8 +13,8 @@ async function runTests() {
   try {
     subcategoryStore.create("jewellery", initialData.jewellery[0].name);
     console.error("FAIL: Duplicate should have thrown an error!");
-  } catch (err: any) {
-    console.log("PASS: Duplicate check blocked creation:", err.message);
+  } catch (err: unknown) {
+    console.log("PASS: Duplicate check blocked creation:", err instanceof Error ? err.message : String(err));
   }
 
   // 3. Test Add New Subcategory
@@ -38,8 +37,8 @@ async function runTests() {
     try {
       subcategoryStore.delete("jewellery", subInUse.name);
       console.error("FAIL: Delete in-use subcategory should have thrown error!");
-    } catch (err: any) {
-      console.log("PASS: Delete protection active:", err.message);
+    } catch (err: unknown) {
+      console.log("PASS: Delete protection active:", err instanceof Error ? err.message : String(err));
     }
   }
 

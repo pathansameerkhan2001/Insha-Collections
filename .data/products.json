@@ -14,14 +14,14 @@
     "inStock": true,
     "status": "Active",
     "featured": false,
-    "mainImage": "/api/images/s3/products/new/showcase/1788612583011-chatgpt-image-sep-5-2026-06-19-02-pm.png?w=400",
+    "mainImage": "/api/images/s3/products/new/showcase/1788612583011-chatgpt-image-sep-5-2026-06-19-02-pm-400w.webp",
     "images": [
-      "/api/images/s3/products/new/real/1788613099662-img-46512.jpg",
+      "/api/images/s3/products/new/real/1788613099662-img-46512-800w.webp",
       "/api/images/s3/products/jewel-144210/real/optimized/1788625676235-neckles1-800w.webp"
     ],
-    "showcaseImage": "/api/images/s3/products/new/showcase/1788612583011-chatgpt-image-sep-5-2026-06-19-02-pm.png",
+    "showcaseImage": "/api/images/s3/products/new/showcase/1788612583011-chatgpt-image-sep-5-2026-06-19-02-pm-400w.webp",
     "realImages": [
-      "/api/images/s3/products/new/real/1788613099662-img-46512.jpg",
+      "/api/images/s3/products/new/real/1788613099662-img-46512-800w.webp",
       "/api/images/s3/products/jewel-144210/real/optimized/1788625676235-neckles1-800w.webp"
     ],
     "rating": 5,
@@ -44,13 +44,13 @@
     "inStock": true,
     "status": "Active",
     "featured": false,
-    "mainImage": "/api/images/s3/products/new/showcase/1788610690589-chatgpt-image-sep-5-2026-05-47-52-pm.png?w=400",
+    "mainImage": "/api/images/s3/products/new/showcase/1788610690589-chatgpt-image-sep-5-2026-05-47-52-pm-400w.webp",
     "images": [
-      "/api/images/s3/products/new/real/1788610696845-img-4763.jpg"
+      "/api/images/s3/products/new/real/1788610696845-img-4763-800w.webp"
     ],
-    "showcaseImage": "/api/images/s3/products/new/showcase/1788610690589-chatgpt-image-sep-5-2026-05-47-52-pm.png",
+    "showcaseImage": "/api/images/s3/products/new/showcase/1788610690589-chatgpt-image-sep-5-2026-05-47-52-pm-400w.webp",
     "realImages": [
-      "/api/images/s3/products/new/real/1788610696845-img-4763.jpg"
+      "/api/images/s3/products/new/real/1788610696845-img-4763-800w.webp"
     ],
     "material": "Fabric with pearl-style embellishments",
     "details": [
@@ -76,13 +76,13 @@
     "inStock": true,
     "status": "Active",
     "featured": false,
-    "mainImage": "/api/images/s3/products/new/showcase/1788610127272-chatgpt-image-sep-5-2026-05-38-27-pm.png?w=400",
+    "mainImage": "/api/images/s3/products/new/showcase/1788610127272-chatgpt-image-sep-5-2026-05-38-27-pm-400w.webp",
     "images": [
-      "/api/images/s3/products/new/real/1788610132796-img-4749.jpg"
+      "/api/images/s3/products/new/real/1788610132796-img-4749-800w.webp"
     ],
-    "showcaseImage": "/api/images/s3/products/new/showcase/1788610127272-chatgpt-image-sep-5-2026-05-38-27-pm.png",
+    "showcaseImage": "/api/images/s3/products/new/showcase/1788610127272-chatgpt-image-sep-5-2026-05-38-27-pm-400w.webp",
     "realImages": [
-      "/api/images/s3/products/new/real/1788610132796-img-4749.jpg"
+      "/api/images/s3/products/new/real/1788610132796-img-4749-800w.webp"
     ],
     "rating": 5,
     "reviewsCount": 1,

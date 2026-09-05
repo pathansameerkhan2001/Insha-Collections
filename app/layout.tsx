@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cinzel, Cormorant_Garamond, Montserrat } from "next/font/google";
+import FloatingContactButton from "@/components/FloatingContactButton";
 import "./globals.css";
 
 const cinzel = Cinzel({
@@ -56,6 +57,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-[#FAF7F3] text-[#231610] font-sans selection:bg-[#C5A57E]/20 selection:text-[#231610]">
         {children}
+        <FloatingContactButton />
       </body>
     </html>
   );

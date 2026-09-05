@@ -225,7 +225,7 @@ export function getQuickViewImageUrls(
     mainImage?: string;
     image?: string;
   },
-  targetWidth: 800 | 1200 = 800
+  targetWidth: 400 | 800 | 1200 = 800
 ): string[] {
   if (product.realImages && product.realImages.length > 0) {
     const urls = product.realImages

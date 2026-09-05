@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Mail, Phone, MapPin, Clock, Check } from "lucide-react";
+import { FacebookIcon, InstagramIcon, YouTubeIcon } from "./BrandIcons";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -160,19 +161,9 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit Insha Collections on Facebook"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#D5C2AF] text-[#231610] hover:text-[#BA7442] hover:border-[#BA7442] bg-[#FAF7F2] hover:bg-white flex items-center justify-center transition-all duration-200 shadow-xs"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#D5C2AF] text-[#231610] hover:text-[#BA7442] hover:border-[#BA7442] bg-[#FAF7F2] hover:bg-white flex items-center justify-center transition-all duration-200 shadow-xs hover:scale-108"
               >
-                <svg
-                  className="w-4 h-4 sm:w-[17px] sm:h-[17px]"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                </svg>
+                <FacebookIcon className="w-4 h-4 sm:w-[17px] sm:h-[17px]" />
               </a>
 
               {/* Instagram */}
@@ -181,21 +172,9 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit Insha Collections on Instagram"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#D5C2AF] text-[#231610] hover:text-[#BA7442] hover:border-[#BA7442] bg-[#FAF7F2] hover:bg-white flex items-center justify-center transition-all duration-200 shadow-xs"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#D5C2AF] text-[#231610] hover:text-[#BA7442] hover:border-[#BA7442] bg-[#FAF7F2] hover:bg-white flex items-center justify-center transition-all duration-200 shadow-xs hover:scale-108"
               >
-                <svg
-                  className="w-4 h-4 sm:w-[17px] sm:h-[17px]"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                  <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-                </svg>
+                <InstagramIcon className="w-4 h-4 sm:w-[17px] sm:h-[17px]" />
               </a>
 
               {/* YouTube */}
@@ -204,15 +183,9 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit Insha Collections on YouTube"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#D5C2AF] text-[#231610] hover:text-[#BA7442] hover:border-[#BA7442] bg-[#FAF7F2] hover:bg-white flex items-center justify-center transition-all duration-200 shadow-xs"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#D5C2AF] text-[#231610] hover:text-[#BA7442] hover:border-[#BA7442] bg-[#FAF7F2] hover:bg-white flex items-center justify-center transition-all duration-200 shadow-xs hover:scale-108"
               >
-                <svg
-                  className="w-4 h-4 sm:w-[17px] sm:h-[17px]"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                </svg>
+                <YouTubeIcon className="w-4 h-4 sm:w-[17px] sm:h-[17px]" />
               </a>
             </div>
           </div>
