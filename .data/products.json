@@ -1,0 +1,2296 @@
+[
+  {
+    "id": "jewel-144210",
+    "name": "Gold Designer Necklace & Earring Set",
+    "slug": "gold-designer-necklace-earring-set",
+    "category": "jewellery",
+    "subCategory": "Necklaces & Chokers",
+    "description": "Elegant gold-tone necklace set featuring intricate traditional detailing with matching statement earrings, perfect for weddings, festive occasions, and special celebrations.",
+    "shortDescription": "Elegant gold-tone necklace set featuring intricate traditional detailing with matching statement earrings, perfect for w...",
+    "price": 999,
+    "salePrice": 15000,
+    "sku": "INSHA-JEW-4211",
+    "stockQuantity": 15,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/api/images/s3/products/new/showcase/1788612583011-chatgpt-image-sep-5-2026-06-19-02-pm.png",
+    "images": [
+      "/api/images/s3/products/new/real/1788613099662-img-46512.jpg"
+    ],
+    "showcaseImage": "/api/images/s3/products/new/showcase/1788612583011-chatgpt-image-sep-5-2026-06-19-02-pm.png",
+    "realImages": [
+      "/api/images/s3/products/new/real/1788613099662-img-46512.jpg"
+    ],
+    "rating": 5,
+    "reviewsCount": 1,
+    "createdAt": "2026-09-05T12:59:04.210Z",
+    "updatedAt": "2026-09-05T12:59:04.210Z"
+  },
+  {
+    "id": "kor-820613",
+    "name": "Pearl Studded Pink Headband",
+    "slug": "pearl-studded-pink-headband",
+    "category": "korean",
+    "subCategory": "Korean Fashion Accessories",
+    "description": "Elegant pink headband decorated with delicate pearl-style studs, perfect for adding a stylish touch to everyday and special occasion looks.",
+    "shortDescription": "Elegant pink headband with delicate pearl-style detailing.",
+    "price": 450,
+    "salePrice": 999,
+    "sku": "INSHA-KOR-0613",
+    "stockQuantity": 15,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/api/images/s3/products/new/showcase/1788610690589-chatgpt-image-sep-5-2026-05-47-52-pm.png",
+    "images": [
+      "/api/images/s3/products/new/real/1788610696845-img-4763.jpg"
+    ],
+    "showcaseImage": "/api/images/s3/products/new/showcase/1788610690589-chatgpt-image-sep-5-2026-05-47-52-pm.png",
+    "realImages": [
+      "/api/images/s3/products/new/real/1788610696845-img-4763.jpg"
+    ],
+    "material": "Fabric with pearl-style embellishments",
+    "details": [
+      "Elegant pink design"
+    ],
+    "rating": 5,
+    "reviewsCount": 1,
+    "createdAt": "2026-09-05T12:20:20.613Z",
+    "updatedAt": "2026-09-05T12:20:20.613Z"
+  },
+  {
+    "id": "kor-210473",
+    "name": "Korean Butterfly Hair Accessories Set",
+    "slug": "korean-butterfly-hair-accessories-set",
+    "category": "korean",
+    "subCategory": "Hair Clips",
+    "description": "Cute butterfly hair accessories with colorful ribbons, pearls, and tassel details, perfect for everyday styling, parties, and gifting.",
+    "shortDescription": "Cute butterfly hair accessories with elegant ribbons and pearl details.",
+    "price": 850,
+    "salePrice": 1000,
+    "sku": "INSHA-KOR-0475",
+    "stockQuantity": 15,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/api/images/s3/products/new/showcase/1788610127272-chatgpt-image-sep-5-2026-05-38-27-pm.png",
+    "images": [
+      "/api/images/s3/products/new/real/1788610132796-img-4749.jpg"
+    ],
+    "showcaseImage": "/api/images/s3/products/new/showcase/1788610127272-chatgpt-image-sep-5-2026-05-38-27-pm.png",
+    "realImages": [
+      "/api/images/s3/products/new/real/1788610132796-img-4749.jpg"
+    ],
+    "rating": 5,
+    "reviewsCount": 1,
+    "createdAt": "2026-09-05T12:10:10.473Z",
+    "updatedAt": "2026-09-05T12:13:18.242Z"
+  },
+  {
+    "id": "jewel-3",
+    "name": "Traditional Kundan Jhumka Earrings",
+    "slug": "traditional-kundan-jhumka-earrings",
+    "category": "jewellery",
+    "subCategory": "Earrings / Jhumkas",
+    "description": "Ornate traditional chandelier jhumkas featuring vibrant green Meenakari enamel, polki stones, and cascading pearl clusters.",
+    "shortDescription": "Ornate traditional chandelier jhumkas featuring vibrant green Meenakari enamel, polki stones, and cascading pearl cluste...",
+    "price": 1599,
+    "salePrice": 1999,
+    "sku": "INSHA-JEW-003",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/prod-kundan-jhumkas.jpg",
+    "images": [
+      "/images/prod-kundan-jhumkas.jpg"
+    ],
+    "material": "Gold Plated Brass with Meenakari Enamel",
+    "details": [
+      "Push-back closure",
+      "Lightweight hollow dome",
+      "Sweat-resistant coating"
+    ],
+    "badge": {
+      "text": "BUY 2 @ 20% OFF",
+      "type": "maroon"
+    },
+    "rating": 4.9,
+    "reviewsCount": 215,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/prod-kundan-jhumkas.jpg"
+    ]
+  },
+  {
+    "id": "jewel-4",
+    "name": "Demi Fine Pearl Pendant Necklace",
+    "slug": "demi-fine-pearl-pendant-necklace",
+    "category": "jewellery",
+    "subCategory": "Pendants & Chains",
+    "description": "Minimalist 18k gold vermeil necklace with a lustrous solitaire South Sea shell pearl framed by a pavé cubic zirconia halo.",
+    "shortDescription": "Minimalist 18k gold vermeil necklace with a lustrous solitaire South Sea shell pearl framed by a pavé cubic zirconia hal...",
+    "price": 899,
+    "salePrice": 1299,
+    "sku": "INSHA-JEW-004",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/prod-pearl-pendant.jpg",
+    "images": [
+      "/images/prod-pearl-pendant.jpg"
+    ],
+    "material": "18k Gold Vermeil & Shell Pearl",
+    "details": [
+      "16-18 inch adjustable chain",
+      "Waterproof anti-tarnish",
+      "Hypoallergenic"
+    ],
+    "badge": {
+      "text": "BUY 1 GET 1",
+      "type": "gold"
+    },
+    "rating": 4.6,
+    "reviewsCount": 88,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/prod-pearl-pendant.jpg"
+    ]
+  },
+  {
+    "id": "jewel-5",
+    "name": "Royal Polki Statement Ring",
+    "slug": "royal-polki-statement-ring",
+    "category": "jewellery",
+    "subCategory": "Rings",
+    "description": "Regal cocktail ring featuring a centerpiece ruby red gemstone surrounded by radiant uncut polki stones in antique gold setting.",
+    "shortDescription": "Regal cocktail ring featuring a centerpiece ruby red gemstone surrounded by radiant uncut polki stones in antique gold s...",
+    "price": 799,
+    "salePrice": 1199,
+    "sku": "INSHA-JEW-005",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/prod-gold-ring.jpg",
+    "images": [
+      "/images/prod-gold-ring.jpg"
+    ],
+    "material": "Antique Gold Plated Brass & Glass Polki",
+    "details": [
+      "Adjustable band size",
+      "Royal heritage design",
+      "Velvet box included"
+    ],
+    "badge": {
+      "text": "BESTSELLER",
+      "type": "gold"
+    },
+    "rating": 4.8,
+    "reviewsCount": 76,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/prod-gold-ring.jpg"
+    ]
+  },
+  {
+    "id": "jewel-6",
+    "name": "Royal Heritage Bridal Set",
+    "slug": "royal-heritage-bridal-set",
+    "category": "jewellery",
+    "subCategory": "Bridal Jewellery",
+    "description": "Grand bridal set including a heavy polki collar necklace, dramatic chandelier earrings, and matching maang tikka with emerald bead tassels.",
+    "shortDescription": "Grand bridal set including a heavy polki collar necklace, dramatic chandelier earrings, and matching maang tikka with em...",
+    "price": 4999,
+    "salePrice": 6499,
+    "sku": "INSHA-JEW-006",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/prod-bridal-set.jpg",
+    "images": [
+      "/images/prod-bridal-set.jpg"
+    ],
+    "material": "High-grade Brass, Kundan & Green Onyx Beads",
+    "details": [
+      "Complete wedding set",
+      "Velvet presentation chest",
+      "Certified anti-tarnish finish"
+    ],
+    "badge": {
+      "text": "PREMIUM ROYAL",
+      "type": "maroon"
+    },
+    "rating": 5,
+    "reviewsCount": 64,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/prod-bridal-set.jpg"
+    ]
+  },
+  {
+    "id": "jewel-7",
+    "name": "Anti-Tarnish Gold Charm Bracelet",
+    "slug": "anti-tarnish-gold-charm-bracelet",
+    "category": "jewellery",
+    "subCategory": "Bracelets",
+    "description": "Sleek 18k yellow gold-plated bracelet with bezel-set sparkling CZ crystals designed for continuous everyday wear without fading.",
+    "shortDescription": "Sleek 18k yellow gold-plated bracelet with bezel-set sparkling CZ crystals designed for continuous everyday wear without...",
+    "price": 1199,
+    "salePrice": 1599,
+    "sku": "INSHA-JEW-007",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/prod-gold-bracelet.jpg",
+    "images": [
+      "/images/prod-gold-bracelet.jpg"
+    ],
+    "material": "316L Stainless Steel with 18k PVD Gold Coating",
+    "details": [
+      "100% waterproof & sweatproof",
+      "Lobster clasp with extender",
+      "Non-allergic"
+    ],
+    "badge": {
+      "text": "WATERPROOF",
+      "type": "gold"
+    },
+    "rating": 4.7,
+    "reviewsCount": 112,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/prod-gold-bracelet.jpg"
+    ]
+  },
+  {
+    "id": "jewel-8",
+    "name": "Anti-Tarnish Gold Twist Hoops",
+    "slug": "anti-tarnish-gold-twist-hoops",
+    "category": "jewellery",
+    "subCategory": "Anti-Tarnish Jewellery",
+    "description": "Chic French croissant-style twisted gold huggie earrings with pavé diamond accents. Featherlight and effortlessly stylish.",
+    "shortDescription": "Chic French croissant-style twisted gold huggie earrings with pavé diamond accents. Featherlight and effortlessly stylis...",
+    "price": 699,
+    "salePrice": 999,
+    "sku": "INSHA-JEW-008",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/prod-anti-tarnish-hoops.jpg",
+    "images": [
+      "/images/prod-anti-tarnish-hoops.jpg"
+    ],
+    "material": "Stainless Steel with 18k Gold PVD Coating",
+    "details": [
+      "Click-top secure closure",
+      "Tarnish-proof for 2+ years",
+      "Zero nickel/lead"
+    ],
+    "badge": {
+      "text": "DAILY WEAR",
+      "type": "gold"
+    },
+    "rating": 4.6,
+    "reviewsCount": 154,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/prod-anti-tarnish-hoops.jpg"
+    ]
+  },
+  {
+    "id": "jewel-9",
+    "name": "Handcrafted Polki & Emerald Choker Set",
+    "slug": "handcrafted-polki-emerald-choker-set",
+    "category": "jewellery",
+    "subCategory": "Necklaces & Chokers",
+    "description": "Intricate Jadau choker necklace with genuine hydro emeralds and uncut polki glass stones, finished with dainty pearl drops.",
+    "shortDescription": "Intricate Jadau choker necklace with genuine hydro emeralds and uncut polki glass stones, finished with dainty pearl dro...",
+    "price": 3499,
+    "salePrice": 4499,
+    "sku": "INSHA-JEW-009",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/prod-kundan-necklace.jpg",
+    "images": [
+      "/images/prod-kundan-necklace.jpg"
+    ],
+    "material": "24k Gold Micron Plated Alloy",
+    "details": [
+      "Dori adjustable back",
+      "Skin safe anti-allergic alloy",
+      "Includes matching earrings"
+    ],
+    "badge": {
+      "text": "ROYAL HERITAGE",
+      "type": "maroon"
+    },
+    "rating": 4.9,
+    "reviewsCount": 88,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/prod-kundan-necklace.jpg"
+    ]
+  },
+  {
+    "id": "jewel-10",
+    "name": "Ruby Floral Filigree Kada Pair",
+    "slug": "ruby-floral-filigree-kada-pair",
+    "category": "jewellery",
+    "subCategory": "Bangles & Kadas",
+    "description": "Majestic pair of openable gold kadas engraved with botanical vines and centered with bezel rubies.",
+    "shortDescription": "Majestic pair of openable gold kadas engraved with botanical vines and centered with bezel rubies....",
+    "price": 1799,
+    "salePrice": 2399,
+    "sku": "INSHA-JEW-010",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/prod-kundan-bangles.jpg",
+    "images": [
+      "/images/prod-kundan-bangles.jpg"
+    ],
+    "material": "Antique Matte Gold Plated Brass",
+    "details": [
+      "Side hinge lock",
+      "Hand carved motifs",
+      "Fits size 2.4 - 2.8"
+    ],
+    "badge": {
+      "text": "BUY 1 GET 1",
+      "type": "gold"
+    },
+    "rating": 4.8,
+    "reviewsCount": 65,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/prod-kundan-bangles.jpg"
+    ]
+  },
+  {
+    "id": "jewel-11",
+    "name": "Meenakari Chandbali Pearl Earrings",
+    "slug": "meenakari-chandbali-pearl-earrings",
+    "category": "jewellery",
+    "subCategory": "Earrings / Jhumkas",
+    "description": "Regal crescent moon chandbali earrings hand-painted in royal crimson Meenakari with polki embellishments.",
+    "shortDescription": "Regal crescent moon chandbali earrings hand-painted in royal crimson Meenakari with polki embellishments....",
+    "price": 1399,
+    "salePrice": 1899,
+    "sku": "INSHA-JEW-011",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/prod-kundan-jhumkas.jpg",
+    "images": [
+      "/images/prod-kundan-jhumkas.jpg"
+    ],
+    "material": "Brass with Enamel & Seed Pearls",
+    "details": [
+      "Comfortable ear studs",
+      "Lightweight hollow construction",
+      "High-gloss protective coating"
+    ],
+    "badge": {
+      "text": "BESTSELLER",
+      "type": "gold"
+    },
+    "rating": 4.9,
+    "reviewsCount": 110,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/prod-kundan-jhumkas.jpg"
+    ]
+  },
+  {
+    "id": "jewel-12",
+    "name": "Solitaire Emerald Cut Gold Ring",
+    "slug": "solitaire-emerald-cut-gold-ring",
+    "category": "jewellery",
+    "subCategory": "Rings",
+    "description": "Minimalist emerald-cut CZ solitaire ring mounted on a polished 18k PVD gold band. Waterproof everyday luxury.",
+    "shortDescription": "Minimalist emerald-cut CZ solitaire ring mounted on a polished 18k PVD gold band. Waterproof everyday luxury....",
+    "price": 899,
+    "salePrice": 1299,
+    "sku": "INSHA-JEW-012",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/prod-gold-ring.jpg",
+    "images": [
+      "/images/prod-gold-ring.jpg"
+    ],
+    "material": "Stainless Steel with 18k PVD Gold",
+    "details": [
+      "Never fades in water",
+      "Adjustable free-size band",
+      "Diamond grade brilliance"
+    ],
+    "badge": {
+      "text": "WATERPROOF",
+      "type": "maroon"
+    },
+    "rating": 4.7,
+    "reviewsCount": 92,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/prod-gold-ring.jpg"
+    ]
+  },
+  {
+    "id": "drs-1",
+    "name": "Embroidered Ivory Georgette Anarkali",
+    "slug": "embroidered-ivory-georgette-anarkali",
+    "category": "dresses",
+    "subCategory": "Anarkali",
+    "description": "Floor-length pure georgette Anarkali gown with intricate golden zari hand-embroidery on yoke and ornate hem border with matching dupatta.",
+    "shortDescription": "Floor-length pure georgette Anarkali gown with intricate golden zari hand-embroidery on yoke and ornate hem border with ...",
+    "price": 3499,
+    "salePrice": 4499,
+    "sku": "INSHA-DRE-001",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/cat-dresses.jpg",
+    "images": [
+      "/images/cat-dresses.jpg"
+    ],
+    "material": "Pure Faux Georgette with Shantoon Lining",
+    "details": [
+      "Full flared 4.5m ghera",
+      "Padded bust with side zipper",
+      "Available in XS to 3XL"
+    ],
+    "badge": {
+      "text": "FESTIVE WEAR",
+      "type": "maroon"
+    },
+    "rating": 4.9,
+    "reviewsCount": 168,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-dresses.jpg"
+    ]
+  },
+  {
+    "id": "drs-2",
+    "name": "Designer Rose Pink Kurti Set",
+    "slug": "designer-rose-pink-kurti-set",
+    "category": "dresses",
+    "subCategory": "Kurtis",
+    "description": "Straight-cut rose pink silk chanderi kurta adorned with floral mirror work, paired with ankle-length cigarette pants and chiffon dupatta.",
+    "shortDescription": "Straight-cut rose pink silk chanderi kurta adorned with floral mirror work, paired with ankle-length cigarette pants and...",
+    "price": 2299,
+    "salePrice": 2999,
+    "sku": "INSHA-DRE-002",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/hero-readymade-dresses.jpg",
+    "images": [
+      "/images/hero-readymade-dresses.jpg"
+    ],
+    "material": "Chanderi Silk with Cotton Silk Pants",
+    "details": [
+      "V-neck with potli buttons",
+      "Includes 3-piece set",
+      "Dry clean recommended"
+    ],
+    "badge": {
+      "text": "NEW ARRIVAL",
+      "type": "gold"
+    },
+    "rating": 4.7,
+    "reviewsCount": 104,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-readymade-dresses.jpg"
+    ]
+  },
+  {
+    "id": "drs-3",
+    "name": "Royal Wine Zari Salwar Suit",
+    "slug": "royal-wine-zari-salwar-suit",
+    "category": "dresses",
+    "subCategory": "Salwar Suits",
+    "description": "Deep wine red velvet salwar suit with antique tilla embroidery along the neckline and cuffs. Paired with a Banarasi brocade dupatta.",
+    "shortDescription": "Deep wine red velvet salwar suit with antique tilla embroidery along the neckline and cuffs. Paired with a Banarasi broc...",
+    "price": 3899,
+    "salePrice": 4999,
+    "sku": "INSHA-DRE-003",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/cat-dresses.jpg",
+    "images": [
+      "/images/cat-dresses.jpg"
+    ],
+    "material": "Micro Velvet with Banarasi Silk Dupatta",
+    "details": [
+      "Full sleeves with heavy borders",
+      "Tailored straight fit",
+      "Royal winter wedding collection"
+    ],
+    "badge": {
+      "text": "PARTY WEAR",
+      "type": "maroon"
+    },
+    "rating": 4.8,
+    "reviewsCount": 88,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-dresses.jpg"
+    ]
+  },
+  {
+    "id": "drs-4",
+    "name": "Sage Green Sequinned Angrakha Suit",
+    "slug": "sage-green-sequinned-angrakha-suit",
+    "category": "dresses",
+    "subCategory": "Festive Wear",
+    "description": "Traditional Angrakha style crossover kurta in pastel sage green with delicate self-colored sequin work and handcrafted latkans.",
+    "shortDescription": "Traditional Angrakha style crossover kurta in pastel sage green with delicate self-colored sequin work and handcrafted l...",
+    "price": 2899,
+    "salePrice": 3599,
+    "sku": "INSHA-DRE-004",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/hero-readymade-dresses.jpg",
+    "images": [
+      "/images/hero-readymade-dresses.jpg"
+    ],
+    "material": "Rayon Viscose & Metallic Zari",
+    "details": [
+      "Side tie-up with handmade tassels",
+      "Flared palazzo pants included",
+      "Breathable fabric"
+    ],
+    "badge": {
+      "text": "BESTSELLER",
+      "type": "gold"
+    },
+    "rating": 4.6,
+    "reviewsCount": 62,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-readymade-dresses.jpg"
+    ]
+  },
+  {
+    "id": "drs-5",
+    "name": "Mustard Ochre Haldi Sharara Set",
+    "slug": "mustard-ochre-haldi-sharara-set",
+    "category": "dresses",
+    "subCategory": "Festive Wear",
+    "description": "Vibrant mustard ochre peplum kurta with gota patti detailing, paired with a layered tier sharara and scalloped organza dupatta.",
+    "shortDescription": "Vibrant mustard ochre peplum kurta with gota patti detailing, paired with a layered tier sharara and scalloped organza d...",
+    "price": 3199,
+    "salePrice": 4199,
+    "sku": "INSHA-DRE-005",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/hero-readymade-dresses.jpg",
+    "images": [
+      "/images/hero-readymade-dresses.jpg"
+    ],
+    "material": "Georgette with Gota Patti Trim",
+    "details": [
+      "Perfect for Haldi & Mehendi",
+      "Elasticated sharara waistband",
+      "Includes net dupatta"
+    ],
+    "badge": {
+      "text": "WEDDING EDIT",
+      "type": "maroon"
+    },
+    "rating": 4.8,
+    "reviewsCount": 94,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-readymade-dresses.jpg"
+    ]
+  },
+  {
+    "id": "drs-6",
+    "name": "Pastel Peach Organza Tiered Gown",
+    "slug": "pastel-peach-organza-tiered-gown",
+    "category": "dresses",
+    "subCategory": "Party Wear",
+    "description": "Dreamy tiered party gown crafted from airy tissue organza with hand-embroidered pearl bodice and flowing umbrella silhouette.",
+    "shortDescription": "Dreamy tiered party gown crafted from airy tissue organza with hand-embroidered pearl bodice and flowing umbrella silhou...",
+    "price": 4499,
+    "salePrice": 5799,
+    "sku": "INSHA-DRE-006",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/cat-dresses.jpg",
+    "images": [
+      "/images/cat-dresses.jpg"
+    ],
+    "material": "Tissue Organza with Satin Underskirt",
+    "details": [
+      "Concealed back zip",
+      "Includes matching embroidered belt",
+      "Floor sweeping flair"
+    ],
+    "badge": {
+      "text": "DESIGNER DRESSES",
+      "type": "maroon"
+    },
+    "rating": 4.9,
+    "reviewsCount": 51,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-dresses.jpg"
+    ]
+  },
+  {
+    "id": "drs-7",
+    "name": "Printed Mulmul Casual Kurta Set",
+    "slug": "printed-mulmul-casual-kurta-set",
+    "category": "dresses",
+    "subCategory": "Casual Wear",
+    "description": "Soft breathable pure mulmul cotton kurta in traditional Sanganeri floral print with matching cotton straight trousers.",
+    "shortDescription": "Soft breathable pure mulmul cotton kurta in traditional Sanganeri floral print with matching cotton straight trousers....",
+    "price": 1699,
+    "salePrice": 2299,
+    "sku": "INSHA-DRE-007",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/hero-readymade-dresses.jpg",
+    "images": [
+      "/images/hero-readymade-dresses.jpg"
+    ],
+    "material": "100% Mulmul Cotton",
+    "details": [
+      "Machine washable",
+      "Includes functional side pockets",
+      "All-day workwear comfort"
+    ],
+    "badge": {
+      "text": "EVERYDAY LUXE",
+      "type": "gold"
+    },
+    "rating": 4.6,
+    "reviewsCount": 135,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-readymade-dresses.jpg"
+    ]
+  },
+  {
+    "id": "drs-8",
+    "name": "Midnight Navy Silk Kaftan Set",
+    "slug": "midnight-navy-silk-kaftan-set",
+    "category": "dresses",
+    "subCategory": "Designer Dresses",
+    "description": "Flowing silk kaftan with adjustable waist drawstring, gold coin lace borders, and relaxed matching silk trousers.",
+    "shortDescription": "Flowing silk kaftan with adjustable waist drawstring, gold coin lace borders, and relaxed matching silk trousers....",
+    "price": 2599,
+    "salePrice": 3499,
+    "sku": "INSHA-DRE-008",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/cat-dresses.jpg",
+    "images": [
+      "/images/cat-dresses.jpg"
+    ],
+    "material": "Silk Blend with Gold Gota",
+    "details": [
+      "Free-size fit (32-44)",
+      "Drawstring inner belt",
+      "Ultra comfortable silhouette"
+    ],
+    "badge": {
+      "text": "RESORT WEAR",
+      "type": "gold"
+    },
+    "rating": 4.7,
+    "reviewsCount": 73,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-dresses.jpg"
+    ]
+  },
+  {
+    "id": "drs-9",
+    "name": "Emerald Green Silk Zari Flared Anarkali",
+    "slug": "emerald-green-silk-zari-flared-anarkali",
+    "category": "dresses",
+    "subCategory": "Anarkali",
+    "description": "Regal emerald green pure silk Anarkali dress accented with antique Kashmiri tilla work and a Banarasi woven dupatta.",
+    "shortDescription": "Regal emerald green pure silk Anarkali dress accented with antique Kashmiri tilla work and a Banarasi woven dupatta....",
+    "price": 3999,
+    "salePrice": 5299,
+    "sku": "INSHA-DRE-009",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/cat-dresses.jpg",
+    "images": [
+      "/images/cat-dresses.jpg"
+    ],
+    "material": "Chanderi Silk & Pure Organza",
+    "details": [
+      "Heavy royal flair",
+      "Padded bust support",
+      "Festive gala wear"
+    ],
+    "badge": {
+      "text": "FESTIVE WEAR",
+      "type": "maroon"
+    },
+    "rating": 5,
+    "reviewsCount": 62,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-dresses.jpg"
+    ]
+  },
+  {
+    "id": "drs-10",
+    "name": "Chanderi Floral Embroidered Straight Kurti",
+    "slug": "chanderi-floral-embroidered-straight-kurti",
+    "category": "dresses",
+    "subCategory": "Kurtis",
+    "description": "Breathable pastel lilac Chanderi straight kurta with handcrafted thread embroidery on collar and hem.",
+    "shortDescription": "Breathable pastel lilac Chanderi straight kurta with handcrafted thread embroidery on collar and hem....",
+    "price": 1899,
+    "salePrice": 2499,
+    "sku": "INSHA-DRE-010",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/hero-readymade-dresses.jpg",
+    "images": [
+      "/images/hero-readymade-dresses.jpg"
+    ],
+    "material": "Chanderi Silk Blend",
+    "details": [
+      "Side slits for ease",
+      "3/4 sleeves with lace trim",
+      "Pairs with pants & palazzos"
+    ],
+    "badge": {
+      "text": "NEW ARRIVAL",
+      "type": "gold"
+    },
+    "rating": 4.7,
+    "reviewsCount": 81,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-readymade-dresses.jpg"
+    ]
+  },
+  {
+    "id": "drs-11",
+    "name": "Powder Blue Organza Dupatta Pant Set",
+    "slug": "powder-blue-organza-dupatta-pant-set",
+    "category": "dresses",
+    "subCategory": "Kurta Sets",
+    "description": "Powder blue straight kurta adorned with scalloped gota lace, matching cigarette pants, and sheer floral organza dupatta.",
+    "shortDescription": "Powder blue straight kurta adorned with scalloped gota lace, matching cigarette pants, and sheer floral organza dupatta....",
+    "price": 3299,
+    "salePrice": 4199,
+    "sku": "INSHA-DRE-011",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/cat-dresses.jpg",
+    "images": [
+      "/images/cat-dresses.jpg"
+    ],
+    "material": "Viscose Silk & Pure Organza",
+    "details": [
+      "Complete 3-piece designer set",
+      "Scalloped cutwork dupatta",
+      "Wedding guest favorite"
+    ],
+    "badge": {
+      "text": "BESTSELLER",
+      "type": "maroon"
+    },
+    "rating": 4.8,
+    "reviewsCount": 95,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-dresses.jpg"
+    ]
+  },
+  {
+    "id": "drs-12",
+    "name": "Ruby Velvet Peplum Sharara Set",
+    "slug": "ruby-velvet-peplum-sharara-set",
+    "category": "dresses",
+    "subCategory": "Party Wear",
+    "description": "Royal winter ensemble with deep ruby red velvet peplum top, gold sequinned sharara, and heavy net dupatta.",
+    "shortDescription": "Royal winter ensemble with deep ruby red velvet peplum top, gold sequinned sharara, and heavy net dupatta....",
+    "price": 4299,
+    "salePrice": 5699,
+    "sku": "INSHA-DRE-012",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/hero-readymade-dresses.jpg",
+    "images": [
+      "/images/hero-readymade-dresses.jpg"
+    ],
+    "material": "Micro Velvet & Net",
+    "details": [
+      "Fully lined interior",
+      "Elasticated tiered sharara",
+      "Grand sangeet attire"
+    ],
+    "badge": {
+      "text": "ROYAL EDIT",
+      "type": "gold"
+    },
+    "rating": 4.9,
+    "reviewsCount": 57,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-readymade-dresses.jpg"
+    ]
+  },
+  {
+    "id": "mat-1",
+    "name": "Pure Chanderi Zari Unstitched Suit Material",
+    "slug": "pure-chanderi-zari-unstitched-suit-material",
+    "category": "materials",
+    "subCategory": "Silk",
+    "description": "Premium unstitched 3-piece Chanderi silk suit material with woven gold zari motifs, plain silk-cotton bottom, and a rich Banarasi dupatta.",
+    "shortDescription": "Premium unstitched 3-piece Chanderi silk suit material with woven gold zari motifs, plain silk-cotton bottom, and a rich...",
+    "price": 2199,
+    "salePrice": 2899,
+    "sku": "INSHA-MAT-001",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/hero-readymade-dresses.jpg",
+    "images": [
+      "/images/hero-readymade-dresses.jpg"
+    ],
+    "material": "Chanderi Silk (2.5m Top, 2.5m Bottom, 2.25m Dupatta)",
+    "details": [
+      "Genuine Chanderi weave",
+      "Sufficient for up to size 48",
+      "Dry clean only"
+    ],
+    "badge": {
+      "text": "PURE SILK",
+      "type": "maroon"
+    },
+    "rating": 4.8,
+    "reviewsCount": 88,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-readymade-dresses.jpg"
+    ]
+  },
+  {
+    "id": "mat-2",
+    "name": "Hand Block Printed Mulmul Cotton Material",
+    "slug": "hand-block-printed-mulmul-cotton-material",
+    "category": "materials",
+    "subCategory": "Cotton",
+    "description": "Authentic Bagru hand block printed mulmul cotton fabric set using natural indigo and vegetable dyes with a featherlight malmal dupatta.",
+    "shortDescription": "Authentic Bagru hand block printed mulmul cotton fabric set using natural indigo and vegetable dyes with a featherlight ...",
+    "price": 1499,
+    "salePrice": 1999,
+    "sku": "INSHA-MAT-002",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/cat-dresses.jpg",
+    "images": [
+      "/images/cat-dresses.jpg"
+    ],
+    "material": "100% Pure Organic Cotton",
+    "details": [
+      "2.5m Kurta + 2.5m Salwar + 2.4m Dupatta",
+      "Colorfast natural dyes",
+      "Pre-shrunk soft fabric"
+    ],
+    "badge": {
+      "text": "100% COTTON",
+      "type": "gold"
+    },
+    "rating": 4.9,
+    "reviewsCount": 145,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-dresses.jpg"
+    ]
+  },
+  {
+    "id": "mat-3",
+    "name": "Banarasi Katan Silk Brocade Suit Set",
+    "slug": "banarasi-katan-silk-brocade-suit-set",
+    "category": "materials",
+    "subCategory": "Festive",
+    "description": "Royal Varanasi katan silk unstitched suit fabric featuring opulent meenakari gold brocade motifs with heavy jacquard woven border.",
+    "shortDescription": "Royal Varanasi katan silk unstitched suit fabric featuring opulent meenakari gold brocade motifs with heavy jacquard wov...",
+    "price": 3299,
+    "salePrice": 4299,
+    "sku": "INSHA-MAT-003",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/hero-readymade-dresses.jpg",
+    "images": [
+      "/images/hero-readymade-dresses.jpg"
+    ],
+    "material": "Katan Silk & Gold Zari",
+    "details": [
+      "Grand wedding attire fabric",
+      "Rich meenakari detailing",
+      "Includes silk lining fabric"
+    ],
+    "badge": {
+      "text": "BANARASI WEAVE",
+      "type": "maroon"
+    },
+    "rating": 4.9,
+    "reviewsCount": 78,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-readymade-dresses.jpg"
+    ]
+  },
+  {
+    "id": "mat-4",
+    "name": "Luxe Embroidered Organza Dress Material",
+    "slug": "luxe-embroidered-organza-dress-material",
+    "category": "materials",
+    "subCategory": "Embroidered",
+    "description": "Pastel lilac organza suit piece with all-over resham thread embroidery and cut-work border, paired with shantoon bottom and organza dupatta.",
+    "shortDescription": "Pastel lilac organza suit piece with all-over resham thread embroidery and cut-work border, paired with shantoon bottom ...",
+    "price": 2699,
+    "salePrice": 3499,
+    "sku": "INSHA-MAT-004",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/cat-dresses.jpg",
+    "images": [
+      "/images/cat-dresses.jpg"
+    ],
+    "material": "Pure Sheer Organza & Shantoon",
+    "details": [
+      "Intricate resham embroidery",
+      "Cutwork scalloped dupatta",
+      "Includes inner lining"
+    ],
+    "badge": {
+      "text": "DESIGNER PIECE",
+      "type": "maroon"
+    },
+    "rating": 4.7,
+    "reviewsCount": 62,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-dresses.jpg"
+    ]
+  },
+  {
+    "id": "mat-5",
+    "name": "Lucknowi Chikankari Georgette Fabric",
+    "slug": "lucknowi-chikankari-georgette-fabric",
+    "category": "materials",
+    "subCategory": "Traditional",
+    "description": "Traditional hand-embroidered Lucknowi chikankari fabric on soft modal georgette with delicate shadow work and mukaish embellishments.",
+    "shortDescription": "Traditional hand-embroidered Lucknowi chikankari fabric on soft modal georgette with delicate shadow work and mukaish em...",
+    "price": 1899,
+    "salePrice": 2499,
+    "sku": "INSHA-MAT-005",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/hero-readymade-dresses.jpg",
+    "images": [
+      "/images/hero-readymade-dresses.jpg"
+    ],
+    "material": "Viscose Modal Georgette",
+    "details": [
+      "Authentic Awadh craftsmanship",
+      "Mukaish shimmer dots",
+      "Soft fluid drape"
+    ],
+    "badge": {
+      "text": "HAND EMBROIDERED",
+      "type": "gold"
+    },
+    "rating": 4.8,
+    "reviewsCount": 115,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-readymade-dresses.jpg"
+    ]
+  },
+  {
+    "id": "mat-6",
+    "name": "Bandhani Silk Tie & Dye Fabric Set",
+    "slug": "bandhani-silk-tie-dye-fabric-set",
+    "category": "materials",
+    "subCategory": "Traditional",
+    "description": "Authentic Gujarati Bandhani hand-tied dotted silk fabric in crimson red and mustard with traditional gota patti neck patti.",
+    "shortDescription": "Authentic Gujarati Bandhani hand-tied dotted silk fabric in crimson red and mustard with traditional gota patti neck pat...",
+    "price": 1999,
+    "salePrice": 2699,
+    "sku": "INSHA-MAT-006",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/cat-dresses.jpg",
+    "images": [
+      "/images/cat-dresses.jpg"
+    ],
+    "material": "Art Silk Bandhani",
+    "details": [
+      "Traditional Rai Bandhej dots",
+      "Includes gota patti lace",
+      "Vibrant festive colors"
+    ],
+    "badge": {
+      "text": "JAIPUR CRAFT",
+      "type": "gold"
+    },
+    "rating": 4.6,
+    "reviewsCount": 58,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-dresses.jpg"
+    ]
+  },
+  {
+    "id": "mat-7",
+    "name": "Tussar Silk Digital Floral Print Piece",
+    "slug": "tussar-silk-digital-floral-print-piece",
+    "category": "materials",
+    "subCategory": "Printed",
+    "description": "Textured beige Tussar silk unstitched suit fabric with high-definition vintage floral prints and antique brass zari borders.",
+    "shortDescription": "Textured beige Tussar silk unstitched suit fabric with high-definition vintage floral prints and antique brass zari bord...",
+    "price": 2499,
+    "salePrice": 3199,
+    "sku": "INSHA-MAT-007",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/hero-readymade-dresses.jpg",
+    "images": [
+      "/images/hero-readymade-dresses.jpg"
+    ],
+    "material": "Pure Tussar Ghicha Silk",
+    "details": [
+      "Natural slub silk texture",
+      "Breathable luxury handfeel",
+      "Includes matching dupatta"
+    ],
+    "badge": {
+      "text": "TUSSAR SILK",
+      "type": "maroon"
+    },
+    "rating": 4.7,
+    "reviewsCount": 46,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-readymade-dresses.jpg"
+    ]
+  },
+  {
+    "id": "mat-8",
+    "name": "Festive Jacquard Weave Suit Fabric",
+    "slug": "festive-jacquard-weave-suit-fabric",
+    "category": "materials",
+    "subCategory": "Designer",
+    "description": "Rich emerald green jacquard weave fabric with self-embossed damask patterns and a lustrous tissue dupatta.",
+    "shortDescription": "Rich emerald green jacquard weave fabric with self-embossed damask patterns and a lustrous tissue dupatta....",
+    "price": 2599,
+    "salePrice": 3399,
+    "sku": "INSHA-MAT-008",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/cat-dresses.jpg",
+    "images": [
+      "/images/cat-dresses.jpg"
+    ],
+    "material": "Poly Silk Jacquard with Zari",
+    "details": [
+      "Embossed damask weave",
+      "Complete 3-piece set",
+      "Wrinkle-resistant fabric"
+    ],
+    "badge": {
+      "text": "ROYAL WEAVE",
+      "type": "gold"
+    },
+    "rating": 4.7,
+    "reviewsCount": 69,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-dresses.jpg"
+    ]
+  },
+  {
+    "id": "mat-9",
+    "name": "Varanasi Meenakari Katan Silk Unstitched Set",
+    "slug": "varanasi-meenakari-katan-silk-unstitched-set",
+    "category": "materials",
+    "subCategory": "Silk",
+    "description": "Heavy wedding unstitched suit set in pure Varanasi silk with all-over multi-colored meenakari floral jaal.",
+    "shortDescription": "Heavy wedding unstitched suit set in pure Varanasi silk with all-over multi-colored meenakari floral jaal....",
+    "price": 3599,
+    "salePrice": 4799,
+    "sku": "INSHA-MAT-009",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/hero-readymade-dresses.jpg",
+    "images": [
+      "/images/hero-readymade-dresses.jpg"
+    ],
+    "material": "100% Katan Silk & Zari",
+    "details": [
+      "2.5m Kurta + 2.5m Silk Bottom + 2.4m Heavy Dupatta",
+      "Authentic Varanasi GI tagged",
+      "Dry clean only"
+    ],
+    "badge": {
+      "text": "BANARASI SILK",
+      "type": "maroon"
+    },
+    "rating": 4.9,
+    "reviewsCount": 53,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-readymade-dresses.jpg"
+    ]
+  },
+  {
+    "id": "mat-10",
+    "name": "Sanganeri Indigo Floral Mulmul Cotton Set",
+    "slug": "sanganeri-indigo-floral-mulmul-cotton-set",
+    "category": "materials",
+    "subCategory": "Cotton",
+    "description": "Pure Jaipuri handblock printed mulmul fabric with plant-based indigo dye and featherlight Kota Doria dupatta.",
+    "shortDescription": "Pure Jaipuri handblock printed mulmul fabric with plant-based indigo dye and featherlight Kota Doria dupatta....",
+    "price": 1599,
+    "salePrice": 2099,
+    "sku": "INSHA-MAT-010",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/cat-dresses.jpg",
+    "images": [
+      "/images/cat-dresses.jpg"
+    ],
+    "material": "100% Organic Mulmul Cotton",
+    "details": [
+      "Ultra-soft summer wear",
+      "Pre-shrunk cotton fabric",
+      "Gentle machine wash"
+    ],
+    "badge": {
+      "text": "100% COTTON",
+      "type": "gold"
+    },
+    "rating": 4.8,
+    "reviewsCount": 94,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-dresses.jpg"
+    ]
+  },
+  {
+    "id": "mat-11",
+    "name": "Lavender Embroidered Georgette Suit Material",
+    "slug": "lavender-embroidered-georgette-suit-material",
+    "category": "materials",
+    "subCategory": "Georgette",
+    "description": "Pastel lavender faux georgette fabric featuring intricate tone-on-tone threadwork, pearl border lace, and matching dupatta.",
+    "shortDescription": "Pastel lavender faux georgette fabric featuring intricate tone-on-tone threadwork, pearl border lace, and matching dupat...",
+    "price": 2499,
+    "salePrice": 3299,
+    "sku": "INSHA-MAT-011",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/hero-readymade-dresses.jpg",
+    "images": [
+      "/images/hero-readymade-dresses.jpg"
+    ],
+    "material": "Faux Georgette & Shantoon",
+    "details": [
+      "Includes 2.5m inner lining fabric",
+      "Scalloped border dupatta",
+      "Ideal for festive parties"
+    ],
+    "badge": {
+      "text": "DESIGNER WEAVE",
+      "type": "maroon"
+    },
+    "rating": 4.7,
+    "reviewsCount": 66,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-readymade-dresses.jpg"
+    ]
+  },
+  {
+    "id": "mat-12",
+    "name": "Chanderi Gold Foil Print Festive Fabric Set",
+    "slug": "chanderi-gold-foil-print-festive-fabric-set",
+    "category": "materials",
+    "subCategory": "Festive",
+    "description": "Festive ochre gold Chanderi silk fabric with metallic foil block print and heavy brocade zari pallu dupatta.",
+    "shortDescription": "Festive ochre gold Chanderi silk fabric with metallic foil block print and heavy brocade zari pallu dupatta....",
+    "price": 2799,
+    "salePrice": 3699,
+    "sku": "INSHA-MAT-012",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/cat-dresses.jpg",
+    "images": [
+      "/images/cat-dresses.jpg"
+    ],
+    "material": "Chanderi Silk with Zari",
+    "details": [
+      "2.5m Top + 2.5m Bottom + 2.3m Brocade Dupatta",
+      "Shimmering festive texture",
+      "Tailor to any silhouette"
+    ],
+    "badge": {
+      "text": "FESTIVE EDIT",
+      "type": "gold"
+    },
+    "rating": 4.8,
+    "reviewsCount": 71,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-dresses.jpg"
+    ]
+  },
+  {
+    "id": "hnd-1",
+    "name": "Terracotta Block Print Linen Curtains (Pair)",
+    "slug": "terracotta-block-print-linen-curtains-pair",
+    "category": "handlooms",
+    "subCategory": "Curtains",
+    "description": "Set of 2 floor-length 100% linen-cotton sheer curtains with hand-blocked terracotta botanical motifs. Lets in gentle filtered sunlight.",
+    "shortDescription": "Set of 2 floor-length 100% linen-cotton sheer curtains with hand-blocked terracotta botanical motifs. Lets in gentle fil...",
+    "price": 1899,
+    "salePrice": 2499,
+    "sku": "INSHA-HAN-001",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/cat-handlooms.jpg",
+    "images": [
+      "/images/cat-handlooms.jpg"
+    ],
+    "material": "Heavy Cotton-Linen Blend (84 x 48 inches each)",
+    "details": [
+      "Brass eyelet grommets",
+      "Pre-washed natural texture",
+      "Machine wash cold"
+    ],
+    "badge": {
+      "text": "ARTISAN MADE",
+      "type": "maroon"
+    },
+    "rating": 4.8,
+    "reviewsCount": 130,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-handlooms.jpg"
+    ]
+  },
+  {
+    "id": "hnd-2",
+    "name": "Handcrafted Teak Sofa Slipcovers (Set of 5)",
+    "slug": "handcrafted-teak-sofa-slipcovers-set-of-5",
+    "category": "handlooms",
+    "subCategory": "Sofa Covers",
+    "description": "Thick woven handloom cotton sofa and chair seat protectors in warm neutral beige with anti-skid backing and fringe tassels.",
+    "shortDescription": "Thick woven handloom cotton sofa and chair seat protectors in warm neutral beige with anti-skid backing and fringe tasse...",
+    "price": 2499,
+    "salePrice": 3299,
+    "sku": "INSHA-HAN-002",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/hero-handlooms.jpg",
+    "images": [
+      "/images/hero-handlooms.jpg"
+    ],
+    "material": "100% Handloom Woven Slub Cotton",
+    "details": [
+      "Set of 5 covers (3-seater + 2 single)",
+      "Dust and stain resistant",
+      "Durable thick weave"
+    ],
+    "badge": {
+      "text": "BESTSELLER",
+      "type": "gold"
+    },
+    "rating": 4.7,
+    "reviewsCount": 84,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-handlooms.jpg"
+    ]
+  },
+  {
+    "id": "hnd-3",
+    "name": "Royal Heritage Hand-Quilted Bedspread",
+    "slug": "royal-heritage-hand-quilted-bedspread",
+    "category": "handlooms",
+    "subCategory": "Bed Covers",
+    "description": "King size hand-stitched Kantha Jaipuri quilt crafted from organic cotton layers with reversible block-print patterns.",
+    "shortDescription": "King size hand-stitched Kantha Jaipuri quilt crafted from organic cotton layers with reversible block-print patterns....",
+    "price": 2899,
+    "salePrice": 3799,
+    "sku": "INSHA-HAN-003",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/cat-handlooms.jpg",
+    "images": [
+      "/images/cat-handlooms.jpg"
+    ],
+    "material": "100% Organic Mulmul with Cotton Batting (90 x 108 inches)",
+    "details": [
+      "Includes 2 pillow shams",
+      "All-season temperature control",
+      "Hand-quilted by Jaipur artisans"
+    ],
+    "badge": {
+      "text": "LUXURY HOME",
+      "type": "maroon"
+    },
+    "rating": 4.9,
+    "reviewsCount": 165,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-handlooms.jpg"
+    ]
+  },
+  {
+    "id": "hnd-4",
+    "name": "Embroidered Indigo & Ochre Cushion Covers (5 Pc)",
+    "slug": "embroidered-indigo-ochre-cushion-covers-5-pc",
+    "category": "handlooms",
+    "subCategory": "Cushion Covers",
+    "description": "Set of 5 bohemian 16x16 inch cushion covers with traditional chain-stitch floral embroidery in earthy indigo, terracotta, and ochre.",
+    "shortDescription": "Set of 5 bohemian 16x16 inch cushion covers with traditional chain-stitch floral embroidery in earthy indigo, terracotta...",
+    "price": 799,
+    "salePrice": 1199,
+    "sku": "INSHA-HAN-004",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/hero-handlooms.jpg",
+    "images": [
+      "/images/hero-handlooms.jpg"
+    ],
+    "material": "Woven Cotton Duck Fabric",
+    "details": [
+      "Concealed YKK zippers",
+      "Double reinforced stitching",
+      "Standard 16x16 inch size"
+    ],
+    "badge": {
+      "text": "BUY 2 @ 20% OFF",
+      "type": "gold"
+    },
+    "rating": 4.7,
+    "reviewsCount": 210,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-handlooms.jpg"
+    ]
+  },
+  {
+    "id": "hnd-5",
+    "name": "Pure Jute & Cotton Braided Table Runner",
+    "slug": "pure-jute-cotton-braided-table-runner",
+    "category": "handlooms",
+    "subCategory": "Table Linen",
+    "description": "Hand-braided natural golden jute and white cotton dining table runner with rustic fringe borders (72 x 14 inches).",
+    "shortDescription": "Hand-braided natural golden jute and white cotton dining table runner with rustic fringe borders (72 x 14 inches)....",
+    "price": 899,
+    "salePrice": 1299,
+    "sku": "INSHA-HAN-005",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/cat-handlooms.jpg",
+    "images": [
+      "/images/cat-handlooms.jpg"
+    ],
+    "material": "Natural Golden Jute & Unbleached Cotton",
+    "details": [
+      "Heat resistant dining mat",
+      "72 inch length fits 6-8 seaters",
+      "Wipe clean with damp cloth"
+    ],
+    "badge": {
+      "text": "ECO LUXURY",
+      "type": "gold"
+    },
+    "rating": 4.6,
+    "reviewsCount": 75,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-handlooms.jpg"
+    ]
+  },
+  {
+    "id": "hnd-6",
+    "name": "Woven Cotton Heritage Sofa Throw Blanket",
+    "slug": "woven-cotton-heritage-sofa-throw-blanket",
+    "category": "handlooms",
+    "subCategory": "Throws",
+    "description": "Chunky textured waffle-weave cotton throw blanket in warm oatmeal with hand-knotted macrame fringes.",
+    "shortDescription": "Chunky textured waffle-weave cotton throw blanket in warm oatmeal with hand-knotted macrame fringes....",
+    "price": 1299,
+    "salePrice": 1799,
+    "sku": "INSHA-HAN-006",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/hero-handlooms.jpg",
+    "images": [
+      "/images/hero-handlooms.jpg"
+    ],
+    "material": "100% Breathable Cotton (50 x 60 inches)",
+    "details": [
+      "Ultra-soft and breathable",
+      "Anti-pilling weave",
+      "Adds instant texture to living spaces"
+    ],
+    "badge": {
+      "text": "COZY LUXE",
+      "type": "maroon"
+    },
+    "rating": 4.8,
+    "reviewsCount": 92,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-handlooms.jpg"
+    ]
+  },
+  {
+    "id": "hnd-7",
+    "name": "Handmade Terracotta Planter Pot with Brass Tray",
+    "slug": "handmade-terracotta-planter-pot-with-brass-tray",
+    "category": "handlooms",
+    "subCategory": "Home Decor",
+    "description": "Vintage rustic terracotta planter pot with weathered patina finish and engraved brass base saucer.",
+    "shortDescription": "Vintage rustic terracotta planter pot with weathered patina finish and engraved brass base saucer....",
+    "price": 1199,
+    "salePrice": 1599,
+    "sku": "INSHA-HAN-007",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/cat-handlooms.jpg",
+    "images": [
+      "/images/cat-handlooms.jpg"
+    ],
+    "material": "Kiln-Fired Terracotta Clay & Solid Brass",
+    "details": [
+      "Drainage hole included",
+      "Indoor and patio suitable",
+      "Height: 10 inches, Diameter: 8 inches"
+    ],
+    "badge": {
+      "text": "HANDCRAFTED",
+      "type": "maroon"
+    },
+    "rating": 4.9,
+    "reviewsCount": 58,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-handlooms.jpg"
+    ]
+  },
+  {
+    "id": "hnd-8",
+    "name": "Traditional Handloom Ikat Cushion Covers (4 Pc)",
+    "slug": "traditional-handloom-ikat-cushion-covers-4-pc",
+    "category": "handlooms",
+    "subCategory": "Traditional Handloom",
+    "description": "Authentic double-Ikat handloom woven cushion covers with geometric chevron patterns in natural cream and charcoal.",
+    "shortDescription": "Authentic double-Ikat handloom woven cushion covers with geometric chevron patterns in natural cream and charcoal....",
+    "price": 899,
+    "salePrice": 1299,
+    "sku": "INSHA-HAN-008",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/hero-handlooms.jpg",
+    "images": [
+      "/images/hero-handlooms.jpg"
+    ],
+    "material": "Pure Handloom Ikat Cotton",
+    "details": [
+      "Set of 4 covers",
+      "Colorfast warp-weft weave",
+      "Hidden zipper enclosure"
+    ],
+    "badge": {
+      "text": "IKAT WEAVE",
+      "type": "gold"
+    },
+    "rating": 4.7,
+    "reviewsCount": 81,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-handlooms.jpg"
+    ]
+  },
+  {
+    "id": "hnd-9",
+    "name": "Hand-Tufted Wool & Jute Geometric Cushion Set (2 Pc)",
+    "slug": "hand-tufted-wool-jute-geometric-cushion-set-2-pc",
+    "category": "handlooms",
+    "subCategory": "Cushion Covers",
+    "description": "Textured bohemian 18x18 inch cushion covers handcrafted with natural wool tufting and golden jute yarn.",
+    "shortDescription": "Textured bohemian 18x18 inch cushion covers handcrafted with natural wool tufting and golden jute yarn....",
+    "price": 999,
+    "salePrice": 1499,
+    "sku": "INSHA-HAN-009",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/hero-handlooms.jpg",
+    "images": [
+      "/images/hero-handlooms.jpg"
+    ],
+    "material": "Wool, Jute & Heavy Canvas",
+    "details": [
+      "Set of 2 covers",
+      "Hidden bottom zipper",
+      "Adds rich tactile warmth"
+    ],
+    "badge": {
+      "text": "ARTISAN MADE",
+      "type": "maroon"
+    },
+    "rating": 4.8,
+    "reviewsCount": 64,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-handlooms.jpg"
+    ]
+  },
+  {
+    "id": "hnd-10",
+    "name": "Jaipuri Botanical Cotton Double Bed Dohar",
+    "slug": "jaipuri-botanical-cotton-double-bed-dohar",
+    "category": "handlooms",
+    "subCategory": "Bed Covers",
+    "description": "3-layered breathable pure mulmul summer blanket with reversible floral handblock prints and flannel filling.",
+    "shortDescription": "3-layered breathable pure mulmul summer blanket with reversible floral handblock prints and flannel filling....",
+    "price": 2199,
+    "salePrice": 2899,
+    "sku": "INSHA-HAN-010",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/cat-handlooms.jpg",
+    "images": [
+      "/images/cat-handlooms.jpg"
+    ],
+    "material": "100% Mulmul Cotton with Soft Flannel Inner",
+    "details": [
+      "Double size (90 x 100 inches)",
+      "Featherlight all-season warmth",
+      "Machine wash cold"
+    ],
+    "badge": {
+      "text": "100% COTTON",
+      "type": "gold"
+    },
+    "rating": 4.9,
+    "reviewsCount": 89,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-handlooms.jpg"
+    ]
+  },
+  {
+    "id": "hnd-11",
+    "name": "Raw Silk Woven Gold Border Table Runner",
+    "slug": "raw-silk-woven-gold-border-table-runner",
+    "category": "handlooms",
+    "subCategory": "Table Linen",
+    "description": "Opulent ruby red raw silk table runner with woven antique gold brocade borders and tassel corner finishes.",
+    "shortDescription": "Opulent ruby red raw silk table runner with woven antique gold brocade borders and tassel corner finishes....",
+    "price": 1099,
+    "salePrice": 1599,
+    "sku": "INSHA-HAN-011",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/hero-handlooms.jpg",
+    "images": [
+      "/images/hero-handlooms.jpg"
+    ],
+    "material": "Raw Matka Silk & Zari",
+    "details": [
+      "Length: 72 inches, Width: 16 inches",
+      "Non-slip cotton lining",
+      "Elevates dining tables & consoles"
+    ],
+    "badge": {
+      "text": "ROYAL HOME",
+      "type": "maroon"
+    },
+    "rating": 4.7,
+    "reviewsCount": 52,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/hero-handlooms.jpg"
+    ]
+  },
+  {
+    "id": "hnd-12",
+    "name": "Heavy Textured Slub Cotton Window Curtains (Pair)",
+    "slug": "heavy-textured-slub-cotton-window-curtains-pair",
+    "category": "handlooms",
+    "subCategory": "Curtains",
+    "description": "Set of 2 natural cream slub textured room-darkening curtains with brass metal eyelets and reinforced bottom hems.",
+    "shortDescription": "Set of 2 natural cream slub textured room-darkening curtains with brass metal eyelets and reinforced bottom hems....",
+    "price": 1699,
+    "salePrice": 2299,
+    "sku": "INSHA-HAN-012",
+    "stockQuantity": 25,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/cat-handlooms.jpg",
+    "images": [
+      "/images/cat-handlooms.jpg"
+    ],
+    "material": "100% Organic Handloom Slub Cotton",
+    "details": [
+      "Pair (84 x 48 inches each)",
+      "Filters 75% light",
+      "Thick durable handloom drape"
+    ],
+    "badge": {
+      "text": "BESTSELLER",
+      "type": "gold"
+    },
+    "rating": 4.8,
+    "reviewsCount": 77,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/cat-handlooms.jpg"
+    ]
+  },
+  {
+    "id": "srv-1",
+    "name": "Royal 24K Gold Radiance Facial",
+    "slug": "royal-24k-gold-radiance-facial",
+    "category": "beauty",
+    "subCategory": "Facial",
+    "description": "Luxury facial treatment designed for a radiant, refreshed look with 24k gold leaf particles, saffron oil, and collagen-boosting massage.",
+    "shortDescription": "Luxury facial treatment designed for a radiant, refreshed look with 24k gold leaf particles, saffron oil, and collagen-b...",
+    "price": 1899,
+    "sku": "INSHA-SRV-001",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/beauty/beauty-facial-gold.jpg",
+    "images": [
+      "/images/beauty/beauty-facial-gold.jpg"
+    ],
+    "duration": "75 mins",
+    "benefits": [
+      "Deep cleansing & detox",
+      "Skin hydration & nourishment",
+      "Instant bridal radiance"
+    ],
+    "badge": {
+      "text": "SIGNATURE",
+      "type": "maroon"
+    },
+    "rating": 4.9,
+    "reviewsCount": 186,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-facial-gold.jpg"
+    ]
+  },
+  {
+    "id": "srv-2",
+    "name": "Luxury Hydra-Infusion Deep Glow Facial",
+    "slug": "luxury-hydra-infusion-deep-glow-facial",
+    "category": "beauty",
+    "subCategory": "Facial",
+    "description": "Advanced hydro-dermabrasion that vacuums impurities while infusing hyaluronic acid, niacinamide, and botanical peptides deep into dermal layers.",
+    "shortDescription": "Advanced hydro-dermabrasion that vacuums impurities while infusing hyaluronic acid, niacinamide, and botanical peptides ...",
+    "price": 2299,
+    "sku": "INSHA-SRV-002",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/beauty/beauty-hydra-facial.jpg",
+    "images": [
+      "/images/beauty/beauty-hydra-facial.jpg"
+    ],
+    "duration": "90 mins",
+    "benefits": [
+      "Instant glass skin texture",
+      "Clears blackheads & congestion",
+      "Zero downtime or redness"
+    ],
+    "badge": {
+      "text": "DERMA CARE",
+      "type": "maroon"
+    },
+    "rating": 4.9,
+    "reviewsCount": 114,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-hydra-facial.jpg"
+    ]
+  },
+  {
+    "id": "srv-3",
+    "name": "Complete Royal Bridal Hair & Makeup Package",
+    "slug": "complete-royal-bridal-hair-makeup-package",
+    "category": "beauty",
+    "subCategory": "Bridal Makeup",
+    "description": "High-definition royal bridal makeover including waterproof HD makeup, traditional or contemporary bridal hairstyling, real flower setting, and draping.",
+    "shortDescription": "High-definition royal bridal makeover including waterproof HD makeup, traditional or contemporary bridal hairstyling, re...",
+    "price": 8999,
+    "sku": "INSHA-SRV-003",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/beauty/beauty-bridal-makeup.jpg",
+    "images": [
+      "/images/beauty/beauty-bridal-makeup.jpg"
+    ],
+    "duration": "180 mins",
+    "benefits": [
+      "16-hour HD waterproof hold",
+      "Pre-bridal skin prep",
+      "Jewellery & dupatta styling assistance"
+    ],
+    "badge": {
+      "text": "BRIDAL SPECIAL",
+      "type": "maroon"
+    },
+    "rating": 5,
+    "reviewsCount": 142,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-bridal-makeup.jpg"
+    ]
+  },
+  {
+    "id": "srv-4",
+    "name": "Pre-Bridal Luxury Radiance Skin Polishing",
+    "slug": "pre-bridal-luxury-radiance-skin-polishing",
+    "category": "beauty",
+    "subCategory": "Bridal Makeup",
+    "description": "Comprehensive pre-bridal dermal analysis, crystal microdermabrasion exfoliation, full body gold polish, and custom bridal glow roadmap.",
+    "shortDescription": "Comprehensive pre-bridal dermal analysis, crystal microdermabrasion exfoliation, full body gold polish, and custom brida...",
+    "price": 3999,
+    "sku": "INSHA-SRV-004",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/beauty/beauty-facial-gold.jpg",
+    "images": [
+      "/images/beauty/beauty-facial-gold.jpg"
+    ],
+    "duration": "120 mins",
+    "benefits": [
+      "Removes dead skin & tanning",
+      "Velvet-smooth instant touch",
+      "Personalized bridal skin protocol"
+    ],
+    "badge": {
+      "text": "BRIDAL GLOW",
+      "type": "maroon"
+    },
+    "rating": 5,
+    "reviewsCount": 79,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-facial-gold.jpg"
+    ]
+  },
+  {
+    "id": "srv-5",
+    "name": "Keratin Silk Protein Hair Spa & Blowout",
+    "slug": "keratin-silk-protein-hair-spa-blowout",
+    "category": "beauty",
+    "subCategory": "Hair Services",
+    "description": "Intense moisture repair treatment with pure hydrolyzed silk protein and argan oil, followed by an aromatic scalp massage and signature blowout.",
+    "shortDescription": "Intense moisture repair treatment with pure hydrolyzed silk protein and argan oil, followed by an aromatic scalp massage...",
+    "price": 1499,
+    "sku": "INSHA-SRV-005",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/beauty/beauty-hair-spa.jpg",
+    "images": [
+      "/images/beauty/beauty-hair-spa.jpg"
+    ],
+    "duration": "60 mins",
+    "benefits": [
+      "Tames frizz & split ends",
+      "Restores mirror-like shine",
+      "Relieves scalp tension"
+    ],
+    "badge": {
+      "text": "POPULAR",
+      "type": "gold"
+    },
+    "rating": 4.8,
+    "reviewsCount": 128,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-hair-spa.jpg"
+    ]
+  },
+  {
+    "id": "srv-6",
+    "name": "Luxury Moroccan Argan Oil Hair Spa",
+    "slug": "luxury-moroccan-argan-oil-hair-spa",
+    "category": "beauty",
+    "subCategory": "Hair Services",
+    "description": "Restorative hot oil therapy with organic Moroccan Argan elixir and deep conditioning herbal steam for chemically treated or dry hair.",
+    "shortDescription": "Restorative hot oil therapy with organic Moroccan Argan elixir and deep conditioning herbal steam for chemically treated...",
+    "price": 1699,
+    "sku": "INSHA-SRV-006",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/beauty/beauty-hair-spa.jpg",
+    "images": [
+      "/images/beauty/beauty-hair-spa.jpg"
+    ],
+    "duration": "65 mins",
+    "benefits": [
+      "Repairs heat & color damage",
+      "Deep root nourishment",
+      "Silky soft touch"
+    ],
+    "badge": {
+      "text": "DEEP NOURISH",
+      "type": "gold"
+    },
+    "rating": 4.8,
+    "reviewsCount": 94,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-hair-spa.jpg"
+    ]
+  },
+  {
+    "id": "srv-7",
+    "name": "Glamour Party Hair Styling & Saree Draping",
+    "slug": "glamour-party-hair-styling-saree-draping",
+    "category": "beauty",
+    "subCategory": "Hair Styling",
+    "description": "Expert hairstyling (Hollywood waves, textured braids, or regal bun) combined with professional saree pleating and pin-up styling.",
+    "shortDescription": "Expert hairstyling (Hollywood waves, textured braids, or regal bun) combined with professional saree pleating and pin-up...",
+    "price": 1199,
+    "sku": "INSHA-SRV-007",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/beauty/beauty-hair-styling.jpg",
+    "images": [
+      "/images/beauty/beauty-hair-styling.jpg"
+    ],
+    "duration": "60 mins",
+    "benefits": [
+      "All-night secure hold",
+      "Custom accessories placement",
+      "Creaseless perfect saree pleats"
+    ],
+    "badge": {
+      "text": "EVENT READY",
+      "type": "gold"
+    },
+    "rating": 4.8,
+    "reviewsCount": 83,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-hair-styling.jpg"
+    ]
+  },
+  {
+    "id": "srv-8",
+    "name": "Royal Crown Braids & Floral Bun Styling",
+    "slug": "royal-crown-braids-floral-bun-styling",
+    "category": "beauty",
+    "subCategory": "Hair Styling",
+    "description": "Intricate traditional crown braid or voluminous low bun adorned with real fresh floral gajras and crystal hair jewelry pins.",
+    "shortDescription": "Intricate traditional crown braid or voluminous low bun adorned with real fresh floral gajras and crystal hair jewelry p...",
+    "price": 1399,
+    "sku": "INSHA-SRV-008",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/beauty/beauty-hair-styling.jpg",
+    "images": [
+      "/images/beauty/beauty-hair-styling.jpg"
+    ],
+    "duration": "75 mins",
+    "benefits": [
+      "Traditional royal styling",
+      "Fresh floral pin-up included",
+      "Long-lasting weightless hold"
+    ],
+    "badge": {
+      "text": "SIGNATURE",
+      "type": "gold"
+    },
+    "rating": 4.9,
+    "reviewsCount": 65,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-hair-styling.jpg"
+    ]
+  },
+  {
+    "id": "srv-9",
+    "name": "Luxury Rose Petal & Almond Spa Manicure",
+    "slug": "luxury-rose-petal-almond-spa-manicure",
+    "category": "beauty",
+    "subCategory": "Manicure / Pedicure",
+    "description": "Aromatherapy hand spa with warm rose water soak, sweet almond scrub, cuticle restoration, hot towel therapy, and chip-resistant gel polish.",
+    "shortDescription": "Aromatherapy hand spa with warm rose water soak, sweet almond scrub, cuticle restoration, hot towel therapy, and chip-re...",
+    "price": 699,
+    "sku": "INSHA-SRV-009",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/beauty/beauty-manicure-pedicure.jpg",
+    "images": [
+      "/images/beauty/beauty-manicure-pedicure.jpg"
+    ],
+    "duration": "45 mins",
+    "benefits": [
+      "Silky smooth nourished hands",
+      "Cuticle care & nail shaping",
+      "Long-lasting chip-resistant polish"
+    ],
+    "badge": {
+      "text": "RELAX & GLOW",
+      "type": "gold"
+    },
+    "rating": 4.7,
+    "reviewsCount": 95,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-manicure-pedicure.jpg"
+    ]
+  },
+  {
+    "id": "srv-10",
+    "name": "Deluxe Paraffin Wax Spa Pedicure",
+    "slug": "deluxe-paraffin-wax-spa-pedicure",
+    "category": "beauty",
+    "subCategory": "Manicure / Pedicure",
+    "description": "Foot indulgence with mineral sea salt soak, pumice exfoliation, foot reflexology massage, and warm hydrating paraffin wax booties.",
+    "shortDescription": "Foot indulgence with mineral sea salt soak, pumice exfoliation, foot reflexology massage, and warm hydrating paraffin wa...",
+    "price": 899,
+    "sku": "INSHA-SRV-010",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/beauty/beauty-spa-pedicure.jpg",
+    "images": [
+      "/images/beauty/beauty-spa-pedicure.jpg"
+    ],
+    "duration": "60 mins",
+    "benefits": [
+      "Heals cracked heels",
+      "Relieves leg fatigue & swelling",
+      "Deeply softens rough skin"
+    ],
+    "badge": {
+      "text": "PAMPER PACK",
+      "type": "gold"
+    },
+    "rating": 4.7,
+    "reviewsCount": 89,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-spa-pedicure.jpg"
+    ]
+  },
+  {
+    "id": "srv-11",
+    "name": "Aromatherapy Full Body Relaxation Spa Massage",
+    "slug": "aromatherapy-full-body-relaxation-spa-massage",
+    "category": "beauty",
+    "subCategory": "Spa",
+    "description": "Holistic therapeutic body massage with warm lavender and sweet almond oils, hot stone back compression, and muscle tension relief.",
+    "shortDescription": "Holistic therapeutic body massage with warm lavender and sweet almond oils, hot stone back compression, and muscle tensi...",
+    "price": 2799,
+    "sku": "INSHA-SRV-011",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/beauty/beauty-spa-treatment.jpg",
+    "images": [
+      "/images/beauty/beauty-spa-treatment.jpg"
+    ],
+    "duration": "75 mins",
+    "benefits": [
+      "Deep muscular relaxation",
+      "Relieves chronic stress & anxiety",
+      "Improves blood circulation"
+    ],
+    "badge": {
+      "text": "HOLISTIC SPA",
+      "type": "gold"
+    },
+    "rating": 4.9,
+    "reviewsCount": 102,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-spa-treatment.jpg"
+    ]
+  },
+  {
+    "id": "srv-12",
+    "name": "Warm Herb Potli Detox Spa Therapy",
+    "slug": "warm-herb-potli-detox-spa-therapy",
+    "category": "beauty",
+    "subCategory": "Spa",
+    "description": "Traditional Ayurvedic herbal poultice compression with heated medicinal herbs and essential oils to soothe body aches and purify skin.",
+    "shortDescription": "Traditional Ayurvedic herbal poultice compression with heated medicinal herbs and essential oils to soothe body aches an...",
+    "price": 3199,
+    "sku": "INSHA-SRV-012",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": true,
+    "mainImage": "/images/beauty/beauty-spa-treatment.jpg",
+    "images": [
+      "/images/beauty/beauty-spa-treatment.jpg"
+    ],
+    "duration": "90 mins",
+    "benefits": [
+      "Detoxifies deep body tissues",
+      "Alleviates joint stiffness",
+      "Rejuvenates physical vitality"
+    ],
+    "badge": {
+      "text": "ROYAL WELLNESS",
+      "type": "maroon"
+    },
+    "rating": 5,
+    "reviewsCount": 58,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-spa-treatment.jpg"
+    ]
+  },
+  {
+    "id": "srv-13",
+    "name": "Ayurvedic Kesh Vardhak Root Therapy",
+    "slug": "ayurvedic-kesh-vardhak-root-therapy",
+    "category": "beauty",
+    "subCategory": "Hair Treatment",
+    "description": "Ancient Ayurvedic scalp therapy with warm bhringraj and brahmi infused oil massage, steam infusion, and herbal root-strengthening mask.",
+    "shortDescription": "Ancient Ayurvedic scalp therapy with warm bhringraj and brahmi infused oil massage, steam infusion, and herbal root-stre...",
+    "price": 999,
+    "sku": "INSHA-SRV-013",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/beauty/beauty-ayurvedic-hair.jpg",
+    "images": [
+      "/images/beauty/beauty-ayurvedic-hair.jpg"
+    ],
+    "duration": "50 mins",
+    "benefits": [
+      "Prevents hair thinning",
+      "Deep relaxation & stress relief",
+      "Nourishes roots naturally"
+    ],
+    "badge": {
+      "text": "100% ORGANIC",
+      "type": "gold"
+    },
+    "rating": 4.8,
+    "reviewsCount": 76,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-ayurvedic-hair.jpg"
+    ]
+  },
+  {
+    "id": "srv-14",
+    "name": "Intense Anti-Dandruff & Scalp Clarifying Treatment",
+    "slug": "intense-anti-dandruff-scalp-clarifying-treatment",
+    "category": "beauty",
+    "subCategory": "Hair Treatment",
+    "description": "Tea tree and neem micro-exfoliation peel designed to eliminate scalp build-up, remove stubborn dandruff flakes, and restore scalp pH.",
+    "shortDescription": "Tea tree and neem micro-exfoliation peel designed to eliminate scalp build-up, remove stubborn dandruff flakes, and rest...",
+    "price": 1199,
+    "sku": "INSHA-SRV-014",
+    "stockQuantity": 999,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/images/beauty/beauty-ayurvedic-hair.jpg",
+    "images": [
+      "/images/beauty/beauty-ayurvedic-hair.jpg"
+    ],
+    "duration": "55 mins",
+    "benefits": [
+      "Soothes itchy scalp irritation",
+      "Deep follicle purification",
+      "Balances natural scalp oils"
+    ],
+    "badge": {
+      "text": "CLINICAL CARE",
+      "type": "gold"
+    },
+    "rating": 4.8,
+    "reviewsCount": 61,
+    "createdAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "realImages": [
+      "/images/beauty/beauty-ayurvedic-hair.jpg"
+    ]
+  }
+]

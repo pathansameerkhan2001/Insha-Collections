@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import FeatureBar from "@/components/FeatureBar";
@@ -20,6 +20,7 @@ import {
   MATERIALS_PRODUCTS,
   HANDLOOM_PRODUCTS,
 } from "@/data/catalog";
+import { ProductRecord, getStorefrontImageUrl } from "@/lib/products/productTypes";
 
 const ALL_PRODUCTS: ProductItem[] = [
   ...JEWELLERY_PRODUCTS,
@@ -32,11 +33,45 @@ const ALL_PRODUCTS: ProductItem[] = [
 export default function Home() {
   const [cart, setCart] = useState<CartEntry[]>([]);
   const [wishlistIds, setWishlistIds] = useState<Record<string, boolean>>({});
+  const [allProductsList, setAllProductsList] = useState<ProductItem[]>(ALL_PRODUCTS);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isStoreLocatorOpen, setIsStoreLocatorOpen] = useState(false);
   const [isAboutUsOpen, setIsAboutUsOpen] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.products && Array.isArray(data.products) && data.products.length > 0) {
+          const list: ProductItem[] = data.products
+            .filter((p: ProductRecord) => p.category !== "beauty")
+            .map((item: ProductRecord) => ({
+              id: item.id,
+              name: item.name,
+              category: item.category as ProductItem["category"],
+              subCategory: item.subCategory,
+              price: item.price,
+              originalPrice: item.salePrice,
+              rating: item.rating || 4.8,
+              reviewsCount: item.reviewsCount || 80,
+              badge: item.badge || { text: "NEW ARRIVAL", type: "gold" },
+              image: getStorefrontImageUrl(item),
+              showcaseImage: item.showcaseImage,
+              realImages: item.realImages,
+              description: item.description,
+              inStock: item.inStock ?? true,
+              material: item.material,
+              details: item.details,
+            }));
+          if (list.length > 0) {
+            setAllProductsList(list);
+          }
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Active Category & Subcategory Filter State
   const [activeCategory, setActiveCategory] = useState<string>("jewellery");
@@ -111,7 +146,7 @@ export default function Home() {
   };
 
   const totalCartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const wishlistedProducts = ALL_PRODUCTS.filter((p) => wishlistIds[p.id]);
+  const wishlistedProducts = allProductsList.filter((p) => wishlistIds[p.id]);
 
   return (
     <main className="min-h-screen flex flex-col bg-[#FAF7F3]">

@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { findProductById } from "@/data/catalog";
+import { productStore } from "@/lib/products/productStore";
+import { getStorefrontImageUrl } from "@/lib/products/productTypes";
 import {
   generateOrderReference,
   dispatchWhatsAppOrder,
@@ -95,7 +97,7 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      const catalogProduct = findProductById(pId);
+      const catalogProduct = productStore.getById(pId) || findProductById(pId);
       if (!catalogProduct) {
         return NextResponse.json(
           { success: false, error: `Product ID '${pId}' is not found in our current catalog.` },
@@ -115,13 +117,15 @@ export async function POST(req: NextRequest) {
       const unitPrice = catalogProduct.price;
       const subtotal = unitPrice * qty;
 
+      const imgUrl = getStorefrontImageUrl(catalogProduct);
+
       validatedItems.push({
         id: catalogProduct.id,
         name: catalogProduct.name,
         price: unitPrice,
         quantity: qty,
         subtotal,
-        image: catalogProduct.image,
+        image: imgUrl,
       });
     }
 

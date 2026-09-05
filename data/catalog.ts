@@ -12,6 +12,8 @@ export interface ProductItem {
     type: "maroon" | "gold";
   };
   image: string;
+  showcaseImage?: string | { url: string; key?: string; alt?: string };
+  realImages?: Array<string | { url: string; key?: string; alt?: string }>;
   description: string;
   inStock: boolean;
   material?: string;

@@ -2,8 +2,21 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { X, Heart, ShoppingCart, Star, ShieldCheck, Truck, RotateCcw, Check } from "lucide-react";
+import {
+  X,
+  Heart,
+  ShoppingCart,
+  Star,
+  ShieldCheck,
+  Truck,
+  RotateCcw,
+  Check,
+  ChevronLeft,
+  ChevronRight,
+  Camera,
+} from "lucide-react";
 import { ProductItem } from "@/data/catalog";
+import { getQuickViewImageUrls } from "@/lib/products/productTypes";
 
 interface ProductQuickViewModalProps {
   product: ProductItem | null;
@@ -22,15 +35,40 @@ export default function ProductQuickViewModal({
   isWishlisted,
   onToggleWishlist,
 }: ProductQuickViewModalProps) {
+  const [prevProductId, setPrevProductId] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  // Synchronize state when product changes
+  if (product && product.id !== prevProductId) {
+    setPrevProductId(product.id);
+    setActiveImageIndex(0);
+    setQuantity(1);
+  }
 
   if (!isOpen || !product) return null;
+
+  // Resolve Real Product Images for Quick View (Original photos take precedence)
+  const realImageUrls = getQuickViewImageUrls(product);
+  const activeImage = realImageUrls[activeImageIndex] || product.image;
 
   const handleAdd = () => {
     onAddToCart(product, quantity);
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
+  };
+
+  const handlePrevImage = () => {
+    setActiveImageIndex((prev) =>
+      prev === 0 ? realImageUrls.length - 1 : prev - 1
+    );
+  };
+
+  const handleNextImage = () => {
+    setActiveImageIndex((prev) =>
+      prev === realImageUrls.length - 1 ? 0 : prev + 1
+    );
   };
 
   return (
@@ -43,34 +81,100 @@ export default function ProductQuickViewModal({
         <button
           type="button"
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/90 hover:bg-[#231610] text-[#231610] hover:text-white border border-[#EAE2D8] flex items-center justify-center transition-colors shadow-sm focus:outline-none"
+          className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/90 hover:bg-[#231610] text-[#231610] hover:text-white border border-[#EAE2D8] flex items-center justify-center transition-colors shadow-sm focus:outline-none cursor-pointer"
           aria-label="Close modal"
         >
           <X className="w-5 h-5 stroke-[1.5]" />
         </button>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-center">
-          {/* Left: Product Image */}
-          <div className="relative w-full aspect-square bg-[#F5ECE5] rounded-xl overflow-hidden border border-[#EAE2D8]">
-            <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              quality={95}
-              className="object-cover object-center"
-              sizes="(max-width: 768px) 100vw, 450px"
-            />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-start">
+          {/* Left: Real Product Image Gallery */}
+          <div className="flex flex-col gap-3">
+            {/* Main Preview Container */}
+            <div className="relative w-full aspect-square bg-[#F5ECE5] rounded-xl overflow-hidden border border-[#EAE2D8] group">
+              <Image
+                src={activeImage}
+                alt={`${product.name} - Real Photo ${activeImageIndex + 1}`}
+                fill
+                quality={95}
+                className="object-cover object-center transition-all duration-300"
+                sizes="(max-width: 768px) 100vw, 450px"
+                unoptimized={activeImage.startsWith("/api/images/s3/")}
+              />
 
-            {/* Badge */}
-            <div className="absolute top-3 left-3 z-10">
-              <span
-                className={`inline-block px-3 py-1 text-[10px] font-bold tracking-wider uppercase rounded-md shadow-sm text-white ${
-                  product.badge.type === "maroon" ? "bg-[#6A1A24]" : "bg-[#A57D4E]"
-                }`}
-              >
-                {product.badge.text}
-              </span>
+              {/* Badge */}
+              <div className="absolute top-3 left-3 z-10">
+                <span
+                  className={`inline-block px-3 py-1 text-[10px] font-bold tracking-wider uppercase rounded-md shadow-sm text-white ${
+                    product.badge.type === "maroon" ? "bg-[#6A1A24]" : "bg-[#A57D4E]"
+                  }`}
+                >
+                  {product.badge.text}
+                </span>
+              </div>
+
+              {/* Real Photo Indicator */}
+              <div className="absolute top-3 right-3 z-10">
+                <div className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#231610]/80 text-[#FAF7F3] text-[10px] font-medium backdrop-blur-xs shadow-sm">
+                  <Camera className="w-3 h-3 text-[#E0C097]" />
+                  <span>Original Photo</span>
+                </div>
+              </div>
+
+              {/* Prev / Next Navigation Arrows if multiple real photos */}
+              {realImageUrls.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    onClick={handlePrevImage}
+                    aria-label="Previous photo"
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-[#231610] shadow-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer"
+                  >
+                    <ChevronLeft className="w-4 h-4 stroke-[2.2]" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleNextImage}
+                    aria-label="Next photo"
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-[#231610] shadow-md flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 cursor-pointer"
+                  >
+                    <ChevronRight className="w-4 h-4 stroke-[2.2]" />
+                  </button>
+
+                  {/* Photo Counter Pill */}
+                  <div className="absolute bottom-2.5 right-2.5 z-10 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded-full font-medium backdrop-blur-xs">
+                    {activeImageIndex + 1} / {realImageUrls.length}
+                  </div>
+                </>
+              )}
             </div>
+
+            {/* Thumbnail Gallery Row */}
+            {realImageUrls.length > 1 && (
+              <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                {realImageUrls.map((imgUrl, idx) => (
+                  <button
+                    key={imgUrl + idx}
+                    type="button"
+                    onClick={() => setActiveImageIndex(idx)}
+                    className={`relative w-16 h-16 sm:w-18 sm:h-18 rounded-lg overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
+                      activeImageIndex === idx
+                        ? "border-[#B89366] ring-2 ring-[#B89366]/30 scale-102"
+                        : "border-[#EAE2D8] hover:border-[#B89366]/60 opacity-70 hover:opacity-100"
+                    }`}
+                  >
+                    <Image
+                      src={imgUrl}
+                      alt={`Thumbnail ${idx + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="72px"
+                      unoptimized={imgUrl.startsWith("/api/images/s3/")}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Right: Product Details */}
@@ -141,7 +245,7 @@ export default function ProductQuickViewModal({
                   <button
                     type="button"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="px-3 py-2 text-sm font-semibold text-[#231610] hover:bg-[#FAF7F3] transition-colors"
+                    className="px-3 py-2 text-sm font-semibold text-[#231610] hover:bg-[#FAF7F3] transition-colors cursor-pointer"
                   >
                     -
                   </button>
@@ -151,7 +255,7 @@ export default function ProductQuickViewModal({
                   <button
                     type="button"
                     onClick={() => setQuantity(quantity + 1)}
-                    className="px-3 py-2 text-sm font-semibold text-[#231610] hover:bg-[#FAF7F3] transition-colors"
+                    className="px-3 py-2 text-sm font-semibold text-[#231610] hover:bg-[#FAF7F3] transition-colors cursor-pointer"
                   >
                     +
                   </button>
@@ -161,7 +265,7 @@ export default function ProductQuickViewModal({
                 <button
                   type="button"
                   onClick={handleAdd}
-                  className={`flex-1 py-3 px-5 rounded-lg flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all duration-200 shadow-sm ${
+                  className={`flex-1 py-3 px-5 rounded-lg flex items-center justify-center gap-2 text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all duration-200 shadow-sm cursor-pointer ${
                     isAdded
                       ? "bg-[#231610] text-[#FAF7F3]"
                       : "bg-[#A57D4E] hover:bg-[#8C6839] text-white"
@@ -185,7 +289,7 @@ export default function ProductQuickViewModal({
                   type="button"
                   onClick={() => onToggleWishlist(product.id)}
                   aria-label="Wishlist"
-                  className={`p-3 rounded-lg border flex items-center justify-center transition-colors ${
+                  className={`p-3 rounded-lg border flex items-center justify-center transition-colors cursor-pointer ${
                     isWishlisted
                       ? "bg-[#6A1A24] text-white border-[#6A1A24]"
                       : "border-[#C5A47E]/60 bg-white text-[#231610] hover:text-[#C5A47E]"
@@ -217,3 +321,4 @@ export default function ProductQuickViewModal({
     </div>
   );
 }
+

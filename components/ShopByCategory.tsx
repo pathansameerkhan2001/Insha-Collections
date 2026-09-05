@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import {
   Heart,
@@ -31,6 +31,7 @@ import {
 } from "@/data/catalog";
 import ProductQuickViewModal from "./ProductQuickViewModal";
 import AppointmentModal from "./AppointmentModal";
+import { getStorefrontImageUrl } from "@/lib/products/productTypes";
 
 // Bow SVG Icon
 function BowIcon({ className = "w-5 h-5" }: { className?: string }) {
@@ -88,6 +89,72 @@ export default function ShopByCategory({
   const [localWishlist, setLocalWishlist] = useState<Record<string, boolean>>({});
   const [addedCartIds, setAddedCartIds] = useState<Record<string, boolean>>({});
 
+  // Dynamic live synced products from admin
+  const [liveProducts, setLiveProducts] = useState<ProductItem[] | null>(null);
+  const [liveServices, setLiveServices] = useState<ServiceItem[] | null>(null);
+
+  useEffect(() => {
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.products && Array.isArray(data.products) && data.products.length > 0) {
+          const physical: ProductItem[] = [];
+          const services: ServiceItem[] = [];
+
+          for (const item of data.products) {
+            if (item.category === "beauty") {
+              services.push({
+                id: item.id,
+                name: item.name,
+                category: "beauty",
+                subCategory: item.subCategory,
+                price: item.price,
+                duration: item.duration || "60 mins",
+                rating: item.rating || 4.8,
+                reviewsCount: item.reviewsCount || 50,
+                badge: item.badge || { text: "POPULAR", type: "gold" },
+                image: item.mainImage || item.image,
+                description: item.description,
+                benefits: item.benefits || ["Professional salon care", "Premium organic formulations"],
+              });
+            } else {
+              const storefrontImg = getStorefrontImageUrl(item);
+              const realImgs =
+                item.realImages && item.realImages.length > 0
+                  ? item.realImages
+                  : item.images && item.images.length > 0
+                  ? item.images
+                  : [item.mainImage || item.image];
+
+              physical.push({
+                id: item.id,
+                name: item.name,
+                category: item.category,
+                subCategory: item.subCategory,
+                price: item.price,
+                originalPrice: item.salePrice,
+                rating: item.rating || 4.8,
+                reviewsCount: item.reviewsCount || 80,
+                badge: item.badge || { text: "NEW ARRIVAL", type: "gold" },
+                image: storefrontImg,
+                showcaseImage: item.showcaseImage,
+                realImages: realImgs,
+                description: item.description,
+                inStock: item.inStock ?? true,
+                material: item.material,
+                details: item.details,
+              });
+            }
+          }
+          if (physical.length > 0) setLiveProducts(physical);
+          if (services.length > 0) setLiveServices(services);
+        }
+      })
+      .catch(() => {
+        // Fallback silently to static catalog
+      });
+  }, []);
+
   // Modals state
   const [quickViewProduct, setQuickViewProduct] = useState<ProductItem | null>(null);
   const [appointmentService, setAppointmentService] = useState<ServiceItem | null>(null);
@@ -95,6 +162,14 @@ export default function ShopByCategory({
   const activeTab = activeCategory || internalTab;
   const currentSubCat = selectedSubCategory || internalSubCat;
   const wishlist = wishlistState || localWishlist;
+
+  const allPhysical = liveProducts || ALL_PHYSICAL_PRODUCTS;
+  const jewelleryItems = liveProducts ? liveProducts.filter((p) => p.category === "jewellery") : JEWELLERY_PRODUCTS;
+  const koreanItems = liveProducts ? liveProducts.filter((p) => p.category === "korean") : KOREAN_PRODUCTS;
+  const dressesItems = liveProducts ? liveProducts.filter((p) => p.category === "dresses") : DRESSES_PRODUCTS;
+  const materialsItems = liveProducts ? liveProducts.filter((p) => p.category === "materials") : MATERIALS_PRODUCTS;
+  const handloomItems = liveProducts ? liveProducts.filter((p) => p.category === "handlooms") : HANDLOOM_PRODUCTS;
+  const beautyItems = liveServices || BEAUTY_SERVICES;
 
   const handleWishlistToggle = (productId: string, e?: React.MouseEvent) => {
     if (e) {
@@ -146,23 +221,33 @@ export default function ShopByCategory({
   const rawItems = useMemo(() => {
     switch (activeTab) {
       case "all":
-        return isExpanded ? ALL_PHYSICAL_PRODUCTS : ALL_PHYSICAL_PRODUCTS.slice(0, 12);
+        return isExpanded ? allPhysical : allPhysical.slice(0, 12);
       case "jewellery":
-        return JEWELLERY_PRODUCTS;
+        return jewelleryItems;
       case "korean":
-        return KOREAN_PRODUCTS;
+        return koreanItems;
       case "dresses":
-        return DRESSES_PRODUCTS;
+        return dressesItems;
       case "materials":
-        return MATERIALS_PRODUCTS;
+        return materialsItems;
       case "handlooms":
-        return HANDLOOM_PRODUCTS;
+        return handloomItems;
       case "beauty":
-        return BEAUTY_SERVICES;
+        return beautyItems;
       default:
-        return JEWELLERY_PRODUCTS;
+        return jewelleryItems;
     }
-  }, [activeTab, isExpanded]);
+  }, [
+    activeTab,
+    isExpanded,
+    allPhysical,
+    jewelleryItems,
+    koreanItems,
+    dressesItems,
+    materialsItems,
+    handloomItems,
+    beautyItems,
+  ]);
 
   // Available subcategories for filtering
   const availableSubCategories = useMemo(() => {
@@ -552,6 +637,7 @@ export default function ShopByCategory({
                       quality={95}
                       className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      unoptimized={product.image.startsWith("/api/images/s3/")}
                     />
 
                     {/* Top-Left Ribbon Badge */}

@@ -95,6 +95,7 @@ export default function CartDrawer({
                     fill
                     sizes="64px"
                     className="object-cover object-center"
+                    unoptimized={product.image.startsWith("/api/images/s3/")}
                   />
                 </div>
 
