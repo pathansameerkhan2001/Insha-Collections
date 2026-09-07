@@ -37,8 +37,9 @@ const ALL_PRODUCTS: ProductItem[] = [
 export default function Home() {
   const [cart, setCart] = useState<CartEntry[]>([]);
   const [wishlistIds, setWishlistIds] = useState<Record<string, boolean>>({});
-  const [allProductsList, setAllProductsList] = useState<ProductItem[]>(ALL_PRODUCTS);
-  const [beautyServicesList, setBeautyServicesList] = useState<ServiceItem[]>(BEAUTY_SERVICES);
+  const [allProductsList, setAllProductsList] = useState<ProductItem[]>([]);
+  const [beautyServicesList, setBeautyServicesList] = useState<ServiceItem[]>([]);
+  const [isLoadingProducts, setIsLoadingProducts] = useState<boolean>(true);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
@@ -108,18 +109,20 @@ export default function Home() {
             }
           }
 
-          if (physical.length > 0) {
-            setAllProductsList(physical);
-          }
-          if (services.length > 0) {
-            setBeautyServicesList(services);
-          }
+          setAllProductsList(physical);
+          setBeautyServicesList(services);
+        } else {
+          setAllProductsList([]);
+          setBeautyServicesList([]);
         }
       })
       .catch((err) => {
         if (err.name !== "AbortError") {
           console.warn("Could not fetch latest products:", err);
         }
+      })
+      .finally(() => {
+        setIsLoadingProducts(false);
       });
 
     return () => {
@@ -259,6 +262,7 @@ export default function Home() {
       <ShopByCategory
         products={allProductsList}
         services={beautyServicesList}
+        isLoading={isLoadingProducts}
         activeCategory={activeCategory}
         selectedSubCategory={selectedSubCategory}
         onTabChange={(tab) => {

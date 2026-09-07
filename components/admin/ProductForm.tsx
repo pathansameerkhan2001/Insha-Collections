@@ -327,7 +327,7 @@ export default function ProductForm({
 
       const data = await res.json();
 
-      if (!res.ok || !data.success) {
+      if (!res.ok || !data.success || !data.product?.id) {
         throw new Error(data.error || "Failed to save product.");
       }
 
@@ -337,12 +337,9 @@ export default function ProductForm({
           : "Product created and published to store catalog!"
       );
 
-      // Invalidate Next.js client router cache so product list immediately renders new product
+      // Invalidate Next.js client router cache and navigate to admin product list
       router.refresh();
-
-      setTimeout(() => {
-        router.push("/admin/products");
-      }, 700);
+      router.push("/admin/products");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Error saving product";
       setErrorMessage(msg);

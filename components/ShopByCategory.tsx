@@ -84,6 +84,7 @@ const ALL_PHYSICAL_PRODUCTS: ProductItem[] = [
 interface ShopByCategoryProps {
   products?: ProductItem[];
   services?: ServiceItem[];
+  isLoading?: boolean;
   activeCategory?: string;
   selectedSubCategory?: string;
   onTabChange?: (tabId: string) => void;
@@ -97,6 +98,7 @@ interface ShopByCategoryProps {
 export default function ShopByCategory({
   products,
   services,
+  isLoading = false,
   activeCategory = "jewellery",
   selectedSubCategory = "All",
   onTabChange,
@@ -113,9 +115,7 @@ export default function ShopByCategory({
   const [localWishlist, setLocalWishlist] = useState<Record<string, boolean>>({});
   const [addedCartIds, setAddedCartIds] = useState<Record<string, boolean>>({});
 
-  // Dynamic live synced products fallback if not passed as props
-  const [liveProducts, setLiveProducts] = useState<ProductItem[] | null>(null);
-  const [liveServices, setLiveServices] = useState<ServiceItem[] | null>(null);
+  // Dynamic dynamic subcategories map
   const [dynamicSubcategoriesMap, setDynamicSubcategoriesMap] = useState<Record<string, string[]> | null>(null);
 
   useEffect(() => {
@@ -135,83 +135,14 @@ export default function ShopByCategory({
       })
       .catch((err) => {
         if (err.name !== "AbortError") {
-          // Fallback silently
+          // Fallback silently to static list
         }
       });
-
-    // If products were not supplied as props, fetch them directly
-    if (!products) {
-      fetch("/api/products", {
-        cache: "no-store",
-        headers: { "Cache-Control": "no-cache" },
-        signal: controller.signal,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.products && Array.isArray(data.products) && data.products.length > 0) {
-            const physical: ProductItem[] = [];
-            const srvs: ServiceItem[] = [];
-
-            for (const item of data.products) {
-              if (item.category === "beauty") {
-                srvs.push({
-                  id: item.id,
-                  name: item.name,
-                  category: "beauty",
-                  subCategory: item.subCategory,
-                  price: item.price,
-                  duration: item.duration || "60 mins",
-                  rating: item.rating || 4.8,
-                  reviewsCount: item.reviewsCount || 50,
-                  badge: item.badge || { text: "POPULAR", type: "gold" },
-                  image: item.mainImage || item.image,
-                  description: item.description,
-                  benefits: item.benefits || ["Professional salon care", "Premium organic formulations"],
-                });
-              } else {
-                const storefrontImg = getStorefrontImageUrl(item, 400);
-                const realImgs =
-                  item.realImages && item.realImages.length > 0
-                    ? item.realImages
-                    : item.images && item.images.length > 0
-                    ? item.images
-                    : [item.mainImage || item.image];
-
-                physical.push({
-                  id: item.id,
-                  name: item.name,
-                  category: item.category,
-                  subCategory: item.subCategory,
-                  price: item.price,
-                  originalPrice: item.salePrice,
-                  rating: item.rating || 4.8,
-                  reviewsCount: item.reviewsCount || 80,
-                  badge: item.badge || { text: "NEW ARRIVAL", type: "gold" },
-                  image: storefrontImg,
-                  showcaseImage: item.showcaseImage,
-                  realImages: realImgs,
-                  description: item.description,
-                  inStock: item.inStock ?? true,
-                  material: item.material,
-                  details: item.details,
-                });
-              }
-            }
-            if (physical.length > 0) setLiveProducts(physical);
-            if (srvs.length > 0) setLiveServices(srvs);
-          }
-        })
-        .catch((err) => {
-          if (err.name !== "AbortError") {
-            // Fallback silently to static catalog
-          }
-        });
-    }
 
     return () => {
       controller.abort();
     };
-  }, [products]);
+  }, []);
 
   // Modals state
   const [quickViewProduct, setQuickViewProduct] = useState<ProductItem | null>(null);
@@ -221,13 +152,13 @@ export default function ShopByCategory({
   const currentSubCat = selectedSubCategory || internalSubCat;
   const wishlist = wishlistState || localWishlist;
 
-  const allPhysical = useMemo(() => products || liveProducts || ALL_PHYSICAL_PRODUCTS, [products, liveProducts]);
+  const allPhysical = useMemo(() => products || [], [products]);
   const jewelleryItems = useMemo(() => allPhysical.filter((p) => p.category === "jewellery"), [allPhysical]);
   const koreanItems = useMemo(() => allPhysical.filter((p) => p.category === "korean"), [allPhysical]);
   const dressesItems = useMemo(() => allPhysical.filter((p) => p.category === "dresses"), [allPhysical]);
   const materialsItems = useMemo(() => allPhysical.filter((p) => p.category === "materials"), [allPhysical]);
   const handloomItems = useMemo(() => allPhysical.filter((p) => p.category === "handlooms"), [allPhysical]);
-  const beautyItems = useMemo(() => services || liveServices || BEAUTY_SERVICES, [services, liveServices]);
+  const beautyItems = useMemo(() => services || [], [services]);
 
   const handleWishlistToggle = (productId: string, e?: React.MouseEvent) => {
     if (e) {
@@ -574,7 +505,36 @@ export default function ShopByCategory({
         </div>
 
         {/* Content Grid: Dedicated Beauty & Salon Services Grid OR Products Grid */}
-        {activeTab === "beauty" ? (
+        {isLoading && displayedItems.length === 0 ? (
+          activeTab === "beauty" ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 animate-pulse">
+              {[1, 2, 3, 4].map((n) => (
+                <div key={n} className="bg-white rounded-2xl border border-[#EAE2D8] overflow-hidden p-4 space-y-3">
+                  <div className="w-full aspect-[4/3] bg-[#F3ECE4] rounded-xl" />
+                  <div className="h-4 bg-[#F3ECE4] rounded w-2/3" />
+                  <div className="h-3 bg-[#F3ECE4] rounded w-full" />
+                  <div className="h-5 bg-[#F3ECE4] rounded w-1/3 pt-2" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5 md:gap-6 lg:gap-7 animate-pulse">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((n) => (
+                <div key={n} className="bg-white rounded-2xl border border-[#EAE2D8] overflow-hidden p-3.5 space-y-3">
+                  <div className="w-full aspect-square bg-[#F3ECE4] rounded-xl" />
+                  <div className="h-4 bg-[#F3ECE4] rounded w-3/4" />
+                  <div className="h-3 bg-[#F3ECE4] rounded w-1/2" />
+                  <div className="h-5 bg-[#F3ECE4] rounded w-1/3 pt-2" />
+                </div>
+              ))}
+            </div>
+          )
+        ) : !isLoading && displayedItems.length === 0 ? (
+          <div className="py-16 text-center text-[#7A6F68] border border-[#EAE2D8] rounded-2xl bg-white p-8">
+            <p className="font-serif-luxury text-lg text-[#231610] uppercase tracking-wider">No Products Found</p>
+            <p className="text-xs sm:text-sm mt-1 text-[#8C7E75]">There are currently no items available under this category selection.</p>
+          </div>
+        ) : activeTab === "beauty" ? (
           /* Beauty & Salon Services Grid */
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
             {(displayedItems as ServiceItem[]).map((service) => (
