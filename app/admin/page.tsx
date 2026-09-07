@@ -52,13 +52,19 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const res = await fetch("/api/admin/products");
+        const res = await fetch("/api/admin/products", {
+          cache: "no-store",
+          headers: { "Cache-Control": "no-cache" },
+        });
         const data = await res.json();
         if (data.summary) {
           setSummary(data.summary);
         }
 
-        const sessionRes = await fetch("/api/auth/session");
+        const sessionRes = await fetch("/api/auth/session", {
+          cache: "no-store",
+          headers: { "Cache-Control": "no-cache" },
+        });
         const sessionData = await sessionRes.json();
         setIsCognitoMode(Boolean(sessionData.cognitoMode));
       } catch (err) {

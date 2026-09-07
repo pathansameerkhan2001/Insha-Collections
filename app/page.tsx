@@ -46,7 +46,10 @@ export default function Home() {
   const [searchQuickViewProduct, setSearchQuickViewProduct] = useState<ProductItem | null>(null);
 
   useEffect(() => {
-    fetch("/api/products")
+    fetch("/api/products", {
+      cache: "no-store",
+      headers: { "Cache-Control": "no-cache" },
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.products && Array.isArray(data.products) && data.products.length > 0) {

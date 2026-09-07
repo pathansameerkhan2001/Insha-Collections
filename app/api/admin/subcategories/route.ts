@@ -3,6 +3,15 @@ import { subcategoryStore } from "@/lib/categories/subcategoryStore";
 import { ProductCategory } from "@/lib/products/productTypes";
 import { verifyAdminSessionOrReject } from "@/lib/auth/serverAuth";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+const NO_CACHE_HEADERS = {
+  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+  Pragma: "no-cache",
+  Expires: "0",
+};
+
 const VALID_CATEGORIES: ProductCategory[] = [
   "jewellery",
   "korean",
@@ -22,13 +31,19 @@ export async function GET(req: NextRequest) {
 
   try {
     const subcategories = subcategoryStore.getAllWithCounts();
-    return NextResponse.json({
-      success: true,
-      subcategories,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        subcategories,
+      },
+      { headers: NO_CACHE_HEADERS }
+    );
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : "Failed to fetch subcategories";
-    return NextResponse.json({ success: false, error: errorMsg }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: errorMsg },
+      { status: 500, headers: NO_CACHE_HEADERS }
+    );
   }
 }
 
@@ -51,14 +66,14 @@ export async function POST(req: NextRequest) {
           success: false,
           error: `Invalid category. Allowed values: ${VALID_CATEGORIES.join(", ")}`,
         },
-        { status: 400 }
+        { status: 400, headers: NO_CACHE_HEADERS }
       );
     }
 
     if (!name || typeof name !== "string" || !name.trim()) {
       return NextResponse.json(
         { success: false, error: "Subcategory name is required." },
-        { status: 400 }
+        { status: 400, headers: NO_CACHE_HEADERS }
       );
     }
 
@@ -70,11 +85,14 @@ export async function POST(req: NextRequest) {
         message: `Subcategory "${newSub.name}" created successfully.`,
         subcategory: newSub,
       },
-      { status: 201 }
+      { status: 201, headers: NO_CACHE_HEADERS }
     );
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : "Failed to create subcategory";
-    return NextResponse.json({ success: false, error: errorMsg }, { status: 400 });
+    return NextResponse.json(
+      { success: false, error: errorMsg },
+      { status: 400, headers: NO_CACHE_HEADERS }
+    );
   }
 }
 
@@ -94,21 +112,21 @@ export async function PUT(req: NextRequest) {
     if (!category || !VALID_CATEGORIES.includes(category as ProductCategory)) {
       return NextResponse.json(
         { success: false, error: "Invalid parent category." },
-        { status: 400 }
+        { status: 400, headers: NO_CACHE_HEADERS }
       );
     }
 
     if (!oldName || typeof oldName !== "string" || !oldName.trim()) {
       return NextResponse.json(
         { success: false, error: "Current subcategory name (oldName) is required." },
-        { status: 400 }
+        { status: 400, headers: NO_CACHE_HEADERS }
       );
     }
 
     if (!newName || typeof newName !== "string" || !newName.trim()) {
       return NextResponse.json(
         { success: false, error: "New subcategory name (newName) is required." },
-        { status: 400 }
+        { status: 400, headers: NO_CACHE_HEADERS }
       );
     }
 
@@ -118,15 +136,21 @@ export async function PUT(req: NextRequest) {
       newName
     );
 
-    return NextResponse.json({
-      success: true,
-      message: `Subcategory renamed to "${subcategory.name}". ${affectedProductsCount} product(s) updated.`,
-      subcategory,
-      affectedProductsCount,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        message: `Subcategory renamed to "${subcategory.name}". ${affectedProductsCount} product(s) updated.`,
+        subcategory,
+        affectedProductsCount,
+      },
+      { headers: NO_CACHE_HEADERS }
+    );
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : "Failed to rename subcategory";
-    return NextResponse.json({ success: false, error: errorMsg }, { status: 400 });
+    return NextResponse.json(
+      { success: false, error: errorMsg },
+      { status: 400, headers: NO_CACHE_HEADERS }
+    );
   }
 }
 
@@ -146,14 +170,14 @@ export async function DELETE(req: NextRequest) {
     if (!category || !VALID_CATEGORIES.includes(category as ProductCategory)) {
       return NextResponse.json(
         { success: false, error: "Invalid parent category." },
-        { status: 400 }
+        { status: 400, headers: NO_CACHE_HEADERS }
       );
     }
 
     if (!name || typeof name !== "string" || !name.trim()) {
       return NextResponse.json(
         { success: false, error: "Subcategory name to delete is required." },
-        { status: 400 }
+        { status: 400, headers: NO_CACHE_HEADERS }
       );
     }
 
@@ -165,20 +189,26 @@ export async function DELETE(req: NextRequest) {
         reassignTo
       );
 
-      return NextResponse.json({
-        success: true,
-        message: `Subcategory "${result.deletedName}" deleted. ${result.reassignedCount} product(s) reassigned to "${reassignTo}".`,
-        reassignedCount: result.reassignedCount,
-      });
+      return NextResponse.json(
+        {
+          success: true,
+          message: `Subcategory "${result.deletedName}" deleted. ${result.reassignedCount} product(s) reassigned to "${reassignTo}".`,
+          reassignedCount: result.reassignedCount,
+        },
+        { headers: NO_CACHE_HEADERS }
+      );
     }
 
     // Normal delete: will throw if products are in use
     const result = subcategoryStore.delete(category as ProductCategory, name);
 
-    return NextResponse.json({
-      success: true,
-      message: `Subcategory "${result.name}" deleted successfully.`,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        message: `Subcategory "${result.name}" deleted successfully.`,
+      },
+      { headers: NO_CACHE_HEADERS }
+    );
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : "Failed to delete subcategory";
     const isInUse = errorMsg.includes("currently used by");
@@ -189,7 +219,7 @@ export async function DELETE(req: NextRequest) {
         error: errorMsg,
         inUse: isInUse,
       },
-      { status: 400 }
+      { status: 400, headers: NO_CACHE_HEADERS }
     );
   }
 }

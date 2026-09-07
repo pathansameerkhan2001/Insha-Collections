@@ -125,16 +125,13 @@ function generateSlug(category: string, name: string): string {
 
 export class SubcategoryStore {
   private cache: Record<ProductCategory, SubCategoryRecord[]> | null = null;
+  private lastLoadedMtime: number = 0;
 
   /**
    * Initializes or loads subcategory data from .data/subcategories.json.
    * Merges any missing default subcategories or subcategories currently in products.json.
    */
   private ensureDataLoaded(): Record<ProductCategory, SubCategoryRecord[]> {
-    if (this.cache) {
-      return this.cache;
-    }
-
     const initialMap: Record<ProductCategory, SubCategoryRecord[]> = {
       jewellery: [],
       korean: [],
@@ -148,6 +145,14 @@ export class SubcategoryStore {
 
     try {
       if (fs.existsSync(SUBCATEGORIES_FILE)) {
+        const stats = fs.statSync(SUBCATEGORIES_FILE);
+        const currentMtime = stats.mtimeMs;
+
+        // If cache exists and file has not changed, return cache
+        if (this.cache && this.lastLoadedMtime === currentMtime) {
+          return this.cache;
+        }
+
         const raw = fs.readFileSync(SUBCATEGORIES_FILE, "utf8");
         const parsed = JSON.parse(raw);
         if (parsed && typeof parsed === "object") {
@@ -156,6 +161,9 @@ export class SubcategoryStore {
               initialMap[catKey] = parsed[catKey];
             }
           }
+          this.cache = initialMap;
+          this.lastLoadedMtime = currentMtime;
+          return this.cache;
         }
       }
     } catch (err) {
@@ -220,7 +228,14 @@ export class SubcategoryStore {
       if (!fs.existsSync(DATA_DIR)) {
         fs.mkdirSync(DATA_DIR, { recursive: true });
       }
-      fs.writeFileSync(SUBCATEGORIES_FILE, JSON.stringify(data, null, 2), "utf8");
+      // Safe atomic write via temporary file rename
+      const tempFilePath = `${SUBCATEGORIES_FILE}.tmp.${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+      fs.writeFileSync(tempFilePath, JSON.stringify(data, null, 2), "utf8");
+      fs.renameSync(tempFilePath, SUBCATEGORIES_FILE);
+
+      const stats = fs.statSync(SUBCATEGORIES_FILE);
+      this.lastLoadedMtime = stats.mtimeMs;
+      this.cache = data;
     } catch (err) {
       console.error("Failed to write subcategories.json:", err);
     }

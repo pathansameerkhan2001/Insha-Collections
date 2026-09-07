@@ -69,7 +69,7 @@ export default function Header({
             </Link>
           </div>
 
-          {/* Right: Interface Action Icons (Search, User/Login, Wishlist, Cart) */}
+          {/* Right: Interface Action Icons (Search, User/Login, Cart) */}
           <div className="flex items-center gap-2 sm:gap-4 md:gap-5 lg:gap-6 text-[#231610]">
             {/* Search Icon */}
             <button
@@ -100,25 +100,6 @@ export default function Header({
             >
               <User className="w-5 h-5 sm:w-[22px] sm:h-[22px] stroke-[1.35]" />
             </Link>
-
-            {/* Wishlist Icon */}
-            <button
-              type="button"
-              onClick={onOpenWishlist}
-              className="hover:text-[#B89366] transition-colors duration-200 p-1 sm:p-1.5 relative focus:outline-none cursor-pointer"
-              aria-label="Wishlist"
-            >
-              <Heart
-                className={`w-5 h-5 sm:w-[22px] sm:h-[22px] stroke-[1.35] ${
-                  wishlistCount > 0 ? "text-[#6A1A24] fill-current" : ""
-                }`}
-              />
-              {wishlistCount > 0 && (
-                <span className="absolute top-0 right-0 w-4 h-4 bg-[#6A1A24] text-[#FAF7F3] text-[9.5px] font-bold rounded-full flex items-center justify-center leading-none">
-                  {wishlistCount}
-                </span>
-              )}
-            </button>
 
             {/* Shopping Bag Icon with Badge */}
             <button

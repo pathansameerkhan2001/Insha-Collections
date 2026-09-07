@@ -116,7 +116,10 @@ export default function ShopByCategory({
 
   useEffect(() => {
     // Fetch dynamic subcategories
-    fetch("/api/subcategories")
+    fetch("/api/subcategories", {
+      cache: "no-store",
+      headers: { "Cache-Control": "no-cache" },
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.subcategories) {
@@ -126,7 +129,10 @@ export default function ShopByCategory({
       .catch(() => {});
 
     // Fetch live products
-    fetch("/api/products")
+    fetch("/api/products", {
+      cache: "no-store",
+      headers: { "Cache-Control": "no-cache" },
+    })
       .then((res) => res.json())
       .then((data) => {
         if (data.products && Array.isArray(data.products) && data.products.length > 0) {

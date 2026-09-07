@@ -55,7 +55,10 @@ export default function AdminProductsPage() {
         params.set("query", searchQuery.trim());
       }
 
-      const res = await fetch(`/api/admin/products?${params.toString()}`);
+      const res = await fetch(`/api/admin/products?${params.toString()}`, {
+        cache: "no-store",
+        headers: { "Cache-Control": "no-cache" },
+      });
       const data = await res.json();
       if (data.products) {
         setProducts(data.products);
@@ -81,7 +84,10 @@ export default function AdminProductsPage() {
           params.set("query", searchQuery.trim());
         }
 
-        const res = await fetch(`/api/admin/products?${params.toString()}`);
+        const res = await fetch(`/api/admin/products?${params.toString()}`, {
+          cache: "no-store",
+          headers: { "Cache-Control": "no-cache" },
+        });
         const data = await res.json();
         if (isMounted && data.products) {
           setProducts(data.products);
@@ -108,6 +114,7 @@ export default function AdminProductsPage() {
     try {
       const res = await fetch(`/api/admin/products/${id}`, {
         method: "DELETE",
+        cache: "no-store",
       });
 
       const data = await res.json();

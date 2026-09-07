@@ -111,14 +111,19 @@ function getInitialCatalog(): ProductRecord[] {
 
 class ProductStore {
   private productsCache: ProductRecord[] | null = null;
+  private lastLoadedMtime: number = 0;
 
   private ensureDataLoaded(): ProductRecord[] {
-    if (this.productsCache) {
-      return this.productsCache;
-    }
-
     try {
       if (fs.existsSync(PRODUCTS_FILE)) {
+        const stats = fs.statSync(PRODUCTS_FILE);
+        const currentMtime = stats.mtimeMs;
+
+        // If cache exists and file has not been modified since last load, return memory cache
+        if (this.productsCache && this.lastLoadedMtime === currentMtime) {
+          return this.productsCache;
+        }
+
         const raw = fs.readFileSync(PRODUCTS_FILE, "utf8");
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -157,7 +162,9 @@ class ProductStore {
               images: normalizedReal.map((r) => (typeof r === "string" ? r : r.url)),
             };
           });
+
           this.productsCache = normalized;
+          this.lastLoadedMtime = currentMtime;
           return this.productsCache;
         }
       }
@@ -165,7 +172,7 @@ class ProductStore {
       console.warn("Could not read products.json, initializing from default catalog:", err);
     }
 
-    // Initialize with default catalog
+    // Initialize with default catalog if file doesn't exist or is invalid
     const initial = getInitialCatalog();
     this.productsCache = initial;
     this.saveToFile(initial);
@@ -177,7 +184,14 @@ class ProductStore {
       if (!fs.existsSync(DATA_DIR)) {
         fs.mkdirSync(DATA_DIR, { recursive: true });
       }
-      fs.writeFileSync(PRODUCTS_FILE, JSON.stringify(products, null, 2), "utf8");
+      // Safe atomic write via temporary file rename
+      const tempFilePath = `${PRODUCTS_FILE}.tmp.${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+      fs.writeFileSync(tempFilePath, JSON.stringify(products, null, 2), "utf8");
+      fs.renameSync(tempFilePath, PRODUCTS_FILE);
+      
+      const stats = fs.statSync(PRODUCTS_FILE);
+      this.lastLoadedMtime = stats.mtimeMs;
+      this.productsCache = products;
     } catch (err) {
       console.error("Failed to write products.json:", err);
     }

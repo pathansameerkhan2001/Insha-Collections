@@ -21,7 +21,10 @@ export default function EditProductPage() {
     async function loadProduct() {
       setIsLoading(true);
       try {
-        const res = await fetch(`/api/admin/products/${id}`);
+        const res = await fetch(`/api/admin/products/${id}`, {
+          cache: "no-store",
+          headers: { "Cache-Control": "no-cache" },
+        });
         const data = await res.json();
 
         if (!res.ok || !data.success || !data.product) {

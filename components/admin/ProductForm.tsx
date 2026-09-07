@@ -322,6 +322,7 @@ export default function ProductForm({
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
+        cache: "no-store",
       });
 
       const data = await res.json();
@@ -336,9 +337,12 @@ export default function ProductForm({
           : "Product created and published to store catalog!"
       );
 
+      // Invalidate Next.js client router cache so product list immediately renders new product
+      router.refresh();
+
       setTimeout(() => {
         router.push("/admin/products");
-      }, 1000);
+      }, 700);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Error saving product";
       setErrorMessage(msg);
