@@ -259,7 +259,7 @@ class ProductStore {
         ? "hand"
         : "srv";
 
-    const uniqueId = `${categoryPrefix}-${Date.now().toString().slice(-6)}`;
+    const uniqueId = `${categoryPrefix}-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`;
     const slug = dto.name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, "-")

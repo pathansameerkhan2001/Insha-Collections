@@ -82,6 +82,8 @@ const ALL_PHYSICAL_PRODUCTS: ProductItem[] = [
 ];
 
 interface ShopByCategoryProps {
+  products?: ProductItem[];
+  services?: ServiceItem[];
   activeCategory?: string;
   selectedSubCategory?: string;
   onTabChange?: (tabId: string) => void;
@@ -93,6 +95,8 @@ interface ShopByCategoryProps {
 }
 
 export default function ShopByCategory({
+  products,
+  services,
   activeCategory = "jewellery",
   selectedSubCategory = "All",
   onTabChange,
@@ -109,16 +113,19 @@ export default function ShopByCategory({
   const [localWishlist, setLocalWishlist] = useState<Record<string, boolean>>({});
   const [addedCartIds, setAddedCartIds] = useState<Record<string, boolean>>({});
 
-  // Dynamic live synced products from admin
+  // Dynamic live synced products fallback if not passed as props
   const [liveProducts, setLiveProducts] = useState<ProductItem[] | null>(null);
   const [liveServices, setLiveServices] = useState<ServiceItem[] | null>(null);
   const [dynamicSubcategoriesMap, setDynamicSubcategoriesMap] = useState<Record<string, string[]> | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     // Fetch dynamic subcategories
     fetch("/api/subcategories", {
       cache: "no-store",
       headers: { "Cache-Control": "no-cache" },
+      signal: controller.signal,
     })
       .then((res) => res.json())
       .then((data) => {
@@ -126,72 +133,85 @@ export default function ShopByCategory({
           setDynamicSubcategoriesMap(data.subcategories);
         }
       })
-      .catch(() => {});
-
-    // Fetch live products
-    fetch("/api/products", {
-      cache: "no-store",
-      headers: { "Cache-Control": "no-cache" },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.products && Array.isArray(data.products) && data.products.length > 0) {
-          const physical: ProductItem[] = [];
-          const services: ServiceItem[] = [];
-
-          for (const item of data.products) {
-            if (item.category === "beauty") {
-              services.push({
-                id: item.id,
-                name: item.name,
-                category: "beauty",
-                subCategory: item.subCategory,
-                price: item.price,
-                duration: item.duration || "60 mins",
-                rating: item.rating || 4.8,
-                reviewsCount: item.reviewsCount || 50,
-                badge: item.badge || { text: "POPULAR", type: "gold" },
-                image: item.mainImage || item.image,
-                description: item.description,
-                benefits: item.benefits || ["Professional salon care", "Premium organic formulations"],
-              });
-            } else {
-              const storefrontImg = getStorefrontImageUrl(item, 400);
-              const realImgs =
-                item.realImages && item.realImages.length > 0
-                  ? item.realImages
-                  : item.images && item.images.length > 0
-                  ? item.images
-                  : [item.mainImage || item.image];
-
-              physical.push({
-                id: item.id,
-                name: item.name,
-                category: item.category,
-                subCategory: item.subCategory,
-                price: item.price,
-                originalPrice: item.salePrice,
-                rating: item.rating || 4.8,
-                reviewsCount: item.reviewsCount || 80,
-                badge: item.badge || { text: "NEW ARRIVAL", type: "gold" },
-                image: storefrontImg,
-                showcaseImage: item.showcaseImage,
-                realImages: realImgs,
-                description: item.description,
-                inStock: item.inStock ?? true,
-                material: item.material,
-                details: item.details,
-              });
-            }
-          }
-          if (physical.length > 0) setLiveProducts(physical);
-          if (services.length > 0) setLiveServices(services);
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          // Fallback silently
         }
-      })
-      .catch(() => {
-        // Fallback silently to static catalog
       });
-  }, []);
+
+    // If products were not supplied as props, fetch them directly
+    if (!products) {
+      fetch("/api/products", {
+        cache: "no-store",
+        headers: { "Cache-Control": "no-cache" },
+        signal: controller.signal,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.products && Array.isArray(data.products) && data.products.length > 0) {
+            const physical: ProductItem[] = [];
+            const srvs: ServiceItem[] = [];
+
+            for (const item of data.products) {
+              if (item.category === "beauty") {
+                srvs.push({
+                  id: item.id,
+                  name: item.name,
+                  category: "beauty",
+                  subCategory: item.subCategory,
+                  price: item.price,
+                  duration: item.duration || "60 mins",
+                  rating: item.rating || 4.8,
+                  reviewsCount: item.reviewsCount || 50,
+                  badge: item.badge || { text: "POPULAR", type: "gold" },
+                  image: item.mainImage || item.image,
+                  description: item.description,
+                  benefits: item.benefits || ["Professional salon care", "Premium organic formulations"],
+                });
+              } else {
+                const storefrontImg = getStorefrontImageUrl(item, 400);
+                const realImgs =
+                  item.realImages && item.realImages.length > 0
+                    ? item.realImages
+                    : item.images && item.images.length > 0
+                    ? item.images
+                    : [item.mainImage || item.image];
+
+                physical.push({
+                  id: item.id,
+                  name: item.name,
+                  category: item.category,
+                  subCategory: item.subCategory,
+                  price: item.price,
+                  originalPrice: item.salePrice,
+                  rating: item.rating || 4.8,
+                  reviewsCount: item.reviewsCount || 80,
+                  badge: item.badge || { text: "NEW ARRIVAL", type: "gold" },
+                  image: storefrontImg,
+                  showcaseImage: item.showcaseImage,
+                  realImages: realImgs,
+                  description: item.description,
+                  inStock: item.inStock ?? true,
+                  material: item.material,
+                  details: item.details,
+                });
+              }
+            }
+            if (physical.length > 0) setLiveProducts(physical);
+            if (srvs.length > 0) setLiveServices(srvs);
+          }
+        })
+        .catch((err) => {
+          if (err.name !== "AbortError") {
+            // Fallback silently to static catalog
+          }
+        });
+    }
+
+    return () => {
+      controller.abort();
+    };
+  }, [products]);
 
   // Modals state
   const [quickViewProduct, setQuickViewProduct] = useState<ProductItem | null>(null);
@@ -201,13 +221,13 @@ export default function ShopByCategory({
   const currentSubCat = selectedSubCategory || internalSubCat;
   const wishlist = wishlistState || localWishlist;
 
-  const allPhysical = liveProducts || ALL_PHYSICAL_PRODUCTS;
-  const jewelleryItems = liveProducts ? liveProducts.filter((p) => p.category === "jewellery") : JEWELLERY_PRODUCTS;
-  const koreanItems = liveProducts ? liveProducts.filter((p) => p.category === "korean") : KOREAN_PRODUCTS;
-  const dressesItems = liveProducts ? liveProducts.filter((p) => p.category === "dresses") : DRESSES_PRODUCTS;
-  const materialsItems = liveProducts ? liveProducts.filter((p) => p.category === "materials") : MATERIALS_PRODUCTS;
-  const handloomItems = liveProducts ? liveProducts.filter((p) => p.category === "handlooms") : HANDLOOM_PRODUCTS;
-  const beautyItems = liveServices || BEAUTY_SERVICES;
+  const allPhysical = useMemo(() => products || liveProducts || ALL_PHYSICAL_PRODUCTS, [products, liveProducts]);
+  const jewelleryItems = useMemo(() => allPhysical.filter((p) => p.category === "jewellery"), [allPhysical]);
+  const koreanItems = useMemo(() => allPhysical.filter((p) => p.category === "korean"), [allPhysical]);
+  const dressesItems = useMemo(() => allPhysical.filter((p) => p.category === "dresses"), [allPhysical]);
+  const materialsItems = useMemo(() => allPhysical.filter((p) => p.category === "materials"), [allPhysical]);
+  const handloomItems = useMemo(() => allPhysical.filter((p) => p.category === "handlooms"), [allPhysical]);
+  const beautyItems = useMemo(() => services || liveServices || BEAUTY_SERVICES, [services, liveServices]);
 
   const handleWishlistToggle = (productId: string, e?: React.MouseEvent) => {
     if (e) {
@@ -259,7 +279,7 @@ export default function ShopByCategory({
   const rawItems = useMemo(() => {
     switch (activeTab) {
       case "all":
-        return isExpanded ? allPhysical : allPhysical.slice(0, 12);
+        return allPhysical;
       case "jewellery":
         return jewelleryItems;
       case "korean":
@@ -277,7 +297,6 @@ export default function ShopByCategory({
     }
   }, [
     activeTab,
-    isExpanded,
     allPhysical,
     jewelleryItems,
     koreanItems,
@@ -310,16 +329,10 @@ export default function ShopByCategory({
     );
   }, [rawItems, currentSubCat, activeTab]);
 
-  // Displayed items based on expansion state
+  // Display all matching items deterministically without artificial clipping
   const displayedItems = useMemo(() => {
-    if (activeTab === "beauty") {
-      return isExpanded ? filteredItems : filteredItems.slice(0, 4);
-    }
-    if (activeTab === "all") {
-      return filteredItems;
-    }
-    return isExpanded ? filteredItems : filteredItems.slice(0, 8);
-  }, [filteredItems, isExpanded, activeTab]);
+    return filteredItems;
+  }, [filteredItems]);
 
   // Handle "VIEW ALL PRODUCTS" or "VIEW ALL SERVICES" click
   const handleViewAllToggle = () => {

@@ -69,9 +69,10 @@ export default function AdminProductsPage() {
   };
 
   useEffect(() => {
-    let isMounted = true;
+    const controller = new AbortController();
+    setIsLoading(true);
+
     async function load() {
-      setIsLoading(true);
       try {
         const params = new URLSearchParams();
         if (selectedCategory && selectedCategory !== "all") {
@@ -87,21 +88,24 @@ export default function AdminProductsPage() {
         const res = await fetch(`/api/admin/products?${params.toString()}`, {
           cache: "no-store",
           headers: { "Cache-Control": "no-cache" },
+          signal: controller.signal,
         });
         const data = await res.json();
-        if (isMounted && data.products) {
+        if (data.products) {
           setProducts(data.products);
         }
-      } catch (err) {
-        console.error("Error fetching admin products:", err);
+      } catch (err: unknown) {
+        if (err instanceof Error && err.name !== "AbortError") {
+          console.error("Error fetching admin products:", err);
+        }
       } finally {
-        if (isMounted) setIsLoading(false);
+        setIsLoading(false);
       }
     }
 
     load();
     return () => {
-      isMounted = false;
+      controller.abort();
     };
   }, [selectedCategory, selectedStatus, searchQuery]);
 

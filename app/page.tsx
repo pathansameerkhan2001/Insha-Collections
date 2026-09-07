@@ -16,11 +16,13 @@ import SearchModal from "@/components/SearchModal";
 import ProductQuickViewModal from "@/components/ProductQuickViewModal";
 import {
   ProductItem,
+  ServiceItem,
   JEWELLERY_PRODUCTS,
   KOREAN_PRODUCTS,
   DRESSES_PRODUCTS,
   MATERIALS_PRODUCTS,
   HANDLOOM_PRODUCTS,
+  BEAUTY_SERVICES,
 } from "@/data/catalog";
 import { ProductRecord, getStorefrontImageUrl } from "@/lib/products/productTypes";
 
@@ -36,6 +38,7 @@ export default function Home() {
   const [cart, setCart] = useState<CartEntry[]>([]);
   const [wishlistIds, setWishlistIds] = useState<Record<string, boolean>>({});
   const [allProductsList, setAllProductsList] = useState<ProductItem[]>(ALL_PRODUCTS);
+  const [beautyServicesList, setBeautyServicesList] = useState<ServiceItem[]>(BEAUTY_SERVICES);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
@@ -46,39 +49,82 @@ export default function Home() {
   const [searchQuickViewProduct, setSearchQuickViewProduct] = useState<ProductItem | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     fetch("/api/products", {
       cache: "no-store",
       headers: { "Cache-Control": "no-cache" },
+      signal: controller.signal,
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.products && Array.isArray(data.products) && data.products.length > 0) {
-          const list: ProductItem[] = data.products
-            .filter((p: ProductRecord) => p.category !== "beauty")
-            .map((item: ProductRecord) => ({
-              id: item.id,
-              name: item.name,
-              category: item.category as ProductItem["category"],
-              subCategory: item.subCategory,
-              price: item.price,
-              originalPrice: item.salePrice,
-              rating: item.rating || 4.8,
-              reviewsCount: item.reviewsCount || 80,
-              badge: item.badge || { text: "NEW ARRIVAL", type: "gold" },
-              image: getStorefrontImageUrl(item),
-              showcaseImage: item.showcaseImage,
-              realImages: item.realImages,
-              description: item.description,
-              inStock: item.inStock ?? true,
-              material: item.material,
-              details: item.details,
-            }));
-          if (list.length > 0) {
-            setAllProductsList(list);
+          const physical: ProductItem[] = [];
+          const services: ServiceItem[] = [];
+
+          for (const item of data.products) {
+            if (item.category === "beauty") {
+              services.push({
+                id: item.id,
+                name: item.name,
+                category: "beauty",
+                subCategory: item.subCategory,
+                price: item.price,
+                duration: item.duration || "60 mins",
+                rating: item.rating || 4.8,
+                reviewsCount: item.reviewsCount || 50,
+                badge: item.badge || { text: "POPULAR", type: "gold" },
+                image: item.mainImage || item.image,
+                description: item.description,
+                benefits: item.benefits || ["Professional salon care", "Premium organic formulations"],
+              });
+            } else {
+              const storefrontImg = getStorefrontImageUrl(item, 400);
+              const realImgs =
+                item.realImages && item.realImages.length > 0
+                  ? item.realImages
+                  : item.images && item.images.length > 0
+                  ? item.images
+                  : [item.mainImage || item.image];
+
+              physical.push({
+                id: item.id,
+                name: item.name,
+                category: item.category as ProductItem["category"],
+                subCategory: item.subCategory,
+                price: item.price,
+                originalPrice: item.salePrice,
+                rating: item.rating || 4.8,
+                reviewsCount: item.reviewsCount || 80,
+                badge: item.badge || { text: "NEW ARRIVAL", type: "gold" },
+                image: storefrontImg,
+                showcaseImage: item.showcaseImage,
+                realImages: realImgs,
+                description: item.description,
+                inStock: item.inStock ?? true,
+                material: item.material,
+                details: item.details,
+              });
+            }
+          }
+
+          if (physical.length > 0) {
+            setAllProductsList(physical);
+          }
+          if (services.length > 0) {
+            setBeautyServicesList(services);
           }
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          console.warn("Could not fetch latest products:", err);
+        }
+      });
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   // Active Category & Subcategory Filter State
@@ -211,6 +257,8 @@ export default function Home() {
       <CategoryGrid onSelectCategory={handleSelectCategory} />
 
       <ShopByCategory
+        products={allProductsList}
+        services={beautyServicesList}
         activeCategory={activeCategory}
         selectedSubCategory={selectedSubCategory}
         onTabChange={(tab) => {
