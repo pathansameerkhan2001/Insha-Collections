@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
   if (authError) return authError;
 
   try {
-    const subcategories = subcategoryStore.getAllWithCounts();
+    const subcategories = await subcategoryStore.getAllWithCounts();
     return NextResponse.json(
       {
         success: true,
@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const newSub = subcategoryStore.create(category as ProductCategory, name);
+    const newSub = await subcategoryStore.create(category as ProductCategory, name);
 
     return NextResponse.json(
       {
@@ -130,7 +130,7 @@ export async function PUT(req: NextRequest) {
       );
     }
 
-    const { subcategory, affectedProductsCount } = subcategoryStore.update(
+    const { subcategory, affectedProductsCount } = await subcategoryStore.update(
       category as ProductCategory,
       oldName,
       newName
@@ -183,7 +183,7 @@ export async function DELETE(req: NextRequest) {
 
     // If reassign target is provided, reassign products first and delete
     if (reassignTo && typeof reassignTo === "string" && reassignTo.trim()) {
-      const result = subcategoryStore.reassignAndDelete(
+      const result = await subcategoryStore.reassignAndDelete(
         category as ProductCategory,
         name,
         reassignTo
@@ -200,7 +200,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     // Normal delete: will throw if products are in use
-    const result = subcategoryStore.delete(category as ProductCategory, name);
+    const result = await subcategoryStore.delete(category as ProductCategory, name);
 
     return NextResponse.json(
       {

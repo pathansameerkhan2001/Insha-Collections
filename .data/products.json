@@ -1,5 +1,33 @@
 [
   {
+    "id": "jewel-1788780696967-67rzs",
+    "name": "Mint Green Chandelier Earrings",
+    "slug": "mint-green-chandelier-earrings",
+    "category": "jewellery",
+    "subCategory": "Rings",
+    "description": "Elegant chandelier earrings featuring antique-gold detailing, mint-green stones, delicate hanging chains, and pearl-style accents. Perfect for festive occasions, parties, and special events.",
+    "shortDescription": "Elegant chandelier earrings featuring antique-gold detailing, mint-green stones, delicate hanging chains, and pearl-styl...",
+    "price": 1159,
+    "salePrice": 1997,
+    "sku": "INSHA-JEW-6967",
+    "stockQuantity": 15,
+    "inStock": true,
+    "status": "Active",
+    "featured": false,
+    "mainImage": "/api/images/s3/products/new/showcase/optimized/1788780623635-chatgpt-image-sep-7-2026-12-18-37-pm-800w.webp?w=400",
+    "images": [
+      "/api/images/s3/products/new/real/optimized/1788780653559-ring-800w.webp"
+    ],
+    "showcaseImage": "/api/images/s3/products/new/showcase/optimized/1788780623635-chatgpt-image-sep-7-2026-12-18-37-pm-800w.webp",
+    "realImages": [
+      "/api/images/s3/products/new/real/optimized/1788780653559-ring-800w.webp"
+    ],
+    "rating": 5,
+    "reviewsCount": 1,
+    "createdAt": "2026-09-07T11:31:36.967Z",
+    "updatedAt": "2026-09-07T11:31:36.967Z"
+  },
+  {
     "id": "jewel-897129",
     "name": "Traditional Gold Statement Necklace Set",
     "slug": "traditional-gold-statement-necklace-set",
@@ -119,10 +147,10 @@
   },
   {
     "id": "jewel-3",
-    "name": "Traditional Kundan Jhumka Earrings",
-    "slug": "traditional-kundan-jhumka-earrings",
+    "name": "Red Stone Gold Necklace Set",
+    "slug": "red-stone-gold-necklace-set",
     "category": "jewellery",
-    "subCategory": "Earrings / Jhumkas",
+    "subCategory": "Bridal Jewellery",
     "description": "Ornate traditional chandelier jhumkas featuring vibrant green Meenakari enamel, polki stones, and cascading pearl clusters.",
     "shortDescription": "Ornate traditional chandelier jhumkas featuring vibrant green Meenakari enamel, polki stones, and cascading pearl cluste...",
     "price": 1599,
@@ -132,9 +160,9 @@
     "inStock": true,
     "status": "Active",
     "featured": true,
-    "mainImage": "/images/prod-kundan-jhumkas.jpg",
+    "mainImage": "/api/images/s3/products/jewel-3/showcase/optimized/1788770021041-chatgpt-image-sep-7-2026-12-01-45-pm-800w.webp?w=400",
     "images": [
-      "/images/prod-kundan-jhumkas.jpg"
+      "/api/images/s3/products/jewel-3/real/optimized/1788770055596-neklesset-800w.webp"
     ],
     "material": "Gold Plated Brass with Meenakari Enamel",
     "details": [
@@ -149,10 +177,11 @@
     "rating": 4.9,
     "reviewsCount": 215,
     "createdAt": "2026-01-01T00:00:00.000Z",
-    "updatedAt": "2026-01-01T00:00:00.000Z",
+    "updatedAt": "2026-09-07T08:34:23.014Z",
     "realImages": [
-      "/images/prod-kundan-jhumkas.jpg"
-    ]
+      "/api/images/s3/products/jewel-3/real/optimized/1788770055596-neklesset-800w.webp"
+    ],
+    "showcaseImage": "/api/images/s3/products/jewel-3/showcase/optimized/1788770021041-chatgpt-image-sep-7-2026-12-01-45-pm-800w.webp"
   },
   {
     "id": "jewel-4",

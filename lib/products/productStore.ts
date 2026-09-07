@@ -16,8 +16,15 @@ import {
   normalizeImageUrl,
   getStorefrontImageUrl,
 } from "./productTypes";
+import {
+  isDynamoConfigured,
+  dynamoGetAllProducts,
+  dynamoGetProductById,
+  dynamoPutProduct,
+  dynamoDeleteProduct,
+} from "@/lib/aws/dynamoService";
 
-// File storage path for persistence across server requests
+// File storage path for offline development fallback
 const DATA_DIR = path.join(process.cwd(), ".data");
 const PRODUCTS_FILE = path.join(DATA_DIR, "products.json");
 
@@ -109,96 +116,99 @@ function getInitialCatalog(): ProductRecord[] {
   return [...products, ...services];
 }
 
-class ProductStore {
-  private productsCache: ProductRecord[] | null = null;
-  private lastLoadedMtime: number = 0;
+function normalizeRecord(p: any): ProductRecord {
+  const rawReal =
+    p.realImages && p.realImages.length > 0
+      ? p.realImages
+      : p.images && p.images.length > 0
+      ? p.images
+      : p.mainImage
+      ? [p.mainImage]
+      : [];
 
-  private ensureDataLoaded(): ProductRecord[] {
+  const normalizedReal = rawReal.map((r: any) =>
+    typeof r === "string" ? normalizeImageUrl(r) : { ...r, url: normalizeImageUrl(r.url) }
+  );
+
+  const normalizedShowcase = p.showcaseImage
+    ? typeof p.showcaseImage === "string"
+      ? normalizeImageUrl(p.showcaseImage)
+      : { ...p.showcaseImage, url: normalizeImageUrl(p.showcaseImage.url) }
+    : undefined;
+
+  const primaryStorefront = getStorefrontImageUrl({
+    showcaseImage: normalizedShowcase,
+    realImages: normalizedReal,
+    mainImage: p.mainImage,
+  });
+
+  return {
+    ...p,
+    price: Number(p.price) || 0,
+    salePrice: p.salePrice ? Number(p.salePrice) : undefined,
+    stockQuantity: p.stockQuantity !== undefined ? Number(p.stockQuantity) : 10,
+    inStock: p.inStock ?? true,
+    featured: Boolean(p.featured),
+    showcaseImage: normalizedShowcase,
+    realImages: normalizedReal,
+    mainImage: primaryStorefront,
+    images: normalizedReal.map((r: any) => (typeof r === "string" ? r : r.url)),
+  };
+}
+
+class ProductStore {
+  // Local file fallback for offline testing
+  private loadLocalData(): ProductRecord[] {
     try {
       if (fs.existsSync(PRODUCTS_FILE)) {
-        const stats = fs.statSync(PRODUCTS_FILE);
-        const currentMtime = stats.mtimeMs;
-
-        // If cache exists and file has not been modified since last load, return memory cache
-        if (this.productsCache && this.lastLoadedMtime === currentMtime) {
-          return this.productsCache;
-        }
-
         const raw = fs.readFileSync(PRODUCTS_FILE, "utf8");
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // Normalize records to ensure realImages and showcaseImage backward compatibility
-          const normalized: ProductRecord[] = parsed.map((p: ProductRecord) => {
-            const rawReal =
-              p.realImages && p.realImages.length > 0
-                ? p.realImages
-                : p.images && p.images.length > 0
-                ? p.images
-                : p.mainImage
-                ? [p.mainImage]
-                : [];
-
-            const normalizedReal = rawReal.map((r) =>
-              typeof r === "string" ? normalizeImageUrl(r) : { ...r, url: normalizeImageUrl(r.url) }
-            );
-
-            const normalizedShowcase = p.showcaseImage
-              ? typeof p.showcaseImage === "string"
-                ? normalizeImageUrl(p.showcaseImage)
-                : { ...p.showcaseImage, url: normalizeImageUrl(p.showcaseImage.url) }
-              : undefined;
-
-            const primaryStorefront = getStorefrontImageUrl({
-              showcaseImage: normalizedShowcase,
-              realImages: normalizedReal,
-              mainImage: p.mainImage,
-            });
-
-            return {
-              ...p,
-              showcaseImage: normalizedShowcase,
-              realImages: normalizedReal,
-              mainImage: primaryStorefront,
-              images: normalizedReal.map((r) => (typeof r === "string" ? r : r.url)),
-            };
-          });
-
-          this.productsCache = normalized;
-          this.lastLoadedMtime = currentMtime;
-          return this.productsCache;
+          return parsed.map(normalizeRecord);
         }
       }
     } catch (err) {
-      console.warn("Could not read products.json, initializing from default catalog:", err);
+      console.warn("Could not read local products.json:", err);
     }
-
-    // Initialize with default catalog if file doesn't exist or is invalid
     const initial = getInitialCatalog();
-    this.productsCache = initial;
-    this.saveToFile(initial);
+    this.saveLocalData(initial);
     return initial;
   }
 
-  private saveToFile(products: ProductRecord[]) {
+  private saveLocalData(products: ProductRecord[]) {
     try {
       if (!fs.existsSync(DATA_DIR)) {
         fs.mkdirSync(DATA_DIR, { recursive: true });
       }
-      // Safe atomic write via temporary file rename
       const tempFilePath = `${PRODUCTS_FILE}.tmp.${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
       fs.writeFileSync(tempFilePath, JSON.stringify(products, null, 2), "utf8");
       fs.renameSync(tempFilePath, PRODUCTS_FILE);
-      
-      const stats = fs.statSync(PRODUCTS_FILE);
-      this.lastLoadedMtime = stats.mtimeMs;
-      this.productsCache = products;
     } catch (err) {
-      console.error("Failed to write products.json:", err);
+      console.error("Failed to write local products.json:", err);
     }
   }
 
-  public getAll(filter?: ProductFilterOptions): ProductRecord[] {
-    let items = this.ensureDataLoaded();
+  public async getAll(filter?: ProductFilterOptions): Promise<ProductRecord[]> {
+    let items: ProductRecord[] = [];
+
+    if (isDynamoConfigured()) {
+      try {
+        const dynamoItems = await dynamoGetAllProducts();
+        items = dynamoItems.map(normalizeRecord);
+      } catch (err) {
+        console.error("DynamoDB getAll failed, falling back to local storage:", err);
+        items = this.loadLocalData();
+      }
+    } else {
+      items = this.loadLocalData();
+    }
+
+    // Deterministic sorting: Newest created/updated first
+    items.sort((a, b) => {
+      const timeA = new Date(a.createdAt || a.updatedAt || 0).getTime();
+      const timeB = new Date(b.createdAt || b.updatedAt || 0).getTime();
+      return timeB - timeA;
+    });
 
     if (!filter) return items;
 
@@ -237,13 +247,27 @@ class ProductStore {
     return items;
   }
 
-  public getById(id: string): ProductRecord | undefined {
-    const items = this.ensureDataLoaded();
-    return items.find((p) => p.id === id);
+  public async getById(id: string): Promise<ProductRecord | null> {
+    if (!id) return null;
+
+    if (isDynamoConfigured()) {
+      try {
+        const item = await dynamoGetProductById(id);
+        if (item) {
+          return normalizeRecord(item);
+        }
+        return null;
+      } catch (err) {
+        console.error(`DynamoDB getById(${id}) failed, falling back to local:`, err);
+      }
+    }
+
+    const localItems = this.loadLocalData();
+    const found = localItems.find((p) => p.id === id);
+    return found ? normalizeRecord(found) : null;
   }
 
-  public create(dto: CreateProductDTO): ProductRecord {
-    const items = this.ensureDataLoaded();
+  public async create(dto: CreateProductDTO): Promise<ProductRecord> {
     const now = new Date().toISOString();
 
     const categoryPrefix =
@@ -322,22 +346,32 @@ class ProductStore {
       updatedAt: now,
     };
 
-    const updatedList = [newRecord, ...items];
-    this.productsCache = updatedList;
-    this.saveToFile(updatedList);
+    if (isDynamoConfigured()) {
+      try {
+        await dynamoPutProduct(newRecord);
+      } catch (err) {
+        console.error("DynamoDB PutProduct failed:", err);
+        throw err;
+      }
+    }
+
+    // Also update local copy for offline synchronization
+    try {
+      const localItems = this.loadLocalData();
+      this.saveLocalData([newRecord, ...localItems]);
+    } catch {
+      // Non-blocking in serverless
+    }
 
     return newRecord;
   }
 
-  public update(id: string, dto: UpdateProductDTO): ProductRecord | null {
-    const items = this.ensureDataLoaded();
-    const index = items.findIndex((p) => p.id === id);
-
-    if (index === -1) {
+  public async update(id: string, dto: UpdateProductDTO): Promise<ProductRecord | null> {
+    const current = await this.getById(id);
+    if (!current) {
       return null;
     }
 
-    const current = items[index];
     const now = new Date().toISOString();
 
     const resolvedShowcase =
@@ -403,77 +437,90 @@ class ProductStore {
       updatedAt: now,
     };
 
-    const updatedList = [...items];
-    updatedList[index] = updatedRecord;
-    this.productsCache = updatedList;
-    this.saveToFile(updatedList);
+    if (isDynamoConfigured()) {
+      try {
+        await dynamoPutProduct(updatedRecord);
+      } catch (err) {
+        console.error(`DynamoDB update(${id}) failed:`, err);
+        throw err;
+      }
+    }
+
+    try {
+      const localItems = this.loadLocalData();
+      const idx = localItems.findIndex((p) => p.id === id);
+      if (idx !== -1) {
+        localItems[idx] = updatedRecord;
+        this.saveLocalData(localItems);
+      }
+    } catch {
+      // Non-blocking in serverless
+    }
 
     return updatedRecord;
   }
 
-  public delete(id: string): boolean {
-    const items = this.ensureDataLoaded();
-    const initialLen = items.length;
-    const filtered = items.filter((p) => p.id !== id);
+  public async delete(id: string): Promise<boolean> {
+    if (!id) return false;
 
-    if (filtered.length === initialLen) {
-      return false;
+    if (isDynamoConfigured()) {
+      try {
+        await dynamoDeleteProduct(id);
+      } catch (err) {
+        console.error(`DynamoDB delete(${id}) failed:`, err);
+        throw err;
+      }
     }
 
-    this.productsCache = filtered;
-    this.saveToFile(filtered);
+    try {
+      const localItems = this.loadLocalData();
+      const filtered = localItems.filter((p) => p.id !== id);
+      this.saveLocalData(filtered);
+    } catch {
+      // Non-blocking in serverless
+    }
+
     return true;
   }
 
-  public countBySubCategory(category: ProductCategory, subCategoryName: string): number {
-    const items = this.ensureDataLoaded();
+  public async countBySubCategory(category: ProductCategory, subCategoryName: string): Promise<number> {
+    const items = await this.getAll();
     const target = subCategoryName.trim().toLowerCase();
     return items.filter(
       (p) => p.category === category && p.subCategory?.trim().toLowerCase() === target
     ).length;
   }
 
-  public updateProductSubcategory(
+  public async updateProductSubcategory(
     category: ProductCategory,
     oldSubCategory: string,
     newSubCategory: string
-  ): number {
-    const items = this.ensureDataLoaded();
+  ): Promise<number> {
+    const items = await this.getAll();
     const targetOld = oldSubCategory.trim().toLowerCase();
     const trimmedNew = newSubCategory.trim();
-    const now = new Date().toISOString();
-
     let affectedCount = 0;
-    const updatedList = items.map((p) => {
-      if (p.category === category && p.subCategory?.trim().toLowerCase() === targetOld) {
-        affectedCount++;
-        return {
-          ...p,
-          subCategory: trimmedNew,
-          updatedAt: now,
-        };
-      }
-      return p;
-    });
 
-    if (affectedCount > 0) {
-      this.productsCache = updatedList;
-      this.saveToFile(updatedList);
+    for (const p of items) {
+      if (p.category === category && p.subCategory?.trim().toLowerCase() === targetOld) {
+        await this.update(p.id, { id: p.id, subCategory: trimmedNew });
+        affectedCount++;
+      }
     }
 
     return affectedCount;
   }
 
-  public reassignProductSubcategory(
+  public async reassignProductSubcategory(
     category: ProductCategory,
     fromSubCategory: string,
     toSubCategory: string
-  ): number {
+  ): Promise<number> {
     return this.updateProductSubcategory(category, fromSubCategory, toSubCategory);
   }
 
-  public getDistinctSubCategoriesByCategory(category: ProductCategory): string[] {
-    const items = this.ensureDataLoaded();
+  public async getDistinctSubCategoriesByCategory(category: ProductCategory): Promise<string[]> {
+    const items = await this.getAll();
     const subCats = new Set<string>();
     for (const p of items) {
       if (p.category === category && p.subCategory && p.subCategory.trim()) {
@@ -483,8 +530,8 @@ class ProductStore {
     return Array.from(subCats);
   }
 
-  public getCategorySummary(): Record<string, number> {
-    const items = this.ensureDataLoaded();
+  public async getCategorySummary(): Promise<Record<string, number>> {
+    const items = await this.getAll();
     const summary: Record<string, number> = {
       total: items.length,
       jewellery: 0,

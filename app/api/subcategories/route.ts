@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     const category = searchParams.get("category") as ProductCategory | null;
 
     if (category) {
-      const names = subcategoryStore.getNamesByCategory(category);
+      const names = await subcategoryStore.getNamesByCategory(category);
       return NextResponse.json(
         {
           success: true,
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Return all categories mapped to their string name lists
-    const all = subcategoryStore.getAllWithCounts();
+    const all = await subcategoryStore.getAllWithCounts();
     const subcategoriesMap: Record<string, string[]> = {};
 
     for (const [cat, list] of Object.entries(all)) {

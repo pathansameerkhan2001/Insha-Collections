@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     const query = searchParams.get("query") || undefined;
     const featured = searchParams.get("featured") === "true" ? true : undefined;
 
-    const products = productStore.getAll({
+    const products = await productStore.getAll({
       category,
       subCategory,
       status,
@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
       featured,
     });
 
-    const summary = productStore.getCategorySummary();
+    const summary = await productStore.getCategorySummary();
 
     return NextResponse.json(
       {
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const newProduct = productStore.create(body);
+    const newProduct = await productStore.create(body);
 
     return NextResponse.json(
       {

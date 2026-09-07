@@ -3,14 +3,12 @@ import path from "path";
 import { CATEGORY_SUBCATEGORIES } from "@/data/catalog";
 import { productStore } from "@/lib/products/productStore";
 import { ProductCategory } from "@/lib/products/productTypes";
-
-/**
- * Storage Architecture Note:
- * This subcategory store uses a JSON file (.data/subcategories.json) for the current development environment.
- * All storage operations are strictly encapsulated behind the SubcategoryStore interface/methods.
- * When deploying to serverless production environments (e.g., AWS Lambda, Vercel), this service layer
- * can be seamlessly migrated to Amazon DynamoDB or PostgreSQL without modifying API contracts or UI components.
- */
+import {
+  isDynamoConfigured,
+  dynamoGetAllSubcategories,
+  dynamoPutSubcategory,
+  dynamoDeleteSubcategory,
+} from "@/lib/aws/dynamoService";
 
 export interface SubCategoryRecord {
   id: string; // Stable slug/id, e.g. "jewellery-bridal-jewellery"
@@ -27,9 +25,6 @@ export interface SubCategoryWithCount extends SubCategoryRecord {
 const DATA_DIR = path.join(process.cwd(), ".data");
 const SUBCATEGORIES_FILE = path.join(DATA_DIR, "subcategories.json");
 
-/**
- * Seed defaults: Comprehensive UNION of user-requested subcategories and existing catalog subcategories.
- */
 const DEFAULT_CATEGORY_SUBCATEGORIES: Record<ProductCategory, string[]> = {
   jewellery: [
     "Bangles & Kadas",
@@ -124,14 +119,7 @@ function generateSlug(category: string, name: string): string {
 }
 
 export class SubcategoryStore {
-  private cache: Record<ProductCategory, SubCategoryRecord[]> | null = null;
-  private lastLoadedMtime: number = 0;
-
-  /**
-   * Initializes or loads subcategory data from .data/subcategories.json.
-   * Merges any missing default subcategories or subcategories currently in products.json.
-   */
-  private ensureDataLoaded(): Record<ProductCategory, SubCategoryRecord[]> {
+  private loadLocalData(): Record<ProductCategory, SubCategoryRecord[]> {
     const initialMap: Record<ProductCategory, SubCategoryRecord[]> = {
       jewellery: [],
       korean: [],
@@ -141,18 +129,8 @@ export class SubcategoryStore {
       beauty: [],
     };
 
-    const now = "2026-01-01T00:00:00.000Z";
-
     try {
       if (fs.existsSync(SUBCATEGORIES_FILE)) {
-        const stats = fs.statSync(SUBCATEGORIES_FILE);
-        const currentMtime = stats.mtimeMs;
-
-        // If cache exists and file has not changed, return cache
-        if (this.cache && this.lastLoadedMtime === currentMtime) {
-          return this.cache;
-        }
-
         const raw = fs.readFileSync(SUBCATEGORIES_FILE, "utf8");
         const parsed = JSON.parse(raw);
         if (parsed && typeof parsed === "object") {
@@ -161,91 +139,51 @@ export class SubcategoryStore {
               initialMap[catKey] = parsed[catKey];
             }
           }
-          this.cache = initialMap;
-          this.lastLoadedMtime = currentMtime;
-          return this.cache;
+          return initialMap;
         }
       }
     } catch (err) {
-      console.warn("Could not read subcategories.json, will initialize from defaults:", err);
-    }
-
-    // Merge in defaults and catalog subcategories to guarantee comprehensive seed
-    const allCategories: ProductCategory[] = [
-      "jewellery",
-      "korean",
-      "dresses",
-      "materials",
-      "handlooms",
-      "beauty",
-    ];
-
-    let hasChanges = false;
-
-    for (const cat of allCategories) {
-      const existingNames = new Set(
-        initialMap[cat].map((s) => s.name.trim().toLowerCase())
-      );
-
-      // 1. Check default list
-      const defaults = DEFAULT_CATEGORY_SUBCATEGORIES[cat] || [];
-      // 2. Check catalog.ts static list
-      const catalogDefaults = CATEGORY_SUBCATEGORIES[cat] || [];
-      // 3. Check actual products in store
-      const distinctFromProducts = productStore.getDistinctSubCategoriesByCategory(cat);
-
-      const combinedSeed = Array.from(
-        new Set([...defaults, ...catalogDefaults, ...distinctFromProducts])
-      );
-
-      for (const name of combinedSeed) {
-        const trimmed = name.trim();
-        if (trimmed && !existingNames.has(trimmed.toLowerCase())) {
-          existingNames.add(trimmed.toLowerCase());
-          initialMap[cat].push({
-            id: generateSlug(cat, trimmed),
-            name: trimmed,
-            categoryId: cat,
-            createdAt: now,
-            updatedAt: now,
-          });
-          hasChanges = true;
-        }
-      }
-    }
-
-    this.cache = initialMap;
-
-    if (hasChanges || !fs.existsSync(SUBCATEGORIES_FILE)) {
-      this.saveToFile(initialMap);
+      console.warn("Could not read local subcategories.json:", err);
     }
 
     return initialMap;
   }
 
-  private saveToFile(data: Record<ProductCategory, SubCategoryRecord[]>) {
+  private saveLocalData(data: Record<ProductCategory, SubCategoryRecord[]>) {
     try {
       if (!fs.existsSync(DATA_DIR)) {
         fs.mkdirSync(DATA_DIR, { recursive: true });
       }
-      // Safe atomic write via temporary file rename
       const tempFilePath = `${SUBCATEGORIES_FILE}.tmp.${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
       fs.writeFileSync(tempFilePath, JSON.stringify(data, null, 2), "utf8");
       fs.renameSync(tempFilePath, SUBCATEGORIES_FILE);
-
-      const stats = fs.statSync(SUBCATEGORIES_FILE);
-      this.lastLoadedMtime = stats.mtimeMs;
-      this.cache = data;
     } catch (err) {
-      console.error("Failed to write subcategories.json:", err);
+      console.error("Failed to write local subcategories.json:", err);
     }
   }
 
-  /**
-   * Retrieves all categories and their subcategories with live product counts.
-   */
-  public getAllWithCounts(): Record<ProductCategory, SubCategoryWithCount[]> {
-    const data = this.ensureDataLoaded();
+  private async fetchAllRawRecords(): Promise<SubCategoryRecord[]> {
+    if (isDynamoConfigured()) {
+      try {
+        const items = await dynamoGetAllSubcategories();
+        return items as SubCategoryRecord[];
+      } catch (err) {
+        console.error("DynamoDB GetAllSubcategories failed, falling back to local:", err);
+      }
+    }
+
+    const localMap = this.loadLocalData();
+    const records: SubCategoryRecord[] = [];
+    for (const list of Object.values(localMap)) {
+      records.push(...list);
+    }
+    return records;
+  }
+
+  public async getAllWithCounts(): Promise<Record<ProductCategory, SubCategoryWithCount[]>> {
+    const records = await this.fetchAllRawRecords();
+    const allProducts = await productStore.getAll();
+
     const result: Record<ProductCategory, SubCategoryWithCount[]> = {
       jewellery: [],
       korean: [],
@@ -264,36 +202,45 @@ export class SubcategoryStore {
       "beauty",
     ];
 
+    // Build subcategory count map from products
+    const countMap = new Map<string, number>();
+    for (const p of allProducts) {
+      if (p.category && p.subCategory) {
+        const key = `${p.category.toLowerCase()}:::${p.subCategory.trim().toLowerCase()}`;
+        countMap.set(key, (countMap.get(key) || 0) + 1);
+      }
+    }
+
+    // Group records by category
+    for (const record of records) {
+      if (result[record.categoryId]) {
+        const key = `${record.categoryId.toLowerCase()}:::${record.name.trim().toLowerCase()}`;
+        result[record.categoryId].push({
+          ...record,
+          productCount: countMap.get(key) || 0,
+        });
+      }
+    }
+
+    // Deterministic sorting by name
     for (const cat of categories) {
-      result[cat] = data[cat].map((sub) => ({
-        ...sub,
-        productCount: productStore.countBySubCategory(cat, sub.name),
-      }));
+      result[cat].sort((a, b) => a.name.localeCompare(b.name));
     }
 
     return result;
   }
 
-  /**
-   * Retrieves all subcategories for a given category.
-   */
-  public getByCategory(category: ProductCategory): SubCategoryRecord[] {
-    const data = this.ensureDataLoaded();
-    return data[category] || [];
+  public async getByCategory(category: ProductCategory): Promise<SubCategoryRecord[]> {
+    const all = await this.getAllWithCounts();
+    return all[category] || [];
   }
 
-  /**
-   * Retrieves string subcategory names for dropdowns and filtering.
-   */
-  public getNamesByCategory(category: ProductCategory): string[] {
-    const subs = this.getByCategory(category);
+  public async getNamesByCategory(category: ProductCategory): Promise<string[]> {
+    const subs = await this.getByCategory(category);
     return subs.map((s) => s.name);
   }
 
-  /**
-   * Creates a new subcategory under a parent category.
-   */
-  public create(categoryId: ProductCategory, name: string): SubCategoryRecord {
+  public async create(categoryId: ProductCategory, name: string): Promise<SubCategoryRecord> {
     const trimmed = (name || "").trim();
 
     if (!trimmed) {
@@ -306,18 +253,13 @@ export class SubcategoryStore {
       throw new Error("Subcategory name cannot exceed 60 characters.");
     }
 
-    const data = this.ensureDataLoaded();
-    const categoryList = data[categoryId] || [];
-
-    // Duplicate check within same category (case-insensitive)
-    const isDuplicate = categoryList.some(
+    const currentList = await this.getByCategory(categoryId);
+    const isDuplicate = currentList.some(
       (s) => s.name.toLowerCase() === trimmed.toLowerCase()
     );
 
     if (isDuplicate) {
-      throw new Error(
-        `Subcategory "${trimmed}" already exists under this category.`
-      );
+      throw new Error(`Subcategory "${trimmed}" already exists under this category.`);
     }
 
     const now = new Date().toISOString();
@@ -331,21 +273,31 @@ export class SubcategoryStore {
       updatedAt: now,
     };
 
-    data[categoryId] = [...categoryList, newRecord];
-    this.cache = data;
-    this.saveToFile(data);
+    if (isDynamoConfigured()) {
+      try {
+        await dynamoPutSubcategory(newRecord);
+      } catch (err) {
+        console.error("DynamoDB PutSubcategory failed:", err);
+        throw err;
+      }
+    }
+
+    try {
+      const localData = this.loadLocalData();
+      localData[categoryId] = [...(localData[categoryId] || []), newRecord];
+      this.saveLocalData(localData);
+    } catch {
+      // Non-blocking in serverless
+    }
 
     return newRecord;
   }
 
-  /**
-   * Renames a subcategory and cascades the change to all matching products.
-   */
-  public update(
+  public async update(
     categoryId: ProductCategory,
     oldNameOrId: string,
     newName: string
-  ): { subcategory: SubCategoryRecord; affectedProductsCount: number } {
+  ): Promise<{ subcategory: SubCategoryRecord; affectedProductsCount: number }> {
     const trimmedNew = (newName || "").trim();
 
     if (!trimmedNew) {
@@ -358,31 +310,21 @@ export class SubcategoryStore {
       throw new Error("Subcategory name cannot exceed 60 characters.");
     }
 
-    const data = this.ensureDataLoaded();
-    const categoryList = data[categoryId] || [];
-
-    const index = categoryList.findIndex(
-      (s) =>
-        s.id === oldNameOrId ||
-        s.name.toLowerCase() === oldNameOrId.toLowerCase()
+    const categoryList = await this.getByCategory(categoryId);
+    const currentSub = categoryList.find(
+      (s) => s.id === oldNameOrId || s.name.toLowerCase() === oldNameOrId.toLowerCase()
     );
 
-    if (index === -1) {
+    if (!currentSub) {
       throw new Error(`Subcategory "${oldNameOrId}" not found in category.`);
     }
 
-    const currentSub = categoryList[index];
-
-    // Check if new name already exists in this category under a different entry
     const isDuplicate = categoryList.some(
-      (s, i) =>
-        i !== index && s.name.toLowerCase() === trimmedNew.toLowerCase()
+      (s) => s.id !== currentSub.id && s.name.toLowerCase() === trimmedNew.toLowerCase()
     );
 
     if (isDuplicate) {
-      throw new Error(
-        `Another subcategory named "${trimmedNew}" already exists under this category.`
-      );
+      throw new Error(`Another subcategory named "${trimmedNew}" already exists under this category.`);
     }
 
     const now = new Date().toISOString();
@@ -394,20 +336,32 @@ export class SubcategoryStore {
       updatedAt: now,
     };
 
-    // 1. Update matching products in product store
-    const affectedProductsCount = productStore.updateProductSubcategory(
+    if (isDynamoConfigured()) {
+      try {
+        await dynamoPutSubcategory(updatedSub);
+      } catch (err) {
+        console.error("DynamoDB updateSubcategory failed:", err);
+        throw err;
+      }
+    }
+
+    // Cascade update to matching products
+    const affectedProductsCount = await productStore.updateProductSubcategory(
       categoryId,
       oldName,
       trimmedNew
     );
 
-    // 2. Update subcategory record
-    const updatedList = [...categoryList];
-    updatedList[index] = updatedSub;
-    data[categoryId] = updatedList;
-
-    this.cache = data;
-    this.saveToFile(data);
+    try {
+      const localData = this.loadLocalData();
+      const idx = (localData[categoryId] || []).findIndex((s) => s.id === currentSub.id);
+      if (idx !== -1) {
+        localData[categoryId][idx] = updatedSub;
+        this.saveLocalData(localData);
+      }
+    } catch {
+      // Non-blocking
+    }
 
     return {
       subcategory: updatedSub,
@@ -415,28 +369,20 @@ export class SubcategoryStore {
     };
   }
 
-  /**
-   * Deletes a subcategory if it is not currently used by any products.
-   * Throws error if products are using it.
-   */
-  public delete(
+  public async delete(
     categoryId: ProductCategory,
     nameOrId: string
-  ): { success: boolean; name: string } {
-    const data = this.ensureDataLoaded();
-    const categoryList = data[categoryId] || [];
-
+  ): Promise<{ success: boolean; name: string }> {
+    const categoryList = await this.getByCategory(categoryId);
     const sub = categoryList.find(
-      (s) =>
-        s.id === nameOrId ||
-        s.name.toLowerCase() === nameOrId.toLowerCase()
+      (s) => s.id === nameOrId || s.name.toLowerCase() === nameOrId.toLowerCase()
     );
 
     if (!sub) {
       throw new Error(`Subcategory "${nameOrId}" not found in category.`);
     }
 
-    const productCount = productStore.countBySubCategory(categoryId, sub.name);
+    const productCount = await productStore.countBySubCategory(categoryId, sub.name);
 
     if (productCount > 0) {
       throw new Error(
@@ -444,28 +390,34 @@ export class SubcategoryStore {
       );
     }
 
-    data[categoryId] = categoryList.filter((s) => s.id !== sub.id);
-    this.cache = data;
-    this.saveToFile(data);
+    if (isDynamoConfigured()) {
+      try {
+        await dynamoDeleteSubcategory(sub.id);
+      } catch (err) {
+        console.error(`DynamoDB deleteSubcategory(${sub.id}) failed:`, err);
+        throw err;
+      }
+    }
+
+    try {
+      const localData = this.loadLocalData();
+      localData[categoryId] = (localData[categoryId] || []).filter((s) => s.id !== sub.id);
+      this.saveLocalData(localData);
+    } catch {
+      // Non-blocking
+    }
 
     return { success: true, name: sub.name };
   }
 
-  /**
-   * Reassigns all products from old subcategory to target subcategory, then deletes the old subcategory.
-   */
-  public reassignAndDelete(
+  public async reassignAndDelete(
     categoryId: ProductCategory,
     oldNameOrId: string,
     targetNameOrId: string
-  ): { success: boolean; reassignedCount: number; deletedName: string } {
-    const data = this.ensureDataLoaded();
-    const categoryList = data[categoryId] || [];
-
+  ): Promise<{ success: boolean; reassignedCount: number; deletedName: string }> {
+    const categoryList = await this.getByCategory(categoryId);
     const oldSub = categoryList.find(
-      (s) =>
-        s.id === oldNameOrId ||
-        s.name.toLowerCase() === oldNameOrId.toLowerCase()
+      (s) => s.id === oldNameOrId || s.name.toLowerCase() === oldNameOrId.toLowerCase()
     );
 
     if (!oldSub) {
@@ -473,34 +425,41 @@ export class SubcategoryStore {
     }
 
     const targetSub = categoryList.find(
-      (s) =>
-        s.id === targetNameOrId ||
-        s.name.toLowerCase() === targetNameOrId.toLowerCase()
+      (s) => s.id === targetNameOrId || s.name.toLowerCase() === targetNameOrId.toLowerCase()
     );
 
     if (!targetSub) {
-      throw new Error(
-        `Target replacement subcategory "${targetNameOrId}" not found in category.`
-      );
+      throw new Error(`Target replacement subcategory "${targetNameOrId}" not found in category.`);
     }
 
     if (oldSub.id === targetSub.id) {
-      throw new Error(
-        "Replacement subcategory must be different from the subcategory being deleted."
-      );
+      throw new Error("Replacement subcategory must be different from the subcategory being deleted.");
     }
 
     // 1. Reassign products in product store
-    const reassignedCount = productStore.reassignProductSubcategory(
+    const reassignedCount = await productStore.reassignProductSubcategory(
       categoryId,
       oldSub.name,
       targetSub.name
     );
 
-    // 2. Remove old subcategory
-    data[categoryId] = categoryList.filter((s) => s.id !== oldSub.id);
-    this.cache = data;
-    this.saveToFile(data);
+    // 2. Delete old subcategory
+    if (isDynamoConfigured()) {
+      try {
+        await dynamoDeleteSubcategory(oldSub.id);
+      } catch (err) {
+        console.error(`DynamoDB deleteSubcategory(${oldSub.id}) failed:`, err);
+        throw err;
+      }
+    }
+
+    try {
+      const localData = this.loadLocalData();
+      localData[categoryId] = (localData[categoryId] || []).filter((s) => s.id !== oldSub.id);
+      this.saveLocalData(localData);
+    } catch {
+      // Non-blocking
+    }
 
     return {
       success: true,

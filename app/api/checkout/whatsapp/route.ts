@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      const catalogProduct = productStore.getById(pId) || findProductById(pId);
+      const catalogProduct = (await productStore.getById(pId)) || findProductById(pId);
       if (!catalogProduct) {
         return NextResponse.json(
           { success: false, error: `Product ID '${pId}' is not found in our current catalog.` },

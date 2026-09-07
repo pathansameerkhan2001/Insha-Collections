@@ -90,7 +90,7 @@ export interface CreateProductDTO {
 }
 
 export interface UpdateProductDTO extends Partial<CreateProductDTO> {
-  id: string;
+  id?: string;
 }
 
 export interface ProductFilterOptions {

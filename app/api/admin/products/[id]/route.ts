@@ -18,7 +18,7 @@ interface RouteParams {
 export async function GET(req: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const product = productStore.getById(id);
+    const product = await productStore.getById(id);
 
     if (!product) {
       return NextResponse.json(
@@ -45,7 +45,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     const { id } = await params;
     const body = (await req.json()) as UpdateProductDTO;
 
-    const updated = productStore.update(id, body);
+    const updated = await productStore.update(id, body);
 
     if (!updated) {
       return NextResponse.json(
@@ -74,7 +74,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
   try {
     const { id } = await params;
-    const deleted = productStore.delete(id);
+    const deleted = await productStore.delete(id);
 
     if (!deleted) {
       return NextResponse.json(

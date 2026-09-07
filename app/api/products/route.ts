@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     const query = searchParams.get("query") || undefined;
 
     // Public API returns only active or in-stock products
-    const allProducts = productStore.getAll({
+    const allProducts = await productStore.getAll({
       category,
       subCategory,
       query,
