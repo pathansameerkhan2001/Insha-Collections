@@ -127,7 +127,7 @@ export default function ContactPage() {
                       Physical Store
                     </span>
                     <p className="text-[#231610] font-medium">
-                      Room no 6, Rachuru complex, Y V Street, Kadapa 516001
+                      Room no 6, Rachuru complex, Y V Street, Kadapa 516001, Andhra Pradesh, India
                     </p>
                   </div>
                 </div>

@@ -136,11 +136,9 @@ export default function Footer() {
                 <div className="w-8 h-8 rounded-full bg-[#EFE7DE] text-[#8C6B4E] flex items-center justify-center flex-shrink-0 shadow-2xs mt-0.5">
                   <MapPin className="w-4 h-4 stroke-[1.5]" />
                 </div>
-                <div className="flex flex-col text-[#3D312A] leading-relaxed">
-                  <span>Room no 6, Rachuru complex,</span>
-                  <span>Y V Street,</span>
-                  <span>Kadapa 516001</span>
-                </div>
+                <p className="text-[#3D312A] leading-relaxed max-w-[280px] sm:max-w-xs">
+                  Room no 6, Rachuru complex, Y V Street, Kadapa 516001, Andhra Pradesh, India
+                </p>
               </div>
             </div>
           </div>

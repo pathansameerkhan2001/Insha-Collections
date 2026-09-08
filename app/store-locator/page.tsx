@@ -12,7 +12,7 @@ const STORES = [
     id: "kadapa-store",
     name: "Kadapa Main Boutique",
     tag: "OFFICIAL STORE",
-    address: "Room no 6, Rachuru complex, Y V Street, Kadapa, Andhra Pradesh 516001",
+    address: "Room no 6, Rachuru complex, Y V Street, Kadapa 516001, Andhra Pradesh, India",
     phone: "+91 9618648050",
     hours: "Mon – Sat: 10:00 AM – 8:00 PM",
     services: [

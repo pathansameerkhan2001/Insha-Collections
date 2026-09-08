@@ -13,7 +13,7 @@ const STORES = [
     id: "kadapa",
     name: "Insha Collections Boutique & Salon",
     tag: "MAIN STORE & SALON",
-    address: "Room no 6, Rachuru complex, Y V Street, Kadapa, Andhra Pradesh 516001",
+    address: "Room no 6, Rachuru complex, Y V Street, Kadapa 516001, Andhra Pradesh, India",
     hours: "Mon - Sat: 10:00 AM - 8:00 PM",
     phone: "+91 9618648050",
     altPhone: "+91 9000407681",

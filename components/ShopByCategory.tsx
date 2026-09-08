@@ -791,32 +791,6 @@ export default function ShopByCategory({
             })}
           </div>
         )}
-
-        {/* View All Action Button */}
-        <div className="flex items-center justify-center mt-10 sm:mt-14 md:mt-16">
-          <div className="flex items-center gap-3 sm:gap-4 w-full max-w-[550px] justify-center">
-            {/* Left flourish */}
-            <div className="flex items-center gap-1.5 flex-1 justify-end">
-              <div className="h-[1px] w-10 sm:w-20 bg-gradient-to-r from-transparent to-[#C5A47E]" />
-              <span className="text-[#C5A47E] text-xs select-none">✧</span>
-            </div>
-
-            {/* Middle decorative button */}
-            <div className="flex items-center gap-2 px-5 sm:px-8 py-2.5 sm:py-3 rounded-full border border-[#C5A47E]/60 bg-[#FAF7F3] shadow-sm">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C5A47E]" />
-              <span className="text-xs sm:text-sm font-serif-luxury tracking-[0.2em] uppercase text-[#231610] font-medium">
-                {displayedItems.length} Royal Creations Displayed
-              </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C5A47E]" />
-            </div>
-
-            {/* Right flourish */}
-            <div className="flex items-center gap-1.5 flex-1 justify-start">
-              <span className="text-[#C5A47E] text-xs select-none">✧</span>
-              <div className="h-[1px] w-10 sm:w-20 bg-gradient-to-l from-transparent to-[#C5A47E]" />
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Quick View Product Modal */}

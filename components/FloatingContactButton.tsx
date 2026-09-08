@@ -52,7 +52,7 @@ export default function FloatingContactButton() {
   const whatsappUrl = `https://wa.me/${BUSINESS_WHATSAPP_NUMBER}`;
   const instagramUrl = "https://www.instagram.com/insha.collections24/";
   const googleMapsUrl = `https://maps.google.com/?q=${encodeURIComponent(
-    "Room no 6, Rachuru complex, Y V Street, Kadapa, Andhra Pradesh 516001"
+    "Room no 6, Rachuru complex, Y V Street, Kadapa 516001, Andhra Pradesh, India"
   )}`;
 
   const contactOptions = [
