@@ -3,12 +3,15 @@ import { findProductById } from "@/data/catalog";
 import { productStore } from "@/lib/products/productStore";
 import { getStorefrontImageUrl } from "@/lib/products/productTypes";
 import {
+  CustomerDetails,
+  OrderItemDetails,
+  FullOrderPayload,
   generateOrderReference,
-  dispatchWhatsAppOrder,
-  OrderPayload,
-  ValidatedOrderItem,
-  CustomerOrderDetails,
-} from "@/utils/whatsapp-cloud";
+  formatWhatsAppOrderMessage,
+  getWhatsAppOrderUrl,
+  OrderType,
+  PaymentMethod,
+} from "@/utils/whatsapp";
 
 interface RequestItemInput {
   productId?: string;
@@ -17,7 +20,7 @@ interface RequestItemInput {
 }
 
 interface RequestBody {
-  customer: CustomerOrderDetails;
+  customer: CustomerDetails;
   items: RequestItemInput[];
 }
 
@@ -35,6 +38,7 @@ export async function POST(req: NextRequest) {
     const { customer, items } = body;
 
     // 1. Validate Customer Data
+    const orderType: OrderType = customer.orderType === "gift" ? "gift" : "myself";
     const cleanName = (customer.fullName || "").trim();
     const cleanMobile = (customer.mobile || "").replace(/\D/g, "").slice(0, 10);
     const cleanAddress = (customer.address || "").trim();
@@ -42,6 +46,8 @@ export async function POST(req: NextRequest) {
     const cleanState = (customer.state || "").trim();
     const cleanPincode = (customer.pincode || "").replace(/\D/g, "").slice(0, 6);
     const cleanInstructions = (customer.instructions || "").trim();
+    const paymentMethod: PaymentMethod = customer.paymentMethod === "online" ? "online" : "cod";
+    const cleanPaymentRef = (customer.paymentReference || "").trim();
 
     if (!cleanName || cleanName.length < 2) {
       return NextResponse.json(
@@ -85,8 +91,21 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Validate Payment Reference / UTR for Online Payment
+    if (paymentMethod === "online" && (!cleanPaymentRef || cleanPaymentRef.length < 4)) {
+      return NextResponse.json(
+        { success: false, error: "Please enter a valid Payment Reference / UTR number for Online Payment." },
+        { status: 400 }
+      );
+    }
+
     // 2. Validate Cart Items Independently Against Catalog Source of Truth
-    const validatedItems: ValidatedOrderItem[] = [];
+    const validatedItems: OrderItemDetails[] = [];
+
+    // Determine request origin for public asset URLs
+    const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "";
+    const proto = req.headers.get("x-forwarded-proto") || "https";
+    const requestOrigin = host ? `${proto}://${host}` : process.env.SITE_URL || "https://insha-collections.com";
 
     for (const rawItem of items) {
       const pId = rawItem.productId || rawItem.id;
@@ -113,19 +132,22 @@ export async function POST(req: NextRequest) {
         );
       }
 
-      // Use the verified catalog price
+      // Use verified catalog price and attributes
       const unitPrice = catalogProduct.price;
       const subtotal = unitPrice * qty;
-
       const imgUrl = getStorefrontImageUrl(catalogProduct);
 
       validatedItems.push({
         id: catalogProduct.id,
         name: catalogProduct.name,
+        category: catalogProduct.category,
+        subCategory: catalogProduct.subCategory,
+        description: catalogProduct.description,
         price: unitPrice,
         quantity: qty,
         subtotal,
         image: imgUrl,
+        productUrl: `${requestOrigin}/#shop-by-category`,
       });
     }
 
@@ -138,12 +160,15 @@ export async function POST(req: NextRequest) {
 
     // Calculate totals server-side
     const totalItems = validatedItems.reduce((sum, it) => sum + it.quantity, 0);
-    const totalAmount = validatedItems.reduce((sum, it) => sum + it.subtotal, 0);
+    const subtotalAmount = validatedItems.reduce((sum, it) => sum + it.subtotal, 0);
+    const shippingAmount = 0;
+    const discountAmount = 0;
+    const totalAmount = subtotalAmount + shippingAmount - discountAmount;
 
     // 3. Generate Collision-Resistant Unique Order Reference
     const orderId = generateOrderReference();
 
-    const orderPayload: OrderPayload = {
+    const orderPayload: FullOrderPayload = {
       orderId,
       customer: {
         fullName: cleanName,
@@ -153,53 +178,45 @@ export async function POST(req: NextRequest) {
         state: cleanState,
         pincode: cleanPincode,
         instructions: cleanInstructions || undefined,
+        orderType,
+        paymentMethod,
+        paymentReference: paymentMethod === "online" ? cleanPaymentRef : undefined,
       },
       items: validatedItems,
       totalItems,
+      subtotal: subtotalAmount,
+      shipping: shippingAmount,
+      discount: discountAmount,
       totalAmount,
       timestamp: new Date().toISOString(),
     };
 
-    // Determine request origin for public asset URLs
-    const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "";
-    const proto = req.headers.get("x-forwarded-proto") || "https";
-    const requestOrigin = host ? `${proto}://${host}` : undefined;
-
-    // 4. Dispatch to WhatsApp Business Cloud API
-    const dispatchResult = await dispatchWhatsAppOrder(orderPayload, requestOrigin);
-
-    if (!dispatchResult.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "We couldn't send your order right now. Please try again.",
-          orderId,
-        },
-        { status: 502 }
-      );
-    }
-
-    // Masked customer mobile for response security (e.g. "98*****210")
-    const maskedMobile =
-      cleanMobile.length === 10
-        ? `${cleanMobile.slice(0, 2)}*****${cleanMobile.slice(7)}`
-        : cleanMobile;
+    // 4. Construct WhatsApp formatted order text and URL
+    const formattedMessage = formatWhatsAppOrderMessage(orderPayload, requestOrigin);
+    const whatsappUrl = getWhatsAppOrderUrl(formattedMessage);
 
     return NextResponse.json({
       success: true,
       orderId,
+      whatsappUrl,
+      orderMessage: formattedMessage,
       totalAmount,
       totalItems,
+      subtotal: subtotalAmount,
+      shipping: shippingAmount,
+      discount: discountAmount,
       customer: {
         fullName: cleanName,
-        mobile: maskedMobile,
+        mobile: cleanMobile,
+        orderType,
+        paymentMethod,
+        paymentReference: paymentMethod === "online" ? cleanPaymentRef : undefined,
       },
-      message: "Order successfully delivered to Insha Collections on WhatsApp.",
     });
   } catch (error) {
     console.error("[Order API] Unexpected error during checkout processing:", error instanceof Error ? error.message : error);
     return NextResponse.json(
-      { success: false, error: "We couldn't send your order right now. Please try again." },
+      { success: false, error: "We couldn't process your order right now. Please try again." },
       { status: 500 }
     );
   }

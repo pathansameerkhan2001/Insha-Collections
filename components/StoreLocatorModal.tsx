@@ -10,24 +10,19 @@ interface StoreLocatorModalProps {
 
 const STORES = [
   {
-    id: "flagship",
-    name: "Insha Collections Flagship Boutique",
-    tag: "FLAGSHIP STORE & SALON",
-    address: "Grand Palace Arcade, Luxury Galleria, Road No. 10, Banjara Hills, Hyderabad, Telangana 500034",
-    hours: "Mon - Sun: 10:00 AM - 9:00 PM",
-    phone: "+91 98765 43210",
-    email: "hyderabad@inshacollections.com",
-    features: ["Anti-Tarnish Jewellery Counter", "Bridal Trousseau Suite", "Luxury Beauty & Hair Salon", "Custom Fitting & Draping"],
-  },
-  {
-    id: "mumbai",
-    name: "Insha Collections Heritage Studio",
-    tag: "BOUTIQUE & STUDIO",
-    address: "Heritage Manor, Linking Road, Bandra West, Mumbai, Maharashtra 400050",
-    hours: "Mon - Sat: 10:30 AM - 8:30 PM (Sun: 11 AM - 7 PM)",
-    phone: "+91 98765 43211",
-    email: "mumbai@inshacollections.com",
-    features: ["Handloom Silks & Organza", "Korean Accessories Collection", "Express Alterations", "Personal Stylist Session"],
+    id: "kadapa",
+    name: "Insha Collections Boutique & Salon",
+    tag: "MAIN STORE & SALON",
+    address: "Room no 6, Rachuru complex, Y V Street, Kadapa, Andhra Pradesh 516001",
+    hours: "Mon - Sat: 10:00 AM - 8:00 PM",
+    phone: "+91 9618648050",
+    altPhone: "+91 9000407681",
+    features: [
+      "Anti-Tarnish Jewellery Counter",
+      "Korean Accessories Collection",
+      "Readymade Dresses & Handlooms",
+      "Luxury Beauty & Hair Salon",
+    ],
   },
 ];
 
@@ -93,17 +88,18 @@ export default function StoreLocatorModal({ isOpen, onClose }: StoreLocatorModal
                   <Clock className="w-4 h-4 text-[#BA7442] flex-shrink-0" />
                   <span>{store.hours}</span>
                 </div>
-                <div className="flex items-center gap-2.5">
-                  <Phone className="w-4 h-4 text-[#BA7442] flex-shrink-0" />
-                  <a href={`tel:${store.phone}`} className="hover:text-[#BA7442] transition-colors">
-                    {store.phone}
-                  </a>
-                </div>
-                <div className="flex items-center gap-2.5">
-                  <Mail className="w-4 h-4 text-[#BA7442] flex-shrink-0" />
-                  <a href={`mailto:${store.email}`} className="hover:text-[#BA7442] transition-colors">
-                    {store.email}
-                  </a>
+                <div className="flex items-start gap-2.5">
+                  <Phone className="w-4 h-4 text-[#BA7442] flex-shrink-0 mt-0.5" />
+                  <div className="flex flex-col gap-1">
+                    <a href={`tel:${store.phone}`} className="hover:text-[#BA7442] transition-colors">
+                      {store.phone}
+                    </a>
+                    {store.altPhone && (
+                      <a href={`tel:${store.altPhone}`} className="hover:text-[#BA7442] transition-colors">
+                        {store.altPhone}
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
 

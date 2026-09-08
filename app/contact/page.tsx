@@ -85,32 +85,21 @@ export default function ContactPage() {
                     <span className="text-xs font-semibold text-[#8C7E75] uppercase tracking-wider block">
                       Call / WhatsApp
                     </span>
-                    <a
-                      href="tel:+919876543210"
-                      className="text-[#231610] hover:text-[#BA7442] font-medium transition-colors"
-                    >
-                      +91 98765 43210
-                    </a>
+                    <div className="flex flex-col gap-0.5">
+                      <a
+                        href="tel:+919618648050"
+                        className="text-[#231610] hover:text-[#BA7442] font-medium transition-colors"
+                      >
+                        +91 9618648050
+                      </a>
+                      <a
+                        href="tel:+919000407681"
+                        className="text-[#231610] hover:text-[#BA7442] font-medium transition-colors"
+                      >
+                        +91 9000407681
+                      </a>
+                    </div>
                     <p className="text-xs text-[#7A6F68] mt-0.5">Direct concierge assistance</p>
-                  </div>
-                </div>
-
-                {/* Email */}
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-[#FAF0E4] text-[#BA7442] flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-semibold text-[#8C7E75] uppercase tracking-wider block">
-                      Email Address
-                    </span>
-                    <a
-                      href="mailto:support@inshacollections.com"
-                      className="text-[#231610] hover:text-[#BA7442] font-medium transition-colors"
-                    >
-                      support@inshacollections.com
-                    </a>
-                    <p className="text-xs text-[#7A6F68] mt-0.5">Replies within 2 business hours</p>
                   </div>
                 </div>
 
@@ -135,10 +124,10 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <span className="text-xs font-semibold text-[#8C7E75] uppercase tracking-wider block">
-                      Flagship Boutique
+                      Physical Store
                     </span>
                     <p className="text-[#231610] font-medium">
-                      123, Insha Collections Heritage Store, Jubilee Hills, Hyderabad, India
+                      Room no 6, Rachuru complex, Y V Street, Kadapa 516001
                     </p>
                   </div>
                 </div>

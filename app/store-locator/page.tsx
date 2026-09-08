@@ -9,33 +9,19 @@ import { MapPin, Phone, Clock, Navigation, ArrowLeft, Store } from "lucide-react
 
 const STORES = [
   {
-    id: "hyd-flagship",
-    name: "Hyderabad Flagship Boutique",
-    tag: "FLAGSHIP STORE",
-    address: "Road No. 36, Jubilee Hills, Hyderabad, Telangana 500033",
-    phone: "+91 98765 43210",
-    hours: "Mon – Sun: 10:30 AM – 8:30 PM",
+    id: "kadapa-store",
+    name: "Kadapa Main Boutique",
+    tag: "OFFICIAL STORE",
+    address: "Room no 6, Rachuru complex, Y V Street, Kadapa, Andhra Pradesh 516001",
+    phone: "+91 9618648050",
+    hours: "Mon – Sat: 10:00 AM – 8:00 PM",
     services: [
-      "Full Anti-Tarnish Jewellery Lounge",
+      "Anti-Tarnish Jewellery Showcase",
       "Korean Accessories Studio",
-      "Bridal & Dress Consultation",
-      "Beauty & Salon Suite",
+      "Bridal & Dress Materials Consultation",
+      "Beauty & Salon Services",
     ],
-    mapUrl: "https://maps.google.com/?q=Jubilee+Hills+Hyderabad",
-  },
-  {
-    id: "mum-studio",
-    name: "Mumbai Heritage Studio",
-    tag: "EXCLUSIVE STUDIO",
-    address: "Bandra West, Linking Road, Mumbai, Maharashtra 400050",
-    phone: "+91 98765 43211",
-    hours: "Mon – Sun: 11:00 AM – 9:00 PM",
-    services: [
-      "Curated Festive Silks & Handlooms",
-      "Custom Jewellery Sizing & Fitting",
-      "Personal Styling Concierge",
-    ],
-    mapUrl: "https://maps.google.com/?q=Linking+Road+Bandra+Mumbai",
+    mapUrl: "https://maps.google.com/?q=Rachuru+complex+Y+V+Street+Kadapa+516001",
   },
 ];
 

@@ -7,6 +7,7 @@ import {
   ArrowLeft,
   ArrowRight,
   User,
+  Gift,
   Phone,
   MapPin,
   FileText,
@@ -18,13 +19,20 @@ import {
   ShieldCheck,
   AlertCircle,
   Loader2,
-  MessageSquare,
+  CreditCard,
+  Banknote,
+  QrCode,
+  Info,
 } from "lucide-react";
 import { CartEntry } from "./CartDrawer";
 import {
   CustomerDetails,
   INDIAN_STATES,
-  generateConciergeSessionUrl,
+  OrderType,
+  PaymentMethod,
+  getWhatsAppOrderUrl,
+  BUSINESS_WHATSAPP_NUMBER,
+  formatCategoryName,
 } from "@/utils/whatsapp";
 
 interface CheckoutModalProps {
@@ -68,6 +76,9 @@ export default function CheckoutModal({
     state: "Andhra Pradesh",
     pincode: "",
     instructions: "",
+    orderType: "myself",
+    paymentMethod: "cod",
+    paymentReference: "",
   });
 
   // Validation Errors
@@ -82,6 +93,7 @@ export default function CheckoutModal({
   const [confirmedOrderId, setConfirmedOrderId] = useState<string>("");
   const [confirmedTotal, setConfirmedTotal] = useState<number>(0);
   const [confirmedItemCount, setConfirmedItemCount] = useState<number>(0);
+  const [confirmedWhatsappUrl, setConfirmedWhatsappUrl] = useState<string>("");
 
   if (!isOpen) return null;
 
@@ -111,11 +123,26 @@ export default function CheckoutModal({
     setFormData((prev) => ({ ...prev, [name]: formattedValue }));
 
     if (hasAttemptedSubmit) {
-      validateField(name as keyof CustomerDetails, formattedValue);
+      validateField(name as keyof CustomerDetails, formattedValue, formData.paymentMethod);
     }
   };
 
-  const validateField = (field: keyof CustomerDetails, value: string) => {
+  const handlePaymentMethodChange = (method: PaymentMethod) => {
+    setFormData((prev) => ({ ...prev, paymentMethod: method }));
+    if (hasAttemptedSubmit) {
+      if (method === "cod") {
+        setErrors((prev) => ({ ...prev, paymentReference: undefined }));
+      } else {
+        validateField("paymentReference", formData.paymentReference || "", "online");
+      }
+    }
+  };
+
+  const validateField = (
+    field: keyof CustomerDetails,
+    value: string,
+    currentPaymentMethod: PaymentMethod = formData.paymentMethod
+  ) => {
     let error = "";
     switch (field) {
       case "fullName":
@@ -153,7 +180,16 @@ export default function CheckoutModal({
         if (!value.trim()) {
           error = "Please enter your pincode.";
         } else if (!/^\d{6}$/.test(value.trim())) {
-          error = "Please enter a valid 6-digit pincode.";
+          error = "Please enter a valid 6-digit postal pincode.";
+        }
+        break;
+      case "paymentReference":
+        if (currentPaymentMethod === "online") {
+          if (!value.trim()) {
+            error = "Please enter your Payment Reference / UTR number.";
+          } else if (value.trim().length < 4) {
+            error = "Please enter a valid Payment Reference / UTR number (min 4 characters).";
+          }
         }
         break;
       default:
@@ -183,7 +219,12 @@ export default function CheckoutModal({
       newErrors.state = "Please select your state.";
     }
     if (!formData.pincode.trim() || !/^\d{6}$/.test(formData.pincode.trim())) {
-      newErrors.pincode = "Please enter a valid 6-digit pincode.";
+      newErrors.pincode = "Please enter a valid 6-digit postal pincode.";
+    }
+    if (formData.paymentMethod === "online") {
+      if (!formData.paymentReference || !formData.paymentReference.trim() || formData.paymentReference.trim().length < 4) {
+        newErrors.paymentReference = "Please enter your Payment Reference / UTR number.";
+      }
     }
 
     setErrors(newErrors);
@@ -199,7 +240,7 @@ export default function CheckoutModal({
     }
   };
 
-  // Submit Order via Backend WhatsApp Business Cloud API Endpoint
+  // Place Order: Validates on server, generates Order ID and prefilled WhatsApp URL, opens WhatsApp
   const handleConfirmOrder = async () => {
     if (items.length === 0 || isSubmitting) return;
 
@@ -227,21 +268,27 @@ export default function CheckoutModal({
         setConfirmedOrderId(data.orderId);
         setConfirmedTotal(data.totalAmount || totalAmount);
         setConfirmedItemCount(data.totalItems || totalItems);
+        setConfirmedWhatsappUrl(data.whatsappUrl);
+
+        // Open WhatsApp directly with pre-filled message
+        if (typeof window !== "undefined" && data.whatsappUrl) {
+          window.open(data.whatsappUrl, "_blank", "noopener,noreferrer");
+        }
 
         // Advance to confirmation screen
         setStep("confirmation");
 
-        // Clear cart ONLY after confirmed successful backend acceptance
+        // Clear cart after verified order creation
         if (onClearCart) {
           onClearCart();
         }
       } else {
-        const errorMsg = data?.error || "We couldn't send your order right now. Please try again.";
+        const errorMsg = data?.error || "We couldn't process your order right now. Please check your details and try again.";
         setSubmitError(errorMsg);
       }
     } catch (err) {
       console.error("Checkout request error:", err);
-      setSubmitError("We couldn't send your order right now. Please check your internet connection and try again.");
+      setSubmitError("We couldn't connect to complete your order. Please check your internet connection and try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -287,13 +334,13 @@ export default function CheckoutModal({
                 </span>
                 <span className="text-[#C5A47E] text-[8px]">◆</span>
                 <span className="text-[10px] sm:text-xs text-[#7A6F68]">
-                  Official WhatsApp Checkout
+                  WhatsApp Checkout
                 </span>
               </div>
               <h2 className="text-base sm:text-lg font-normal text-[#231610] font-serif-luxury tracking-wider uppercase mt-0.5">
-                {step === "form" && "DELIVERY & CONTACT DETAILS"}
+                {step === "form" && "CUSTOMER DETAILS & PAYMENT"}
                 {step === "review" && "ORDER REVIEW & CONFIRMATION"}
-                {step === "confirmation" && "ORDER REQUEST SENT"}
+                {step === "confirmation" && "ORDER READY FOR WHATSAPP"}
               </h2>
             </div>
           </div>
@@ -331,10 +378,90 @@ export default function CheckoutModal({
         ) : (
           <div className="flex-1 overflow-y-auto p-5 sm:p-7 md:p-8">
             {/* ========================================================================= */}
-            {/* STEP 1: CHECKOUT FORM                                                    */}
+            {/* STEP 1: CHECKOUT FORM (CUSTOMER DETAILS & PAYMENT METHOD)                 */}
             {/* ========================================================================= */}
             {step === "form" && (
-              <form onSubmit={handleFormSubmit} className="space-y-5" noValidate>
+              <form onSubmit={handleFormSubmit} className="space-y-6" noValidate>
+                {/* Section Header: Customer Details */}
+                <div className="space-y-1 border-b border-[#EAE2D8] pb-2">
+                  <span className="text-[11px] font-semibold text-[#BA7442] tracking-wider uppercase">
+                    STEP 1 OF 2
+                  </span>
+                  <h3 className="text-sm sm:text-base font-normal text-[#231610] font-serif-luxury tracking-wide uppercase">
+                    Delivery & Customer Information
+                  </h3>
+                </div>
+
+                {/* ========================================================================= */}
+                {/* ORDER TYPE SELECTION                                                     */}
+                {/* ========================================================================= */}
+                <div className="space-y-2">
+                  <label className="block text-xs font-semibold text-[#BA7442] tracking-wider uppercase">
+                    ORDER TYPE <span className="text-[#BA7442]">*</span>
+                  </label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    {/* For Myself */}
+                    <label
+                      onClick={() => setFormData((prev) => ({ ...prev, orderType: "myself" }))}
+                      className={`relative flex items-center gap-3.5 p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer ${
+                        formData.orderType === "myself"
+                          ? "border-[#BA7442] bg-white shadow-sm ring-1 ring-[#BA7442]/30"
+                          : "border-[#EAE2D8] bg-white/70 hover:border-[#D5C2AF] hover:bg-white"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="orderType"
+                        value="myself"
+                        checked={formData.orderType === "myself"}
+                        onChange={() => setFormData((prev) => ({ ...prev, orderType: "myself" }))}
+                        className="w-4 h-4 text-[#BA7442] focus:ring-[#BA7442] accent-[#BA7442] cursor-pointer"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <User className="w-4 h-4 text-[#BA7442]" />
+                          <span className="text-xs sm:text-sm font-semibold text-[#231610]">
+                            For Myself
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-[#7A6F68] mt-0.5">
+                          I am ordering for my own use
+                        </p>
+                      </div>
+                    </label>
+
+                    {/* For Gift */}
+                    <label
+                      onClick={() => setFormData((prev) => ({ ...prev, orderType: "gift" }))}
+                      className={`relative flex items-center gap-3.5 p-3.5 sm:p-4 rounded-2xl border-2 transition-all cursor-pointer ${
+                        formData.orderType === "gift"
+                          ? "border-[#BA7442] bg-white shadow-sm ring-1 ring-[#BA7442]/30"
+                          : "border-[#EAE2D8] bg-white/70 hover:border-[#D5C2AF] hover:bg-white"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="orderType"
+                        value="gift"
+                        checked={formData.orderType === "gift"}
+                        onChange={() => setFormData((prev) => ({ ...prev, orderType: "gift" }))}
+                        className="w-4 h-4 text-[#BA7442] focus:ring-[#BA7442] accent-[#BA7442] cursor-pointer"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <Gift className="w-4 h-4 text-[#BA7442]" />
+                          <span className="text-xs sm:text-sm font-semibold text-[#231610]">
+                            For Gift
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-[#7A6F68] mt-0.5">
+                          I am ordering this as a gift
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
                 {/* Form Fields Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                   {/* Full Name */}
@@ -353,7 +480,7 @@ export default function CheckoutModal({
                         autoComplete="name"
                         value={formData.fullName}
                         onChange={handleChange}
-                        placeholder="e.g. Rahul Kumar"
+                        placeholder="e.g. Sameer Khan"
                         className={`w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-white border ${
                           errors.fullName ? "border-[#C53030] ring-1 ring-[#C53030]" : "border-[#D5C2AF]"
                         } text-[#231610] placeholder-[#A09388] focus:outline-none focus:border-[#BA7442] focus:ring-1 focus:ring-[#BA7442] transition-colors`}
@@ -374,7 +501,7 @@ export default function CheckoutModal({
                     >
                       Mobile Number <span className="text-[#BA7442]">*</span>
                       <span className="text-[11px] text-[#7A6F68] font-normal ml-1">
-                        (Your personal contact number)
+                        (WhatsApp mobile number for confirmation)
                       </span>
                     </label>
                     <div className="flex items-stretch rounded-xl overflow-hidden border border-[#D5C2AF] bg-white focus-within:border-[#BA7442] focus-within:ring-1 focus-within:ring-[#BA7442]">
@@ -390,7 +517,7 @@ export default function CheckoutModal({
                         maxLength={10}
                         value={formData.mobile}
                         onChange={handleChange}
-                        placeholder="9876543210"
+                        placeholder="9618648050"
                         className="flex-1 px-4 py-3 text-xs sm:text-sm bg-white text-[#231610] placeholder-[#A09388] focus:outline-none"
                       />
                     </div>
@@ -416,7 +543,7 @@ export default function CheckoutModal({
                       autoComplete="street-address"
                       value={formData.address}
                       onChange={handleChange}
-                      placeholder="H.No 12-45, MG Road, Near City Mall, Beside ABC Bank"
+                      placeholder="Door No, Street Name, Landmark, Area"
                       className={`w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl bg-white border ${
                         errors.address ? "border-[#C53030] ring-1 ring-[#C53030]" : "border-[#D5C2AF]"
                       } text-[#231610] placeholder-[#A09388] focus:outline-none focus:border-[#BA7442] focus:ring-1 focus:ring-[#BA7442] transition-colors resize-none`}
@@ -528,10 +655,151 @@ export default function CheckoutModal({
                       rows={2}
                       value={formData.instructions}
                       onChange={handleChange}
-                      placeholder="e.g. Please call before delivery."
+                      placeholder="e.g. Please deliver between 2 PM to 5 PM."
                       className="w-full px-4 py-2.5 text-xs sm:text-sm rounded-xl bg-white border border-[#D5C2AF] text-[#231610] placeholder-[#A09388] focus:outline-none focus:border-[#BA7442] focus:ring-1 focus:ring-[#BA7442] transition-colors resize-none"
                     />
                   </div>
+                </div>
+
+                {/* ========================================================================= */}
+                {/* PAYMENT METHOD SELECTION                                                 */}
+                {/* ========================================================================= */}
+                <div className="pt-2 space-y-4">
+                  <div className="space-y-1 border-b border-[#EAE2D8] pb-2">
+                    <span className="text-[11px] font-semibold text-[#BA7442] tracking-wider uppercase">
+                      PAYMENT METHOD <span className="text-[#BA7442]">*</span>
+                    </span>
+                    <h3 className="text-sm sm:text-base font-normal text-[#231610] font-serif-luxury tracking-wide uppercase">
+                      Select Payment Mode
+                    </h3>
+                  </div>
+
+                  {/* Payment Options Grid */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                    {/* Cash on Delivery */}
+                    <label
+                      onClick={() => handlePaymentMethodChange("cod")}
+                      className={`relative flex items-center gap-3.5 p-4 rounded-2xl border-2 transition-all cursor-pointer ${
+                        formData.paymentMethod === "cod"
+                          ? "border-[#BA7442] bg-white shadow-sm ring-1 ring-[#BA7442]/30"
+                          : "border-[#EAE2D8] bg-white/70 hover:border-[#D5C2AF] hover:bg-white"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="cod"
+                        checked={formData.paymentMethod === "cod"}
+                        onChange={() => handlePaymentMethodChange("cod")}
+                        className="w-4 h-4 text-[#BA7442] focus:ring-[#BA7442] accent-[#BA7442] cursor-pointer"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <Banknote className="w-4 h-4 text-[#BA7442]" />
+                          <span className="text-xs sm:text-sm font-semibold text-[#231610]">
+                            Cash on Delivery
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-[#7A6F68] mt-0.5">
+                          Pay directly upon delivery
+                        </p>
+                      </div>
+                    </label>
+
+                    {/* Online Payment */}
+                    <label
+                      onClick={() => handlePaymentMethodChange("online")}
+                      className={`relative flex items-center gap-3.5 p-4 rounded-2xl border-2 transition-all cursor-pointer ${
+                        formData.paymentMethod === "online"
+                          ? "border-[#BA7442] bg-white shadow-sm ring-1 ring-[#BA7442]/30"
+                          : "border-[#EAE2D8] bg-white/70 hover:border-[#D5C2AF] hover:bg-white"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="online"
+                        checked={formData.paymentMethod === "online"}
+                        onChange={() => handlePaymentMethodChange("online")}
+                        className="w-4 h-4 text-[#BA7442] focus:ring-[#BA7442] accent-[#BA7442] cursor-pointer"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <QrCode className="w-4 h-4 text-[#BA7442]" />
+                          <span className="text-xs sm:text-sm font-semibold text-[#231610]">
+                            Online Payment
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-[#7A6F68] mt-0.5">
+                          Scan & Pay using PhonePe QR
+                        </p>
+                      </div>
+                    </label>
+                  </div>
+
+                  {/* Online Payment Section with PhonePe QR */}
+                  {formData.paymentMethod === "online" && (
+                    <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#BA7442]/40 shadow-xs space-y-4 animate-in fade-in zoom-in-98 duration-200">
+                      <div className="text-center space-y-1 border-b border-[#F5ECE5] pb-3">
+                        <span className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-[#BA7442] uppercase">
+                          ONLINE PAYMENT
+                        </span>
+                        <h4 className="text-sm sm:text-base font-normal text-[#231610] font-serif-luxury tracking-wide uppercase">
+                          Scan & Pay using PhonePe
+                        </h4>
+                      </div>
+
+                      {/* PhonePe QR Display */}
+                      <div className="flex flex-col items-center justify-center space-y-3">
+                        <div className="relative w-56 sm:w-64 aspect-[1/2] rounded-xl overflow-hidden border border-[#EAE2D8] shadow-md bg-white p-1">
+                          <Image
+                            src="/images/payment/phonepe-qr.png"
+                            alt="Scan & Pay using PhonePe QR Code"
+                            fill
+                            priority
+                            sizes="(max-width: 640px) 224px, 256px"
+                            className="object-contain"
+                          />
+                        </div>
+
+                        <div className="flex items-center gap-2 text-xs text-[#5A4D45] bg-[#F5ECE5] px-3.5 py-2 rounded-xl text-center">
+                          <Info className="w-4 h-4 text-[#BA7442] flex-shrink-0" />
+                          <span>Please complete the payment before placing the order.</span>
+                        </div>
+                      </div>
+
+                      {/* Payment Reference / UTR Input Field */}
+                      <div className="pt-2">
+                        <label
+                          htmlFor="paymentReference"
+                          className="block text-xs font-medium text-[#231610] tracking-wide mb-1.5"
+                        >
+                          Payment Reference / UTR Number <span className="text-[#BA7442]">*</span>
+                        </label>
+                        <input
+                          id="paymentReference"
+                          name="paymentReference"
+                          type="text"
+                          value={formData.paymentReference || ""}
+                          onChange={handleChange}
+                          placeholder="Enter payment reference / UTR number"
+                          className={`w-full px-4 py-3 text-xs sm:text-sm rounded-xl bg-white border ${
+                            errors.paymentReference
+                              ? "border-[#C53030] ring-1 ring-[#C53030]"
+                              : "border-[#D5C2AF]"
+                          } text-[#231610] placeholder-[#A09388] focus:outline-none focus:border-[#BA7442] focus:ring-1 focus:ring-[#BA7442] transition-colors`}
+                        />
+                        {errors.paymentReference && (
+                          <p className="text-[11px] text-[#C53030] mt-1 font-medium">
+                            {errors.paymentReference}
+                          </p>
+                        )}
+                        <p className="text-[11px] text-[#7A6F68] mt-1">
+                          Enter the 12-digit UTR number or UPI transaction reference from PhonePe.
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Mini Order Summary Strip */}
@@ -572,7 +840,7 @@ export default function CheckoutModal({
             {/* STEP 2: ORDER PREVIEW / REVIEW                                            */}
             {/* ========================================================================= */}
             {step === "review" && (
-              <div className="space-y-6">
+              <div className="space-y-5">
                 {/* Submission Error Banner */}
                 {submitError && (
                   <div className="p-4 rounded-2xl bg-[#FFF5F5] border border-[#FEB2B2] text-[#9B2C2C] text-xs flex items-start gap-3 animate-in fade-in duration-200">
@@ -584,7 +852,47 @@ export default function CheckoutModal({
                   </div>
                 )}
 
-                {/* 1. Customer Details Card */}
+                {/* 1. ORDER FROM WEBSITE / ORDER TYPE CARD */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE2D8] shadow-xs space-y-2">
+                  <div className="flex items-center justify-between border-b border-[#F2ECE4] pb-2.5">
+                    <div>
+                      <span className="text-[10px] font-semibold tracking-[0.16em] text-[#BA7442] uppercase block">
+                        ORDER FROM WEBSITE
+                      </span>
+                      <h3 className="text-sm sm:text-base font-normal text-[#231610] font-serif-luxury tracking-wide uppercase mt-0.5">
+                        Order Summary & Review
+                      </h3>
+                    </div>
+                    <button
+                      type="button"
+                      disabled={isSubmitting}
+                      onClick={() => {
+                        setSubmitError(null);
+                        setStep("form");
+                      }}
+                      className="inline-flex items-center gap-1 text-xs text-[#BA7442] hover:text-[#231610] font-medium transition-colors cursor-pointer disabled:opacity-50"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>Edit</span>
+                    </button>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 pt-1 text-xs sm:text-[13px] text-[#231610]">
+                    {formData.orderType === "gift" ? (
+                      <Gift className="w-4 h-4 text-[#BA7442] flex-shrink-0" />
+                    ) : (
+                      <User className="w-4 h-4 text-[#BA7442] flex-shrink-0" />
+                    )}
+                    <span>
+                      Order Type:{" "}
+                      <strong className="text-[#231610]">
+                        {formData.orderType === "gift" ? "For Gift" : "For Myself"}
+                      </strong>
+                    </span>
+                  </div>
+                </div>
+
+                {/* 2. Customer Details Card */}
                 <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE2D8] shadow-xs space-y-3">
                   <div className="flex items-center justify-between border-b border-[#F2ECE4] pb-2.5">
                     <h3 className="text-xs font-semibold tracking-[0.14em] text-[#BA7442] uppercase font-serif-luxury">
@@ -613,31 +921,7 @@ export default function CheckoutModal({
                       <Phone className="w-4 h-4 text-[#BA7442] flex-shrink-0" />
                       <span>+91 {formData.mobile}</span>
                     </div>
-                  </div>
-                </div>
-
-                {/* 2. Delivery Address Card */}
-                <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE2D8] shadow-xs space-y-3">
-                  <div className="flex items-center justify-between border-b border-[#F2ECE4] pb-2.5">
-                    <h3 className="text-xs font-semibold tracking-[0.14em] text-[#BA7442] uppercase font-serif-luxury">
-                      DELIVERY ADDRESS
-                    </h3>
-                    <button
-                      type="button"
-                      disabled={isSubmitting}
-                      onClick={() => {
-                        setSubmitError(null);
-                        setStep("form");
-                      }}
-                      className="inline-flex items-center gap-1 text-xs text-[#BA7442] hover:text-[#231610] font-medium transition-colors cursor-pointer disabled:opacity-50"
-                    >
-                      <Edit3 className="w-3.5 h-3.5" />
-                      <span>Edit</span>
-                    </button>
-                  </div>
-
-                  <div className="space-y-2 text-xs sm:text-[13px] text-[#231610]">
-                    <div className="flex items-start gap-2.5">
+                    <div className="flex items-start gap-2.5 pt-1">
                       <MapPin className="w-4 h-4 text-[#BA7442] flex-shrink-0 mt-0.5" />
                       <div>
                         <p className="leading-relaxed">{formData.address}</p>
@@ -658,11 +942,53 @@ export default function CheckoutModal({
                   </div>
                 </div>
 
-                {/* 3. Order Items Card with Actual Catalog Images */}
+                {/* 3. Payment Details Card */}
                 <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE2D8] shadow-xs space-y-3">
                   <div className="flex items-center justify-between border-b border-[#F2ECE4] pb-2.5">
                     <h3 className="text-xs font-semibold tracking-[0.14em] text-[#BA7442] uppercase font-serif-luxury">
-                      ORDER DETAILS ({totalItems} {totalItems === 1 ? "Item" : "Items"})
+                      PAYMENT DETAILS
+                    </h3>
+                    <button
+                      type="button"
+                      disabled={isSubmitting}
+                      onClick={() => {
+                        setSubmitError(null);
+                        setStep("form");
+                      }}
+                      className="inline-flex items-center gap-1 text-xs text-[#BA7442] hover:text-[#231610] font-medium transition-colors cursor-pointer disabled:opacity-50"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>Edit</span>
+                    </button>
+                  </div>
+
+                  <div className="space-y-2 text-xs sm:text-[13px] text-[#231610]">
+                    <div className="flex items-center gap-2.5">
+                      <CreditCard className="w-4 h-4 text-[#BA7442] flex-shrink-0" />
+                      <span>
+                        Payment Method:{" "}
+                        <strong className="text-[#231610]">
+                          {formData.paymentMethod === "online" ? "Online Payment (PhonePe)" : "Cash on Delivery"}
+                        </strong>
+                      </span>
+                    </div>
+
+                    {formData.paymentMethod === "online" && (
+                      <div className="flex items-center gap-2.5 pl-6 text-xs text-[#5A4D45]">
+                        <span>Payment Reference / UTR:</span>
+                        <span className="font-mono font-semibold text-[#231610] bg-[#F5ECE5] px-2 py-0.5 rounded">
+                          {formData.paymentReference}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* 4. Products Card */}
+                <div className="p-4 sm:p-5 rounded-2xl bg-white border border-[#EAE2D8] shadow-xs space-y-3">
+                  <div className="flex items-center justify-between border-b border-[#F2ECE4] pb-2.5">
+                    <h3 className="text-xs font-semibold tracking-[0.14em] text-[#BA7442] uppercase font-serif-luxury">
+                      PRODUCTS ({totalItems} {totalItems === 1 ? "Item" : "Items"})
                     </h3>
                     {onBackToCart && (
                       <button
@@ -677,78 +1003,90 @@ export default function CheckoutModal({
                     )}
                   </div>
 
-                  {/* Items List */}
+                  {/* Items List with complete product information */}
                   <div className="divide-y divide-[#F5ECE5] space-y-3">
                     {items.map(({ product, quantity }) => {
                       const itemSubtotal = product.price * quantity;
+                      const catDisplay = formatCategoryName(product.category);
+                      const subCatDisplay = product.subCategory || catDisplay;
+
                       return (
                         <div
                           key={product.id}
-                          className="flex items-center gap-3.5 pt-3 first:pt-0"
+                          className="pt-3 first:pt-0 space-y-2"
                         >
-                          {/* Actual Catalog Product Image */}
-                          <div className="relative w-14 h-14 rounded-lg bg-[#F5ECE5] overflow-hidden flex-shrink-0 border border-[#EAE2D8]">
-                            <Image
-                              src={product.image}
-                              alt={product.name}
-                              fill
-                              sizes="56px"
-                              className="object-cover object-center"
-                            />
-                          </div>
-
-                          {/* Details */}
-                          <div className="flex-1 min-w-0">
-                            <h4 className="text-xs sm:text-[13px] font-medium text-[#231610] font-serif-luxury truncate">
-                              {product.name}
-                            </h4>
-                            <div className="flex items-center gap-2 mt-1 flex-wrap">
-                              <p className="text-[11px] text-[#7A6F68]">
-                                Price: ₹{product.price.toLocaleString("en-IN")}
-                              </p>
-                              {onUpdateQty && !isSubmitting ? (
-                                <div className="inline-flex items-center border border-[#D5C2AF] rounded-md bg-[#FAF7F3] text-[11px]">
-                                  <button
-                                    type="button"
-                                    onClick={() => onUpdateQty(product.id, -1)}
-                                    className="px-1.5 py-0.5 hover:bg-white text-[#231610] transition-colors cursor-pointer font-bold"
-                                    aria-label="Decrease quantity"
-                                  >
-                                    -
-                                  </button>
-                                  <span className="px-1.5 py-0.5 font-semibold text-[11px] text-[#231610] min-w-[16px] text-center">
-                                    {quantity}
-                                  </span>
-                                  <button
-                                    type="button"
-                                    onClick={() => onUpdateQty(product.id, 1)}
-                                    className="px-1.5 py-0.5 hover:bg-white text-[#231610] transition-colors cursor-pointer font-bold"
-                                    aria-label="Increase quantity"
-                                  >
-                                    +
-                                  </button>
-                                </div>
-                              ) : (
-                                <span className="text-[11px] font-semibold text-[#231610]">Qty: {quantity}</span>
-                              )}
-                              {onRemoveItem && !isSubmitting && (
-                                <button
-                                  type="button"
-                                  onClick={() => onRemoveItem(product.id)}
-                                  className="text-[#9E9085] hover:text-[#C53030] p-0.5 transition-colors cursor-pointer ml-1"
-                                  aria-label="Remove item"
-                                >
-                                  <X className="w-3 h-3" />
-                                </button>
-                              )}
+                          <div className="flex items-start gap-3.5">
+                            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-[#F5ECE5] overflow-hidden flex-shrink-0 border border-[#EAE2D8]">
+                              <Image
+                                src={product.image}
+                                alt={product.name}
+                                fill
+                                sizes="80px"
+                                className="object-cover object-center"
+                              />
                             </div>
-                          </div>
 
-                          {/* Subtotal */}
-                          <div className="text-right flex-shrink-0">
-                            <span className="text-xs sm:text-sm font-bold text-[#231610]">
-                              ₹{itemSubtotal.toLocaleString("en-IN")}
-                            </span>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="text-xs sm:text-sm font-medium text-[#231610] font-serif-luxury truncate">
+                                {product.name}
+                              </h4>
+                              <p className="text-[10px] sm:text-[11px] font-mono text-[#7A6F68] mt-0.5">
+                                ID: {product.id} • {catDisplay} {subCatDisplay !== catDisplay ? `(${subCatDisplay})` : ""}
+                              </p>
+
+                              {product.description && (
+                                <p className="text-[11px] text-[#6B5E55] line-clamp-2 mt-1 leading-relaxed">
+                                  {product.description}
+                                </p>
+                              )}
+
+                              <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+                                <p className="text-[11px] text-[#7A6F68]">
+                                  Price: ₹{product.price.toLocaleString("en-IN")}
+                                </p>
+                                {onUpdateQty && !isSubmitting ? (
+                                  <div className="inline-flex items-center border border-[#D5C2AF] rounded-md bg-[#FAF7F3] text-[11px]">
+                                    <button
+                                      type="button"
+                                      onClick={() => onUpdateQty(product.id, -1)}
+                                      className="px-1.5 py-0.5 hover:bg-white text-[#231610] transition-colors cursor-pointer font-bold"
+                                      aria-label="Decrease quantity"
+                                    >
+                                      -
+                                    </button>
+                                    <span className="px-1.5 py-0.5 font-semibold text-[11px] text-[#231610] min-w-[16px] text-center">
+                                      {quantity}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() => onUpdateQty(product.id, 1)}
+                                      className="px-1.5 py-0.5 hover:bg-white text-[#231610] transition-colors cursor-pointer font-bold"
+                                      aria-label="Increase quantity"
+                                    >
+                                      +
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <span className="text-[11px] font-semibold text-[#231610]">Qty: {quantity}</span>
+                                )}
+                                {onRemoveItem && !isSubmitting && (
+                                  <button
+                                    type="button"
+                                    onClick={() => onRemoveItem(product.id)}
+                                    className="text-[#9E9085] hover:text-[#C53030] p-0.5 transition-colors cursor-pointer ml-1"
+                                    aria-label="Remove item"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="text-right flex-shrink-0">
+                              <span className="text-xs sm:text-sm font-bold text-[#231610]">
+                                ₹{itemSubtotal.toLocaleString("en-IN")}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       );
@@ -756,18 +1094,26 @@ export default function CheckoutModal({
                   </div>
                 </div>
 
-                {/* 4. Total Calculation Summary */}
+                {/* 5. ORDER SUMMARY */}
                 <div className="p-4 sm:p-5 rounded-2xl bg-[#F5ECE5]/80 border border-[#EAE2D8] space-y-2 text-xs sm:text-sm">
                   <div className="flex justify-between text-[#5A4D45]">
                     <span>Total Items</span>
                     <span className="font-semibold text-[#231610]">{totalItems}</span>
                   </div>
                   <div className="flex justify-between text-[#5A4D45]">
-                    <span>Standard Delivery</span>
-                    <span className="font-semibold text-[#15803D]">FREE</span>
+                    <span>Subtotal</span>
+                    <span className="font-semibold text-[#231610]">₹{totalAmount.toLocaleString("en-IN")}</span>
+                  </div>
+                  <div className="flex justify-between text-[#5A4D45]">
+                    <span>Shipping</span>
+                    <span className="font-semibold text-[#15803D]">FREE (₹0)</span>
+                  </div>
+                  <div className="flex justify-between text-[#5A4D45]">
+                    <span>Discount</span>
+                    <span className="font-semibold text-[#231610]">₹0</span>
                   </div>
                   <div className="flex justify-between text-sm sm:text-base font-bold text-[#231610] pt-2 border-t border-[#D5C2AF]">
-                    <span className="tracking-wide uppercase font-serif-luxury">TOTAL AMOUNT</span>
+                    <span className="tracking-wide uppercase font-serif-luxury">TOTAL</span>
                     <span className="text-[#BA7442]">₹{totalAmount.toLocaleString("en-IN")}</span>
                   </div>
                 </div>
@@ -776,7 +1122,7 @@ export default function CheckoutModal({
                 <div className="p-3 rounded-xl bg-[#F9F4EE] border border-[#E4D7C8] flex items-center gap-2.5 text-[11px] text-[#6B5E55]">
                   <ShieldCheck className="w-4 h-4 text-[#BA7442] flex-shrink-0" />
                   <span>
-                    Your order details and product images will be securely sent to Insha Collections (+91 9618648050).
+                    When you click PLACE ORDER, your order will open in WhatsApp with Insha Collections (+91 9618648050) so you can press send.
                   </span>
                 </div>
 
@@ -804,12 +1150,12 @@ export default function CheckoutModal({
                     {isSubmitting ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>SENDING ORDER TO WHATSAPP...</span>
+                        <span>PREPARING ORDER...</span>
                       </>
                     ) : (
                       <>
                         <WhatsAppIcon className="w-5 h-5 fill-white" />
-                        <span>{submitError ? "TRY AGAIN" : "CONFIRM & SEND ORDER"}</span>
+                        <span>PLACE ORDER</span>
                       </>
                     )}
                   </button>
@@ -835,13 +1181,13 @@ export default function CheckoutModal({
                 {/* Headings */}
                 <div className="space-y-1.5 max-w-md">
                   <span className="text-[11px] sm:text-xs font-semibold tracking-[0.2em] text-[#BA7442] uppercase">
-                    ORDER REQUEST SENT
+                    ORDER PREPARED FOR WHATSAPP
                   </span>
                   <h3 className="text-2xl sm:text-3xl font-normal text-[#231610] font-serif-luxury tracking-wide">
                     Thank You!
                   </h3>
                   <p className="text-xs sm:text-sm text-[#5A4D45] font-medium leading-relaxed">
-                    Thank you! Your order details have been sent to Insha Collections on WhatsApp.
+                    Your order details and product images have been generated for Insha Collections.
                   </p>
                 </div>
 
@@ -857,7 +1203,7 @@ export default function CheckoutModal({
                   <div className="w-full max-w-md p-4 rounded-2xl bg-white border border-[#BA7442]/30 shadow-xs flex items-center justify-between text-left">
                     <div>
                       <span className="text-[10px] font-semibold text-[#7A6F68] uppercase tracking-wider block">
-                        ORDER REFERENCE
+                        ORDER ID
                       </span>
                       <span className="text-sm sm:text-base font-bold text-[#231610] font-mono tracking-wide">
                         {confirmedOrderId}
@@ -882,35 +1228,34 @@ export default function CheckoutModal({
                     </div>
                     <div>
                       <p className="font-semibold text-[#231610]">
-                        Order Received on WhatsApp Concierge
+                        WhatsApp Pre-filled Order
                       </p>
                       <p className="text-[11.5px] text-[#6B5E55] mt-0.5 leading-relaxed">
-                        Our executive has received your product images and order specifications on <strong>+91 9618648050</strong>. We will confirm your delivery schedule promptly.
+                        WhatsApp has been opened with your complete order message. Please press <strong>SEND</strong> in WhatsApp to deliver the order to Insha Collections on <strong>+91 9618648050</strong>.
                       </p>
                     </div>
                   </div>
 
                   <div className="pt-2 border-t border-[#E0D0BE] flex items-center justify-between text-[11px] text-[#5A4D45]">
-                    <span>Total Items: <strong>{confirmedItemCount}</strong></span>
-                    <span>Status: <strong className="text-[#15803D]">Received</strong></span>
+                    <span>Order Type: <strong className="text-[#231610]">{formData.orderType === "gift" ? "For Gift" : "For Myself"}</strong></span>
+                    <span>Payment: <strong className="text-[#BA7442]">{formData.paymentMethod === "online" ? "Online Payment" : "COD"}</strong></span>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
                 <div className="w-full max-w-md pt-2 space-y-2.5">
-                  {confirmedOrderId && (
+                  {confirmedWhatsappUrl && (
                     <button
                       type="button"
                       onClick={() => {
-                        const conciergeUrl = generateConciergeSessionUrl(confirmedOrderId, formData.fullName);
                         if (typeof window !== "undefined") {
-                          window.open(conciergeUrl, "_blank", "noopener,noreferrer");
+                          window.open(confirmedWhatsappUrl, "_blank", "noopener,noreferrer");
                         }
                       }}
-                      className="w-full py-3 px-5 rounded-xl border border-[#BA7442] bg-white hover:bg-[#F5ECE5] text-[#BA7442] text-xs font-semibold tracking-wider uppercase transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-xs"
+                      className="w-full py-3.5 px-5 rounded-xl bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#20BA5C] hover:to-[#0F7569] text-white text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer shadow-md hover:shadow-lg"
                     >
-                      <MessageSquare className="w-4 h-4" />
-                      <span>Chat with Concierge on WhatsApp</span>
+                      <WhatsAppIcon className="w-4 h-4 fill-white" />
+                      <span>OPEN IN WHATSAPP TO SEND</span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </button>
                   )}

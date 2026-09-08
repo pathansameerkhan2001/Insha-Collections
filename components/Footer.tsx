@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Mail, Phone, MapPin, Clock, Check } from "lucide-react";
-import { FacebookIcon, InstagramIcon, YouTubeIcon } from "./BrandIcons";
+import { FacebookIcon, InstagramIcon, YouTubeIcon, PinterestIcon } from "./BrandIcons";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -21,78 +21,22 @@ export default function Footer() {
   };
 
   return (
-    <footer className="w-full bg-[#FAF7F2] text-[#231610] border-t border-[#EAE2D8] pt-0 pb-12 sm:pb-16 overflow-hidden">
+    <footer className="w-full bg-[#FAF6F0] text-[#231610] border-t border-[#EAE2D8] pt-0 pb-8 sm:pb-10 overflow-hidden">
       {/* 1. Newsletter Strip Section */}
-      <div className="relative w-full bg-[#F5EFE9]/90 border-b border-[#EAE2D8] py-8 sm:py-10 md:py-12 overflow-hidden">
-        {/* Subtle Botanical Leaf Decorative SVGs on Left & Right */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 pointer-events-none opacity-40 sm:opacity-50 select-none hidden sm:block">
-          <svg
-            width="140"
-            height="100"
-            viewBox="0 0 140 100"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="text-[#B97A48]"
-          >
-            <path
-              d="M-10 90C20 80 50 60 70 20M70 20C65 35 50 45 35 48M70 20C75 35 90 40 105 38M45 55C30 60 20 75 18 90M55 45C65 58 70 75 68 92M25 72C15 80 8 92 6 100"
-              stroke="currentColor"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-            />
-            <path
-              d="M30 40C24 38 18 42 16 48C22 50 28 46 30 40ZM60 22C54 18 46 20 42 26C48 30 56 28 60 22ZM85 28C88 22 84 14 78 12C74 18 78 26 85 28ZM40 68C34 66 28 72 26 78C32 80 38 74 40 68Z"
-              stroke="currentColor"
-              strokeWidth="1"
-              fill="currentColor"
-              fillOpacity="0.08"
-            />
-          </svg>
-        </div>
-
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none opacity-40 sm:opacity-50 select-none hidden sm:block">
-          <svg
-            width="140"
-            height="100"
-            viewBox="0 0 140 100"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="text-[#B97A48] rotate-180"
-          >
-            <path
-              d="M-10 90C20 80 50 60 70 20M70 20C65 35 50 45 35 48M70 20C75 35 90 40 105 38M45 55C30 60 20 75 18 90M55 45C65 58 70 75 68 92M25 72C15 80 8 92 6 100"
-              stroke="currentColor"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-            />
-            <path
-              d="M30 40C24 38 18 42 16 48C22 50 28 46 30 40ZM60 22C54 18 46 20 42 26C48 30 56 28 60 22ZM85 28C88 22 84 14 78 12C74 18 78 26 85 28ZM40 68C34 66 28 72 26 78C32 80 38 74 40 68Z"
-              stroke="currentColor"
-              strokeWidth="1"
-              fill="currentColor"
-              fillOpacity="0.08"
-            />
-          </svg>
-        </div>
-
-        {/* Content Container */}
-        <div className="max-w-[1320px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
+      <div className="relative w-full bg-[#F5ECE5]/70 border-b border-[#EAE2D8] py-7 sm:py-9 overflow-hidden">
+        <div className="max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-10">
             {/* Left: Envelope Icon + Text */}
             <div className="flex items-center gap-4 sm:gap-5 text-center sm:text-left flex-col sm:flex-row">
-              {/* Envelope Circle Icon */}
-              <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full border border-[#B97A48]/60 bg-[#FAF7F2] flex items-center justify-center text-[#B97A48] flex-shrink-0 shadow-xs">
-                <Mail className="w-6 h-6 stroke-[1.35]" />
+              <div className="w-12 h-12 sm:w-13 sm:h-13 rounded-full border border-[#B97A48]/50 bg-[#FAF6F0] flex items-center justify-center text-[#B97A48] flex-shrink-0 shadow-xs">
+                <Mail className="w-5 h-5 stroke-[1.4]" />
               </div>
-
-              {/* Headings */}
               <div>
-                <h3 className="text-base sm:text-lg md:text-[19px] font-normal text-[#231610] tracking-[0.14em] uppercase font-serif-luxury leading-snug">
+                <h3 className="text-sm sm:text-base md:text-[17px] font-normal text-[#231610] tracking-[0.14em] uppercase font-serif-luxury leading-snug">
                   STAY UPDATED WITH INSHA COLLECTIONS
                 </h3>
-                <p className="text-xs sm:text-[13.5px] text-[#6B5E55] font-normal mt-0.5 leading-relaxed">
-                  Subscribe to get special offers, new arrivals, <br className="hidden sm:inline" />
-                  style inspiration and more.
+                <p className="text-xs sm:text-[13px] text-[#6B5E55] font-normal mt-0.5 leading-relaxed">
+                  Subscribe to get special offers, new arrivals, style inspiration and more.
                 </p>
               </div>
             </div>
@@ -106,11 +50,11 @@ export default function Footer() {
                   placeholder="Enter your email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 min-w-[180px] sm:min-w-[240px] md:min-w-[280px] px-4 py-2.5 sm:py-3 text-xs sm:text-sm bg-white text-[#231610] placeholder-[#9E9085] focus:outline-none"
+                  className="flex-1 min-w-[180px] sm:min-w-[240px] md:min-w-[260px] px-4 py-2.5 sm:py-3 text-xs sm:text-sm bg-white text-[#231610] placeholder-[#9E9085] focus:outline-none"
                 />
                 <button
                   type="submit"
-                  className="px-5 sm:px-7 py-2.5 sm:py-3 bg-gradient-to-r from-[#BA7442] to-[#9C5A2C] hover:from-[#A86435] hover:to-[#8B4E24] text-white text-xs font-semibold tracking-[0.14em] uppercase font-sans transition-all duration-300 flex items-center justify-center gap-1.5 flex-shrink-0 cursor-pointer"
+                  className="px-5 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-[#BA7442] to-[#9C5A2C] hover:from-[#A86435] hover:to-[#8B4E24] text-white text-xs font-semibold tracking-[0.14em] uppercase font-sans transition-all duration-300 flex items-center justify-center gap-1.5 flex-shrink-0 cursor-pointer"
                 >
                   {subscribed ? (
                     <>
@@ -127,43 +71,114 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* 2. Main Footer Body (Logo + Description + Socials on Left | CONTACT US on Right) */}
-      <div className="max-w-[1240px] mx-auto px-4 sm:px-8 lg:px-12 pt-12 sm:pt-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 sm:gap-14 md:gap-16 lg:gap-24 items-center">
-          {/* Left Column: Circular Logo, Tagline, Social Icons */}
-          <div className="flex flex-col items-center text-center">
-            {/* Circular Logo Frame */}
-            <Link href="/" className="group inline-block focus:outline-none">
-              <div className="relative w-40 h-40 sm:w-48 sm:h-48 rounded-full bg-white p-2 border border-[#E0D0BE] shadow-xs flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.02]">
-                <div className="relative w-full h-full rounded-full overflow-hidden">
-                  <Image
-                    src="/images/New-logo.jpeg"
-                    alt="Insha Collections Logo"
-                    fill
-                    priority
-                    className="object-contain mix-blend-multiply"
-                    sizes="(max-width: 640px) 160px, 192px"
-                  />
-                </div>
+      {/* ========================================================================= */}
+      {/* SECTION 1: INSHA COLLECTIONS / CLIENT SECTION                             */}
+      {/* ========================================================================= */}
+      <div className="max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-12 py-10 sm:py-14">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-0 items-center">
+          
+          {/* LEFT (4 cols): Insha Collections Official Circular Logo */}
+          <div className="lg:col-span-4 flex flex-col items-center lg:items-center justify-center">
+            <Link href="/" className="group inline-block focus:outline-none" aria-label="Insha Collections Homepage">
+              <div className="relative w-44 h-44 sm:w-48 sm:h-48 md:w-52 md:h-52 rounded-full p-2 flex items-center justify-center transition-transform duration-300 group-hover:scale-[1.02]">
+                <Image
+                  src="/images/New-logo.jpeg"
+                  alt="Insha Collections Logo"
+                  width={220}
+                  height={220}
+                  priority
+                  className="object-contain mix-blend-multiply rounded-full select-none"
+                />
               </div>
             </Link>
+          </div>
 
-            {/* Tagline / Brand Description */}
-            <p className="text-xs sm:text-[13.5px] text-[#5A4D45] max-w-xs sm:max-w-sm mt-4 leading-relaxed font-normal">
-              Timeless elegance crafted for every you. Premium quality, trusted by thousands.
-            </p>
+          {/* CENTER (4 cols): CONTACT US */}
+          <div className="lg:col-span-4 lg:border-l lg:border-[#E8DFD3] lg:pl-10 flex flex-col items-center lg:items-start text-center lg:text-left">
+            <h4 className="text-sm sm:text-base font-normal text-[#231610] tracking-[0.2em] uppercase font-serif-luxury">
+              CONTACT US
+            </h4>
 
-            {/* Social Icons Row (Facebook, Instagram, YouTube) */}
-            <div className="flex items-center gap-3 sm:gap-3.5 mt-5">
+            {/* Delicate divider with diamond */}
+            <div className="flex items-center gap-2 mt-1.5 mb-5">
+              <div className="h-[1px] w-8 sm:w-10 bg-[#C8B8A6]" />
+              <span className="text-[#B97A48] text-[8px] select-none">◆</span>
+              <div className="h-[1px] w-8 sm:w-10 bg-[#C8B8A6]" />
+            </div>
+
+            {/* Contact Details with circular soft badges */}
+            <div className="space-y-4 text-xs sm:text-[13.5px] text-[#3D312A] font-normal w-full max-w-sm">
+              {/* Phone */}
+              <div className="flex items-center gap-3.5 justify-center lg:justify-start">
+                <div className="w-8 h-8 rounded-full bg-[#EFE7DE] text-[#8C6B4E] flex items-center justify-center flex-shrink-0 shadow-2xs">
+                  <Phone className="w-4 h-4 stroke-[1.5]" />
+                </div>
+                <div className="flex flex-col gap-0.5 items-center lg:items-start">
+                  <a href="tel:+919618648050" className="hover:text-[#BA7442] transition-colors font-medium">
+                    +91 9618648050
+                  </a>
+                  <a href="tel:+919000407681" className="hover:text-[#BA7442] transition-colors font-medium">
+                    +91 9000407681
+                  </a>
+                </div>
+              </div>
+
+              {/* Hours */}
+              <div className="flex items-center gap-3.5 justify-center lg:justify-start">
+                <div className="w-8 h-8 rounded-full bg-[#EFE7DE] text-[#8C6B4E] flex items-center justify-center flex-shrink-0 shadow-2xs">
+                  <Clock className="w-4 h-4 stroke-[1.5]" />
+                </div>
+                <span className="text-[#3D312A]">Mon - Sat: 10:00 AM - 8:00 PM</span>
+              </div>
+
+              {/* Physical Address */}
+              <div className="flex items-start gap-3.5 justify-center lg:justify-start text-center lg:text-left">
+                <div className="w-8 h-8 rounded-full bg-[#EFE7DE] text-[#8C6B4E] flex items-center justify-center flex-shrink-0 shadow-2xs mt-0.5">
+                  <MapPin className="w-4 h-4 stroke-[1.5]" />
+                </div>
+                <div className="flex flex-col text-[#3D312A] leading-relaxed">
+                  <span>Room no 6, Rachuru complex,</span>
+                  <span>Y V Street,</span>
+                  <span>Kadapa 516001</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT (4 cols): FOLLOW US */}
+          <div className="lg:col-span-4 lg:border-l lg:border-[#E8DFD3] lg:pl-10 flex flex-col items-center text-center">
+            <h4 className="text-sm sm:text-base font-normal text-[#231610] tracking-[0.2em] uppercase font-serif-luxury">
+              FOLLOW US
+            </h4>
+
+            {/* Delicate divider with diamond */}
+            <div className="flex items-center gap-2 mt-1.5 mb-5">
+              <div className="h-[1px] w-8 sm:w-10 bg-[#C8B8A6]" />
+              <span className="text-[#B97A48] text-[8px] select-none">◆</span>
+              <div className="h-[1px] w-8 sm:w-10 bg-[#C8B8A6]" />
+            </div>
+
+            {/* Tagline */}
+            <div className="max-w-xs space-y-1">
+              <p className="text-xs sm:text-[13px] text-[#5A4D45] leading-relaxed">
+                Timeless elegance crafted for every you.
+              </p>
+              <p className="text-xs sm:text-[13px] text-[#5A4D45] leading-relaxed">
+                Premium quality, trusted by thousands.
+              </p>
+            </div>
+
+            {/* Social Icons Row */}
+            <div className="flex items-center gap-3.5 mt-5">
               {/* Facebook */}
               <a
                 href="https://www.facebook.com/insha.collections24/"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit Insha Collections on Facebook"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#D5C2AF] text-[#231610] hover:text-[#BA7442] hover:border-[#BA7442] bg-[#FAF7F2] hover:bg-white flex items-center justify-center transition-all duration-200 shadow-xs hover:scale-108"
+                className="w-10 h-10 rounded-full bg-[#EFE7DE] text-[#4A392F] hover:text-[#B97A48] hover:bg-white border border-transparent hover:border-[#D5C2AF] flex items-center justify-center transition-all duration-200 shadow-2xs hover:scale-108"
               >
-                <FacebookIcon className="w-4 h-4 sm:w-[17px] sm:h-[17px]" />
+                <FacebookIcon className="w-4 h-4" />
               </a>
 
               {/* Instagram */}
@@ -172,9 +187,20 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit Insha Collections on Instagram"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#D5C2AF] text-[#231610] hover:text-[#BA7442] hover:border-[#BA7442] bg-[#FAF7F2] hover:bg-white flex items-center justify-center transition-all duration-200 shadow-xs hover:scale-108"
+                className="w-10 h-10 rounded-full bg-[#EFE7DE] text-[#4A392F] hover:text-[#B97A48] hover:bg-white border border-transparent hover:border-[#D5C2AF] flex items-center justify-center transition-all duration-200 shadow-2xs hover:scale-108"
               >
-                <InstagramIcon className="w-4 h-4 sm:w-[17px] sm:h-[17px]" />
+                <InstagramIcon className="w-4 h-4" />
+              </a>
+
+              {/* Pinterest */}
+              <a
+                href="https://www.instagram.com/insha.collections24/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Visit Insha Collections on Pinterest"
+                className="w-10 h-10 rounded-full bg-[#EFE7DE] text-[#4A392F] hover:text-[#B97A48] hover:bg-white border border-transparent hover:border-[#D5C2AF] flex items-center justify-center transition-all duration-200 shadow-2xs hover:scale-108"
+              >
+                <PinterestIcon className="w-4 h-4" />
               </a>
 
               {/* YouTube */}
@@ -183,67 +209,82 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit Insha Collections on YouTube"
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-[#D5C2AF] text-[#231610] hover:text-[#BA7442] hover:border-[#BA7442] bg-[#FAF7F2] hover:bg-white flex items-center justify-center transition-all duration-200 shadow-xs hover:scale-108"
+                className="w-10 h-10 rounded-full bg-[#EFE7DE] text-[#4A392F] hover:text-[#B97A48] hover:bg-white border border-transparent hover:border-[#D5C2AF] flex items-center justify-center transition-all duration-200 shadow-2xs hover:scale-108"
               >
-                <YouTubeIcon className="w-4 h-4 sm:w-[17px] sm:h-[17px]" />
+                <YouTubeIcon className="w-4 h-4" />
               </a>
             </div>
+
+            {/* Handwritten Signature Flourish: Stay Connected ♡ */}
+            <p className="font-serif italic text-lg sm:text-xl text-[#9E6E49] mt-4 flex items-center justify-center gap-1.5 tracking-wide">
+              <span>Stay Connected</span>
+              <span className="text-[#9E6E49] text-base not-italic">♡</span>
+            </p>
           </div>
 
-          {/* Right Column: ONLY "CONTACT US" Section with Vertical Left Divider on Desktop */}
-          <div className="md:border-l md:border-[#EAE2D8] md:pl-12 lg:pl-16 flex flex-col items-center md:items-start text-center md:text-left">
-            {/* Title: CONTACT US */}
-            <h4 className="text-base sm:text-lg font-normal text-[#231610] tracking-[0.16em] uppercase font-serif-luxury">
-              CONTACT US
-            </h4>
+        </div>
+      </div>
 
-            {/* Delicate Divider with Rhombus */}
-            <div className="flex items-center gap-2 mt-2 mb-6 sm:mb-7">
-              <div className="h-[1px] w-10 sm:w-14 bg-gradient-to-r from-transparent to-[#B97A48]/70" />
-              <span className="text-[#B97A48] text-[9px] select-none">◆</span>
-              <div className="h-[1px] w-10 sm:w-14 bg-gradient-to-l from-transparent to-[#B97A48]/70" />
-            </div>
+      {/* ========================================================================= */}
+      {/* SEPARATION DIVIDER WITH CENTER DIAMOND                                     */}
+      {/* ========================================================================= */}
+      <div className="relative w-full max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-12 my-2">
+        <div className="relative w-full border-t border-[#E8DFD3] flex items-center justify-center">
+          <span className="absolute -top-2 bg-[#FAF6F0] px-3 text-[#B97A48] text-[9px] select-none">
+            ◆
+          </span>
+        </div>
+      </div>
 
-            {/* Contact Rows */}
-            <div className="space-y-4 sm:space-y-5 text-xs sm:text-[14px] text-[#3D312A] font-normal w-full max-w-sm">
-              {/* Phone Numbers */}
-              <div className="flex items-start gap-3.5 justify-center md:justify-start group">
-                <div className="text-[#B97A48] flex-shrink-0 mt-0.5">
-                  <Phone className="w-5 h-5 stroke-[1.4]" />
-                </div>
-                <div className="flex flex-col gap-1 items-center md:items-start">
-                  <a
-                    href="tel:+919618648050"
-                    className="hover:text-[#BA7442] transition-colors"
-                  >
-                    +91 9618648050
-                  </a>
-                  <a
-                    href="tel:+919000407681"
-                    className="hover:text-[#BA7442] transition-colors"
-                  >
-                    +91 9000407681
-                  </a>
-                </div>
-              </div>
-
-              {/* Hours */}
-              <div className="flex items-center gap-3.5 justify-center md:justify-start">
-                <div className="text-[#B97A48] flex-shrink-0">
-                  <Clock className="w-5 h-5 stroke-[1.4]" />
-                </div>
-                <span>Mon - Sat: 10:00 AM - 8:00 PM</span>
-              </div>
-
-              {/* Address */}
-              <div className="flex items-center gap-3.5 justify-center md:justify-start">
-                <div className="text-[#B97A48] flex-shrink-0">
-                  <MapPin className="w-5 h-5 stroke-[1.4]" />
-                </div>
-                <span>123, Insha Collections, India</span>
-              </div>
-            </div>
+      {/* ========================================================================= */}
+      {/* SECTION 2: BRANDNIX / DESIGNER ATTRIBUTION & COPYRIGHT SECTION            */}
+      {/* ========================================================================= */}
+      <div className="max-w-[1360px] mx-auto px-4 sm:px-8 lg:px-12 pt-6 pb-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 items-center">
+          
+          {/* LEFT: Copyright Info */}
+          <div className="text-center md:text-left text-xs sm:text-[13px] text-[#7A6F68] space-y-0.5 order-2 md:order-1">
+            <p>© {new Date().getFullYear()} Insha Collections.</p>
+            <p>All rights reserved.</p>
           </div>
+
+          {/* CENTER: Brandnix Attribution Block */}
+          <div className="flex flex-col items-center justify-center text-center space-y-1.5 order-1 md:order-2">
+            {/* 'Designed by' with horizontal accent lines */}
+            <div className="flex items-center gap-3 text-xs sm:text-[13px] text-[#7A6F68] font-serif italic">
+              <div className="h-[1px] w-12 sm:w-16 bg-[#D8CCC0]" />
+              <span>Designed by</span>
+              <div className="h-[1px] w-12 sm:w-16 bg-[#D8CCC0]" />
+            </div>
+
+            {/* BRANDNIX Clickable Wordmark */}
+            <a
+              href="https://www.brandnix.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit Brandnix Design & Digital Agency website"
+              className="text-2xl sm:text-3xl font-extrabold tracking-[0.2em] text-[#1A1412] hover:text-[#BA7442] transition-colors duration-200 uppercase font-sans cursor-pointer"
+            >
+              BRANDNIX
+            </a>
+
+            {/* Brandnix Tagline */}
+            <p className="text-[10px] sm:text-[11px] tracking-[0.28em] text-[#9E6E49] font-semibold uppercase">
+              IDEAS | DESIGN | DIGITAL | BEYOND
+            </p>
+          </div>
+
+          {/* RIGHT: Shop with Confidence & Support Tagline */}
+          <div className="text-center md:text-right text-xs text-[#7A6F68] space-y-1 order-3">
+            <p className="font-serif italic text-xs sm:text-[13.5px] text-[#5A4D45] flex items-center justify-center md:justify-end gap-1">
+              <span>Shop with Confidence</span>
+              <span className="text-[#9E6E49] text-xs not-italic">♡</span>
+            </p>
+            <p className="text-[11px] text-[#8C7E75]">
+              Support Local | Support Women | Support Elegance
+            </p>
+          </div>
+
         </div>
       </div>
     </footer>
