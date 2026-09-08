@@ -245,6 +245,152 @@ export function getWhatsAppOrderUrl(message: string): string {
   return `https://wa.me/${BUSINESS_WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
+export type AppointmentBookingType = "myself" | "gift";
+export type AppointmentPaymentMethod = "online" | "salon";
+
+export interface AppointmentPayload {
+  appointmentId: string;
+  service: {
+    id: string;
+    name: string;
+    category: string;
+    duration: string;
+    description: string;
+    price: number;
+    image: string;
+  };
+  bookingType: AppointmentBookingType;
+  date: string;
+  time: string;
+  customer: {
+    name: string;
+    phone: string;
+    specialRequests?: string;
+  };
+  payment: {
+    method: AppointmentPaymentMethod;
+    paymentReference?: string;
+  };
+}
+
+/**
+ * Generates a collision-resistant unique Appointment Reference ID: INSH-APT-YYYYMMDD-XXXX
+ */
+export function generateAppointmentReference(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, "0");
+  const day = String(now.getDate()).padStart(2, "0");
+  const dateStr = `${year}${month}${day}`;
+
+  // 4 random alphanumeric characters (uppercase)
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let randomSuffix = "";
+  for (let i = 0; i < 4; i++) {
+    randomSuffix += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+
+  return `INSH-APT-${dateStr}-${randomSuffix}`;
+}
+
+/**
+ * Generates the clean, standardized WhatsApp appointment message matching the exact specification:
+ *
+ * ✨ APPOINTMENT BOOKING FROM WEBSITE — INSHA COLLECTIONS
+ *
+ * Appointment ID: INSH-APT-YYYYMMDD-XXXX
+ *
+ * SERVICE DETAILS
+ *
+ * Service: ...
+ * Category: ...
+ * Duration: ...
+ *
+ * Description:
+ * ...
+ *
+ * Price: ₹...
+ *
+ * Service Image:
+ * https://...
+ *
+ * BOOKING TYPE:
+ * For Myself
+ *
+ * DATE:
+ * 09/05/2026
+ *
+ * TIME:
+ * 11:30 AM
+ *
+ * CUSTOMER DETAILS
+ *
+ * Name: ...
+ * Phone: ...
+ *
+ * Special Preferences / Requests:
+ * ...
+ *
+ * PAYMENT DETAILS
+ *
+ * Payment Method: ...
+ * Payment Reference / UTR: ...
+ *
+ * Please confirm this appointment from Insha Collections.
+ *
+ * Thank you for choosing Insha Collections. ❤️
+ */
+export function formatWhatsAppAppointmentMessage(
+  payload: AppointmentPayload,
+  siteOrigin?: string
+): string {
+  const { appointmentId, service, bookingType, date, time, customer, payment } = payload;
+
+  const baseSiteUrl = (
+    siteOrigin ||
+    process.env.SITE_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    "https://insha-collections.com"
+  ).replace(/\/+$/, "");
+
+  const bookingTypeDisplay = bookingType === "gift" ? "For Gift" : "For Myself";
+  const desc = service.description?.trim() || "Exclusive salon & bridal luxury experience at Insha Collections.";
+  const imageUrl = getPublicHttpsImageUrl(service.image, baseSiteUrl);
+  const requestsText = customer.specialRequests && customer.specialRequests.trim()
+    ? customer.specialRequests.trim()
+    : "None";
+
+  let message = `✨ APPOINTMENT BOOKING FROM WEBSITE — INSHA COLLECTIONS\n\n`;
+  message += `Appointment ID: ${appointmentId}\n\n`;
+  message += `SERVICE DETAILS\n\n`;
+  message += `Service: ${service.name.trim()}\n`;
+  message += `Category: ${service.category.trim()}\n`;
+  message += `Duration: ${service.duration.trim()}\n\n`;
+  message += `Description:\n${desc}\n\n`;
+  message += `Price: ₹${service.price.toLocaleString("en-IN")}\n\n`;
+  message += `Service Image:\n${imageUrl}\n\n`;
+  message += `BOOKING TYPE:\n${bookingTypeDisplay}\n\n`;
+  message += `DATE:\n${date.trim()}\n\n`;
+  message += `TIME:\n${time.trim()}\n\n`;
+  message += `CUSTOMER DETAILS\n\n`;
+  message += `Name: ${customer.name.trim()}\n`;
+  message += `Phone: ${customer.phone.trim()}\n\n`;
+  message += `Special Preferences / Requests:\n${requestsText}\n\n`;
+  message += `PAYMENT DETAILS\n\n`;
+
+  if (payment.method === "online") {
+    message += `Payment Method: Online Payment\n`;
+    message += `Payment Reference / UTR: ${payment.paymentReference?.trim() || "N/A"}\n\n`;
+  } else {
+    message += `Payment Method: Pay at Salon\n\n`;
+  }
+
+  message += `Please confirm this appointment from Insha Collections.\n\n`;
+  message += `Thank you for choosing Insha Collections. ❤️`;
+
+  return message;
+}
+
 /**
  * Returns a customer-initiated WhatsApp concierge link to open a 24-hour customer service session with Insha Collections.
  */
@@ -253,3 +399,4 @@ export function generateConciergeSessionUrl(orderReference: string, customerName
   const text = `${greeting} I just placed an order on your website (Order ID: ${orderReference}). Please let me know the confirmation and delivery timeline.`;
   return `https://wa.me/${BUSINESS_WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
+
