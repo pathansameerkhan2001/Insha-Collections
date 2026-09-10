@@ -121,7 +121,7 @@ export function generateOrderReference(): string {
  * Ensures no localhost or raw relative paths are sent.
  */
 export function getPublicHttpsImageUrl(imagePath?: string, siteOrigin?: string): string {
-  if (!imagePath) return "https://insha-collections.com/images/New-logo.jpeg";
+  if (!imagePath) return "https://inshacollections.in/images/New-logo.jpeg";
 
   // If already absolute HTTPS URL
   if (imagePath.startsWith("https://")) {
@@ -138,7 +138,7 @@ export function getPublicHttpsImageUrl(imagePath?: string, siteOrigin?: string):
     siteOrigin ||
     process.env.SITE_URL ||
     process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://insha-collections.com"
+    "https://inshacollections.in"
   ).replace(/\/+$/, "");
 
   const cleanPath = imagePath.startsWith("/") ? imagePath : `/${imagePath}`;
@@ -167,7 +167,7 @@ export function formatWhatsAppOrderMessage(
     siteOrigin ||
     process.env.SITE_URL ||
     process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://insha-collections.com"
+    "https://inshacollections.in"
   ).replace(/\/+$/, "");
 
   const orderTypeDisplay = customer.orderType === "gift" ? "For Gift" : "For Myself";
@@ -350,7 +350,7 @@ export function formatWhatsAppAppointmentMessage(
     siteOrigin ||
     process.env.SITE_URL ||
     process.env.NEXT_PUBLIC_SITE_URL ||
-    "https://insha-collections.com"
+    "https://inshacollections.in"
   ).replace(/\/+$/, "");
 
   const bookingTypeDisplay = bookingType === "gift" ? "For Gift" : "For Myself";

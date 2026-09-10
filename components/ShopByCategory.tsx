@@ -123,8 +123,6 @@ export default function ShopByCategory({
 
     // Fetch dynamic subcategories
     fetch("/api/subcategories", {
-      cache: "no-store",
-      headers: { "Cache-Control": "no-cache" },
       signal: controller.signal,
     })
       .then((res) => res.json())
@@ -548,6 +546,9 @@ export default function ShopByCategory({
                     src={service.image}
                     alt={service.name}
                     fill
+                    loading="lazy"
+                    placeholder="blur"
+                    blurDataURL={LUXURY_BLUR_DATA_URL}
                     className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   />

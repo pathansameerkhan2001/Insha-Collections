@@ -668,7 +668,7 @@ export default function AppointmentModal({
                           src="/images/payment/phonepe-qr.png"
                           alt="Scan & Pay using PhonePe QR Code"
                           fill
-                          priority
+                          loading="lazy"
                           sizes="(max-width: 640px) 192px, 224px"
                           className="object-contain"
                         />

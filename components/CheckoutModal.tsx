@@ -756,7 +756,7 @@ export default function CheckoutModal({
                             src="/images/payment/phonepe-qr.png"
                             alt="Scan & Pay using PhonePe QR Code"
                             fill
-                            priority
+                            loading="lazy"
                             sizes="(max-width: 640px) 224px, 256px"
                             className="object-contain"
                           />

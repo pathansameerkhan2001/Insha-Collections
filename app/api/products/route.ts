@@ -4,10 +4,8 @@ import { productStore } from "@/lib/products/productStore";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-const NO_CACHE_HEADERS = {
-  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
-  Pragma: "no-cache",
-  Expires: "0",
+const CACHE_HEADERS = {
+  "Cache-Control": "public, s-maxage=30, stale-while-revalidate=120",
 };
 
 export async function GET(req: NextRequest) {
@@ -33,14 +31,14 @@ export async function GET(req: NextRequest) {
         products: publicItems,
       },
       {
-        headers: NO_CACHE_HEADERS,
+        headers: CACHE_HEADERS,
       }
     );
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Error fetching public products";
     return NextResponse.json(
       { success: false, error: msg },
-      { status: 500, headers: NO_CACHE_HEADERS }
+      { status: 500, headers: CACHE_HEADERS }
     );
   }
 }

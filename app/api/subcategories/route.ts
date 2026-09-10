@@ -5,10 +5,12 @@ import { ProductCategory } from "@/lib/products/productTypes";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+const CACHE_HEADERS = {
+  "Cache-Control": "public, s-maxage=30, stale-while-revalidate=120",
+};
+
 const NO_CACHE_HEADERS = {
-  "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
-  Pragma: "no-cache",
-  Expires: "0",
+  "Cache-Control": "no-store, max-age=0",
 };
 
 /**
@@ -28,7 +30,7 @@ export async function GET(req: NextRequest) {
           category,
           subcategories: names,
         },
-        { headers: NO_CACHE_HEADERS }
+        { headers: CACHE_HEADERS }
       );
     }
 
@@ -45,13 +47,13 @@ export async function GET(req: NextRequest) {
         success: true,
         subcategories: subcategoriesMap,
       },
-      { headers: NO_CACHE_HEADERS }
+      { headers: CACHE_HEADERS }
     );
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : "Failed to fetch subcategories";
     return NextResponse.json(
       { success: false, error: errorMsg },
-      { status: 500, headers: NO_CACHE_HEADERS }
+      { status: 500, headers: CACHE_HEADERS }
     );
   }
 }

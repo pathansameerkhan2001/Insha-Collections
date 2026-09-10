@@ -13,6 +13,11 @@
     --feature-bar-bg: #FAF6F2;
   }
 
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
   body {
     background-color: var(--bg-main);
     color: var(--text-primary);
@@ -30,6 +35,17 @@
 
   .font-montserrat {
     font-family: var(--font-montserrat), sans-serif;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 

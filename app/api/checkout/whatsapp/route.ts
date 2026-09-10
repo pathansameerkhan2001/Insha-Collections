@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
     // Determine request origin for public asset URLs
     const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "";
     const proto = req.headers.get("x-forwarded-proto") || "https";
-    const requestOrigin = host ? `${proto}://${host}` : process.env.SITE_URL || "https://insha-collections.com";
+    const requestOrigin = host ? `${proto}://${host}` : process.env.SITE_URL || "https://inshacollections.in";
 
     for (const rawItem of items) {
       const pId = rawItem.productId || rawItem.id;

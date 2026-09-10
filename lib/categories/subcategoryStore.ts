@@ -119,6 +119,15 @@ function generateSlug(category: string, name: string): string {
 }
 
 export class SubcategoryStore {
+  private memoryCache: Record<ProductCategory, SubCategoryWithCount[]> | null = null;
+  private cacheExpiresAt: number = 0;
+  private readonly CACHE_TTL_MS = 45000;
+
+  public invalidateCache() {
+    this.memoryCache = null;
+    this.cacheExpiresAt = 0;
+  }
+
   private loadLocalData(): Record<ProductCategory, SubCategoryRecord[]> {
     const initialMap: Record<ProductCategory, SubCategoryRecord[]> = {
       jewellery: [],
@@ -181,6 +190,11 @@ export class SubcategoryStore {
   }
 
   public async getAllWithCounts(): Promise<Record<ProductCategory, SubCategoryWithCount[]>> {
+    const now = Date.now();
+    if (this.memoryCache && now < this.cacheExpiresAt) {
+      return this.memoryCache;
+    }
+
     const records = await this.fetchAllRawRecords();
     const allProducts = await productStore.getAll();
 
@@ -226,6 +240,9 @@ export class SubcategoryStore {
     for (const cat of categories) {
       result[cat].sort((a, b) => a.name.localeCompare(b.name));
     }
+
+    this.memoryCache = result;
+    this.cacheExpiresAt = now + this.CACHE_TTL_MS;
 
     return result;
   }
@@ -290,6 +307,7 @@ export class SubcategoryStore {
       // Non-blocking in serverless
     }
 
+    this.invalidateCache();
     return newRecord;
   }
 
@@ -363,6 +381,7 @@ export class SubcategoryStore {
       // Non-blocking
     }
 
+    this.invalidateCache();
     return {
       subcategory: updatedSub,
       affectedProductsCount,
@@ -407,6 +426,7 @@ export class SubcategoryStore {
       // Non-blocking
     }
 
+    this.invalidateCache();
     return { success: true, name: sub.name };
   }
 
@@ -461,6 +481,7 @@ export class SubcategoryStore {
       // Non-blocking
     }
 
+    this.invalidateCache();
     return {
       success: true,
       reassignedCount,

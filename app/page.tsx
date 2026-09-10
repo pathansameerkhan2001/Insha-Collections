@@ -37,9 +37,9 @@ const ALL_PRODUCTS: ProductItem[] = [
 export default function Home() {
   const [cart, setCart] = useState<CartEntry[]>([]);
   const [wishlistIds, setWishlistIds] = useState<Record<string, boolean>>({});
-  const [allProductsList, setAllProductsList] = useState<ProductItem[]>([]);
-  const [beautyServicesList, setBeautyServicesList] = useState<ServiceItem[]>([]);
-  const [isLoadingProducts, setIsLoadingProducts] = useState<boolean>(true);
+  const [allProductsList, setAllProductsList] = useState<ProductItem[]>(() => ALL_PRODUCTS);
+  const [beautyServicesList, setBeautyServicesList] = useState<ServiceItem[]>(() => BEAUTY_SERVICES);
+  const [isLoadingProducts, setIsLoadingProducts] = useState<boolean>(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
@@ -53,8 +53,6 @@ export default function Home() {
     const controller = new AbortController();
 
     fetch("/api/products", {
-      cache: "no-store",
-      headers: { "Cache-Control": "no-cache" },
       signal: controller.signal,
     })
       .then((res) => res.json())

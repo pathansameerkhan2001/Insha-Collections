@@ -10,32 +10,52 @@ interface HeroSlide {
   src: string;
   alt: string;
   bgColor: string;
+  objectPosition?: string;
 }
 
 const SLIDE_DURATION = 5500; // 5.5 seconds per slide
 
 const HERO_SLIDES: HeroSlide[] = [
   {
+    id: "welcome",
+    src: "/images/hero-welcome-banner.webp",
+    alt: "Welcome to Insha Collections - Timeless Style For A More Beautiful You",
+    bgColor: "#FAF5EE",
+  },
+  {
+    id: "beauty",
+    src: "/images/hero-beauty-banner.webp",
+    alt: "Insha Collections - Beauty & Salon - Look Good. Feel Beautiful. Always You.",
+    bgColor: "#FAF5EE",
+  },
+  {
+    id: "storefront",
+    src: "/images/hero-storefront-banner.webp",
+    alt: "Insha Collections - Dress Materials & Jewellery Storefront - Kadapa",
+    bgColor: "#FAF5EE",
+    objectPosition: "center 15%",
+  },
+  {
     id: "jewellery",
-    src: "/images/hero-jewellery-banner.jpg",
+    src: "/images/hero-jewellery-banner.webp",
     alt: "Insha Collections - Anti Tarnish Jewellery - Elegance That Lasts",
     bgColor: "#FAF5EE",
   },
   {
     id: "korean",
-    src: "/images/hero-korean-banner.jpg",
+    src: "/images/hero-korean-banner.webp",
     alt: "Insha Collections - Korean Collection - Trendy. Stylish. Effortless.",
     bgColor: "#FAF5EE",
   },
   {
     id: "dresses",
-    src: "/images/hero-dresses-banner.jpg",
+    src: "/images/hero-dresses-banner.webp",
     alt: "Insha Collections - Readymade Collection - Style That Fits You",
     bgColor: "#F8F3EC",
   },
   {
     id: "handlooms",
-    src: "/images/hero-handlooms-banner.jpg",
+    src: "/images/hero-handlooms-banner.webp",
     alt: "Insha Collections - Handloom Collection - Timeless Weaves. Timeless Homes.",
     bgColor: "#F7F1E8",
   },
@@ -146,8 +166,8 @@ export default function HeroSection() {
       aria-label="Hero Collections Showcase"
     >
       <div className="w-full relative max-w-[1920px] mx-auto">
-        {/* Compact, balanced height (max 480-515px on desktop) */}
-        <div className="relative w-full aspect-[16/8.2] sm:aspect-[16/7.8] md:aspect-[16/7.2] lg:aspect-[16/6.8] min-h-[230px] sm:min-h-[310px] md:min-h-[390px] lg:min-h-[450px] max-h-[515px] overflow-hidden">
+        {/* Perfectly proportioned hero frame with ample headroom for panoramic luxury banners */}
+        <div className="relative w-full aspect-[16/9] sm:aspect-[16/8.6] md:aspect-[16/8.2] lg:aspect-[16/7.8] xl:aspect-[16/7.5] min-h-[250px] sm:min-h-[340px] md:min-h-[420px] lg:min-h-[500px] xl:min-h-[560px] max-h-[680px] overflow-hidden">
           {/* Horizontal Slide Carousel Track */}
           <AnimatePresence initial={false} custom={direction}>
             <motion.div
@@ -168,9 +188,13 @@ export default function HeroSection() {
                   alt={currentSlideData.alt}
                   fill
                   priority={currentSlide === 0}
-                  quality={100}
-                  className="object-cover object-center pointer-events-none"
-                  sizes="(max-width: 1920px) 100vw, 1920px"
+                  loading={currentSlide === 0 ? "eager" : "lazy"}
+                  quality={90}
+                  className="object-cover pointer-events-none transition-all duration-300"
+                  style={{
+                    objectPosition: currentSlideData.objectPosition || "center center",
+                  }}
+                  sizes="(max-width: 640px) 100vw, (max-width: 1200px) 100vw, 1920px"
                 />
               </div>
             </motion.div>

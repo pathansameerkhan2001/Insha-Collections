@@ -157,6 +157,15 @@ function normalizeRecord(p: any): ProductRecord {
 }
 
 class ProductStore {
+  private memoryCache: ProductRecord[] | null = null;
+  private cacheExpiresAt: number = 0;
+  private readonly CACHE_TTL_MS = 45000; // 45 seconds server memory cache
+
+  public invalidateCache() {
+    this.memoryCache = null;
+    this.cacheExpiresAt = 0;
+  }
+
   // Local file fallback for offline testing
   private loadLocalData(): ProductRecord[] {
     try {
@@ -191,24 +200,34 @@ class ProductStore {
   public async getAll(filter?: ProductFilterOptions): Promise<ProductRecord[]> {
     let items: ProductRecord[] = [];
 
-    if (isDynamoConfigured()) {
-      try {
-        const dynamoItems = await dynamoGetAllProducts();
-        items = dynamoItems.map(normalizeRecord);
-      } catch (err) {
-        console.error("DynamoDB getAll failed, falling back to local storage:", err);
+    // Check memory cache first
+    const now = Date.now();
+    if (this.memoryCache && now < this.cacheExpiresAt) {
+      items = [...this.memoryCache];
+    } else {
+      if (isDynamoConfigured()) {
+        try {
+          const dynamoItems = await dynamoGetAllProducts();
+          items = dynamoItems.map(normalizeRecord);
+        } catch (err) {
+          console.error("DynamoDB getAll failed, falling back to local storage:", err);
+          items = this.loadLocalData();
+        }
+      } else {
         items = this.loadLocalData();
       }
-    } else {
-      items = this.loadLocalData();
-    }
 
-    // Deterministic sorting: Newest created/updated first
-    items.sort((a, b) => {
-      const timeA = new Date(a.createdAt || a.updatedAt || 0).getTime();
-      const timeB = new Date(b.createdAt || b.updatedAt || 0).getTime();
-      return timeB - timeA;
-    });
+      // Deterministic sorting: Newest created/updated first
+      items.sort((a, b) => {
+        const timeA = new Date(a.createdAt || a.updatedAt || 0).getTime();
+        const timeB = new Date(b.createdAt || b.updatedAt || 0).getTime();
+        return timeB - timeA;
+      });
+
+      // Save to memory cache
+      this.memoryCache = [...items];
+      this.cacheExpiresAt = now + this.CACHE_TTL_MS;
+    }
 
     if (!filter) return items;
 
@@ -363,6 +382,7 @@ class ProductStore {
       // Non-blocking in serverless
     }
 
+    this.invalidateCache();
     return newRecord;
   }
 
@@ -457,6 +477,7 @@ class ProductStore {
       // Non-blocking in serverless
     }
 
+    this.invalidateCache();
     return updatedRecord;
   }
 
@@ -480,6 +501,7 @@ class ProductStore {
       // Non-blocking in serverless
     }
 
+    this.invalidateCache();
     return true;
   }
 
