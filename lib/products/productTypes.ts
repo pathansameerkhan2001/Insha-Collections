@@ -249,8 +249,42 @@ export function getQuickViewImageUrls(
   return ["/images/prod-gold-ring.jpg"];
 }
 
+// In-memory set to prevent redundant prefetch calls
+const PREFETCHED_URLS = new Set<string>();
+
+/**
+ * Intelligently prefetches the primary Quick View image into the browser cache
+ * on user intent (e.g. desktop hover). Prevents duplicate network requests.
+ */
+export function prefetchQuickViewImage(
+  product: {
+    showcaseImage?: string | ProductImageInfo;
+    realImages?: Array<string | ProductImageInfo>;
+    mainImage?: string;
+    image?: string;
+  },
+  targetWidth: 400 | 800 | 1200 = 800
+): void {
+  if (typeof window === "undefined") return;
+
+  const quickViewUrls = getQuickViewImageUrls(product, targetWidth);
+  const primaryUrl = quickViewUrls[0];
+  if (!primaryUrl || PREFETCHED_URLS.has(primaryUrl)) return;
+
+  PREFETCHED_URLS.add(primaryUrl);
+
+  try {
+    const img = new window.Image();
+    img.decoding = "async";
+    img.src = primaryUrl;
+  } catch {
+    // Ignore prefetch errors silently
+  }
+}
+
 /**
  * Luxury shimmer/blur placeholder for smooth progressive image loading
  */
 export const LUXURY_BLUR_DATA_URL =
   "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0iI0Y1RUNFNSIvPjwvc3ZnPg==";
+

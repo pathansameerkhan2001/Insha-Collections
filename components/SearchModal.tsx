@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import Image from "next/image";
 import { Search, X, Sparkles, ArrowRight, Eye, Tag } from "lucide-react";
 import { ProductItem } from "@/data/catalog";
-import { LUXURY_BLUR_DATA_URL } from "@/lib/products/productTypes";
+import { prefetchQuickViewImage, isS3DeliveryUrl, LUXURY_BLUR_DATA_URL } from "@/lib/products/productTypes";
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -171,6 +171,7 @@ export default function SearchModal({
                 {searchResults.map((product) => (
                   <div
                     key={product.id}
+                    onMouseEnter={() => prefetchQuickViewImage(product)}
                     onClick={() => {
                       onSelectProduct(product);
                       onClose();
@@ -186,6 +187,7 @@ export default function SearchModal({
                           fill
                           sizes="64px"
                           quality={75}
+                          unoptimized={isS3DeliveryUrl(product.image)}
                           placeholder="blur"
                           blurDataURL={LUXURY_BLUR_DATA_URL}
                           className="object-cover group-hover:scale-105 transition-transform duration-300"

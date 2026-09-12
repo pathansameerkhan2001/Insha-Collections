@@ -17,7 +17,7 @@ import {
   Zap,
 } from "lucide-react";
 import { ProductItem } from "@/data/catalog";
-import { getQuickViewImageUrls, LUXURY_BLUR_DATA_URL } from "@/lib/products/productTypes";
+import { getQuickViewImageUrls, isS3DeliveryUrl, LUXURY_BLUR_DATA_URL } from "@/lib/products/productTypes";
 
 interface ProductQuickViewModalProps {
   product: ProductItem | null;
@@ -42,6 +42,7 @@ export default function ProductQuickViewModal({
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [loadedHighResMap, setLoadedHighResMap] = useState<Record<string, boolean>>({});
 
   // Synchronize state when product changes
   if (product && product.id !== prevProductId) {
@@ -68,6 +69,10 @@ export default function ProductQuickViewModal({
   const realImageUrls = getQuickViewImageUrls(product, 800);
   const thumbnailUrls = getQuickViewImageUrls(product, 400);
   const activeImage = realImageUrls[activeImageIndex] || product.image;
+  // Card's existing loaded image used as instant 0ms base layer
+  const cardImage = product.image;
+  const previewImage = activeImageIndex === 0 ? cardImage : thumbnailUrls[activeImageIndex] || cardImage;
+  const isCurrentHighResLoaded = Boolean(loadedHighResMap[activeImage]);
 
   const handleAdd = () => {
     onAddToCart(product, quantity);
@@ -106,18 +111,36 @@ export default function ProductQuickViewModal({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-start">
           {/* Left: Real Product Image Gallery */}
           <div className="flex flex-col gap-3">
-            {/* Main Preview Container */}
+            {/* Main Preview Container - Locked 1:1 Aspect Ratio with zero layout shift */}
             <div className="relative w-full aspect-square bg-[#F5ECE5] rounded-xl overflow-hidden border border-[#EAE2D8] group">
+              {/* Layer 1: Instant Base Preview Layer (reusing existing card image in browser cache) */}
+              {previewImage && (
+                <Image
+                  src={previewImage}
+                  alt={`${product.name} Preview`}
+                  fill
+                  priority
+                  unoptimized={isS3DeliveryUrl(previewImage)}
+                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 450px, 450px"
+                  className="object-cover object-center"
+                />
+              )}
+
+              {/* Layer 2: Progressive High-Resolution Image (800w derivative) */}
               <Image
                 src={activeImage}
                 alt={`${product.name} - Real Photo ${activeImageIndex + 1}`}
                 fill
-                quality={85}
+                quality={82}
                 priority
-                placeholder="blur"
-                blurDataURL={LUXURY_BLUR_DATA_URL}
-                className="object-cover object-center transition-all duration-300"
-                sizes="(max-width: 768px) 100vw, 450px"
+                unoptimized={isS3DeliveryUrl(activeImage)}
+                sizes="(max-width: 640px) 90vw, (max-width: 1024px) 450px, 450px"
+                onLoad={() => {
+                  setLoadedHighResMap((prev) => ({ ...prev, [activeImage]: true }));
+                }}
+                className={`object-cover object-center transition-opacity duration-200 ${
+                  isCurrentHighResLoaded ? "opacity-100" : "opacity-0"
+                }`}
               />
 
               {/* Badge */}
@@ -170,30 +193,32 @@ export default function ProductQuickViewModal({
             {/* Thumbnail Gallery Row */}
             {realImageUrls.length > 1 && (
               <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-                {realImageUrls.map((imgUrl, idx) => (
-                  <button
-                    key={imgUrl + idx}
-                    type="button"
-                    onClick={() => setActiveImageIndex(idx)}
-                    className={`relative w-16 h-16 sm:w-18 sm:h-18 rounded-lg overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
-                      activeImageIndex === idx
-                        ? "border-[#B89366] ring-2 ring-[#B89366]/30 scale-102"
-                        : "border-[#EAE2D8] hover:border-[#B89366]/60 opacity-70 hover:opacity-100"
-                    }`}
-                  >
-                    <Image
-                      src={thumbnailUrls[idx] || imgUrl}
-                      alt={`Thumbnail ${idx + 1}`}
-                      fill
-                      loading="lazy"
-                      quality={75}
-                      placeholder="blur"
-                      blurDataURL={LUXURY_BLUR_DATA_URL}
-                      className="object-cover"
-                      sizes="72px"
-                    />
-                  </button>
-                ))}
+                {realImageUrls.map((imgUrl, idx) => {
+                  const thumbSrc = thumbnailUrls[idx] || imgUrl;
+                  return (
+                    <button
+                      key={imgUrl + idx}
+                      type="button"
+                      onClick={() => setActiveImageIndex(idx)}
+                      className={`relative w-16 h-16 sm:w-18 sm:h-18 rounded-lg overflow-hidden shrink-0 border-2 transition-all cursor-pointer ${
+                        activeImageIndex === idx
+                          ? "border-[#B89366] ring-2 ring-[#B89366]/30 scale-102"
+                          : "border-[#EAE2D8] hover:border-[#B89366]/60 opacity-70 hover:opacity-100"
+                      }`}
+                    >
+                      <Image
+                        src={thumbSrc}
+                        alt={`Thumbnail ${idx + 1}`}
+                        fill
+                        loading="lazy"
+                        quality={75}
+                        unoptimized={isS3DeliveryUrl(thumbSrc)}
+                        className="object-cover"
+                        sizes="72px"
+                      />
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>

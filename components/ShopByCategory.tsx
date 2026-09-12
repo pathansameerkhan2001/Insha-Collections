@@ -32,7 +32,7 @@ import {
 } from "@/data/catalog";
 import ProductQuickViewModal from "./ProductQuickViewModal";
 import AppointmentModal from "./AppointmentModal";
-import { getStorefrontImageUrl, LUXURY_BLUR_DATA_URL } from "@/lib/products/productTypes";
+import { getStorefrontImageUrl, prefetchQuickViewImage, isS3DeliveryUrl, LUXURY_BLUR_DATA_URL } from "@/lib/products/productTypes";
 
 function BowIcon({ className = "w-4 h-4" }: { className?: string }) {
   return (
@@ -547,6 +547,7 @@ export default function ShopByCategory({
                     alt={service.name}
                     fill
                     loading="lazy"
+                    unoptimized={isS3DeliveryUrl(service.image)}
                     placeholder="blur"
                     blurDataURL={LUXURY_BLUR_DATA_URL}
                     className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
@@ -639,6 +640,7 @@ export default function ShopByCategory({
               return (
                 <div
                   key={product.id}
+                  onMouseEnter={() => prefetchQuickViewImage(product)}
                   className="group relative flex flex-col bg-white rounded-xl sm:rounded-2xl border border-[#EAE2D8] overflow-hidden transition-all duration-300 shadow-[0_2px_12px_rgba(35,22,16,0.03)] hover:shadow-[0_14px_36px_rgba(35,22,16,0.09)] hover:border-[#C5A47E]/60"
                 >
                   {/* Product Image Container */}
@@ -650,6 +652,7 @@ export default function ShopByCategory({
                       quality={85}
                       priority={idx < 4}
                       loading={idx < 4 ? "eager" : "lazy"}
+                      unoptimized={isS3DeliveryUrl(product.image)}
                       placeholder="blur"
                       blurDataURL={LUXURY_BLUR_DATA_URL}
                       className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
@@ -700,6 +703,7 @@ export default function ShopByCategory({
                     {/* Quick View Hover Button */}
                     <button
                       type="button"
+                      onMouseEnter={() => prefetchQuickViewImage(product)}
                       onClick={() => setQuickViewProduct(product)}
                       className="absolute inset-x-3 bottom-2.5 z-10 hidden group-hover:flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-[#231610]/85 backdrop-blur-md text-[#FAF7F3] text-xs font-medium tracking-wide uppercase transition-all duration-200 shadow-md hover:bg-[#231610] cursor-pointer"
                     >
@@ -713,6 +717,7 @@ export default function ShopByCategory({
                     <div>
                       {/* Name */}
                       <h3
+                        onMouseEnter={() => prefetchQuickViewImage(product)}
                         onClick={() => setQuickViewProduct(product)}
                         className="text-xs sm:text-sm md:text-[14.5px] font-normal text-[#231610] font-serif-luxury tracking-wide line-clamp-1 leading-snug group-hover:text-[#A57D4E] transition-colors duration-200 cursor-pointer"
                       >

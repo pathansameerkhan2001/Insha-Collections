@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import fs from "fs";
+import path from "path";
 import sharp from "sharp";
 import crypto from "crypto";
 import { getS3Object, convertHeicToJpeg, uploadToS3Direct, isS3Configured } from "@/lib/aws/s3Service";
@@ -82,8 +84,9 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       });
     }
 
-    // 2. Direct S3 WebP Request
-    if (s3Key.toLowerCase().endsWith(".webp")) {
+    // 2. Direct S3 WebP Request (if already exact derivative or no resize requested)
+    const isExactDerivative = requestedWidth ? s3Key.includes(`-${requestedWidth}w.webp`) : true;
+    if (s3Key.toLowerCase().endsWith(".webp") && isExactDerivative) {
       const s3Data = await getS3Object(s3Key);
       const generatedEtag = s3Data.etag || `"${crypto.createHash("md5").update(s3Data.buffer).digest("hex")}"`;
 
@@ -111,13 +114,15 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       });
     }
 
-    // 3. Pre-Optimized S3 Derivative Check (using strict POSIX pathing)
+    // 3. Pre-Optimized S3 Derivative Check (using clean base names)
     if (requestedWidth && (requestedWidth === 400 || requestedWidth === 800 || requestedWidth === 1200 || requestedWidth === 1600)) {
       const parts = s3Key.split("/");
       const fileName = parts.pop() || "";
       const baseDir = parts.join("/");
       const dotIdx = fileName.lastIndexOf(".");
-      const baseName = dotIdx !== -1 ? fileName.slice(0, dotIdx) : fileName;
+      const rawBaseName = dotIdx !== -1 ? fileName.slice(0, dotIdx) : fileName;
+      // Strip any existing derivative suffix like -400w, -800w, -1200w, -1600w to avoid -800w-800w.webp
+      const baseName = rawBaseName.replace(/-\d+w$/, "");
 
       // Candidate derivative keys
       const candidateKeys = [
@@ -154,7 +159,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
             },
           });
         } catch {
-          // Pre-optimized derivative not found; try next or generate
+          // Pre-optimized derivative not found; continue searching
         }
       }
     }
@@ -202,8 +207,12 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
           const fileName = parts.pop() || "";
           const baseDir = parts.join("/");
           const dotIdx = fileName.lastIndexOf(".");
-          const baseName = dotIdx !== -1 ? fileName.slice(0, dotIdx) : fileName;
-          const derivativeS3Key = baseDir
+          const rawBaseName = dotIdx !== -1 ? fileName.slice(0, dotIdx) : fileName;
+          const baseName = rawBaseName.replace(/-\d+w$/, "");
+
+          const derivativeS3Key = baseDir.includes("/original")
+            ? `${baseDir.replace("/original", "/optimized")}/${baseName}-${requestedWidth}w.webp`
+            : baseDir
             ? `${baseDir}/${baseName}-${requestedWidth}w.webp`
             : `${baseName}-${requestedWidth}w.webp`;
 
