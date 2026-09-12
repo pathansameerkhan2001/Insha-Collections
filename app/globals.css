@@ -15,14 +15,14 @@
 
   html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   body {
     background-color: var(--bg-main);
     color: var(--text-primary);
     font-family: var(--font-montserrat), sans-serif;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   h1, h2, h3, .font-serif-luxury {

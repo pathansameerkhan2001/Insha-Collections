@@ -39,7 +39,7 @@ export default function Header({
 
   return (
     <>
-      <header className="w-full bg-[#FAF7F3] sticky top-0 z-40 transition-all duration-200 border-b border-[#EAE2D8]/60">
+      <header className="w-full bg-[#FAF7F3]/95 backdrop-blur-md sticky top-0 z-50 transition-all duration-200 border-b border-[#EAE2D8]/80 shadow-[0_2px_12px_rgba(35,22,16,0.04)]">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 h-20 sm:h-24 flex items-center justify-between relative">
           {/* Left: Hamburger Menu Button */}
           <div className="flex items-center">
