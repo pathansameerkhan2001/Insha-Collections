@@ -663,14 +663,14 @@ export default function AppointmentModal({
                     </div>
 
                     <div className="flex flex-col items-center justify-center space-y-2.5">
-                      <div className="relative w-48 sm:w-56 aspect-[1/2] rounded-xl overflow-hidden border border-[#EAE2D8] shadow-sm bg-white p-1">
+                      <div className="relative w-44 sm:w-52 aspect-[333/408] rounded-xl overflow-hidden border border-[#EAE2D8] shadow-sm bg-white p-2">
                         <Image
-                          src="/images/payment/phonepe-qr.png"
-                          alt="Scan & Pay using PhonePe QR Code"
+                          src="/images/payment/phonepe-qr.jpg"
+                          alt="Insha Collections Official PhonePe Payment QR Code - Scan & Pay (HABEEBUNNISA BEGUM SYED)"
                           fill
-                          loading="lazy"
-                          sizes="(max-width: 640px) 192px, 224px"
-                          className="object-contain"
+                          priority
+                          sizes="(max-width: 640px) 176px, 208px"
+                          className="object-contain select-none"
                         />
                       </div>
 

@@ -751,14 +751,14 @@ export default function CheckoutModal({
 
                       {/* PhonePe QR Display */}
                       <div className="flex flex-col items-center justify-center space-y-3">
-                        <div className="relative w-56 sm:w-64 aspect-[1/2] rounded-xl overflow-hidden border border-[#EAE2D8] shadow-md bg-white p-1">
+                        <div className="relative w-48 sm:w-56 aspect-[333/408] rounded-xl overflow-hidden border border-[#EAE2D8] shadow-md bg-white p-2">
                           <Image
-                            src="/images/payment/phonepe-qr.png"
-                            alt="Scan & Pay using PhonePe QR Code"
+                            src="/images/payment/phonepe-qr.jpg"
+                            alt="Insha Collections Official PhonePe Payment QR Code - Scan & Pay (HABEEBUNNISA BEGUM SYED)"
                             fill
-                            loading="lazy"
-                            sizes="(max-width: 640px) 224px, 256px"
-                            className="object-contain"
+                            priority
+                            sizes="(max-width: 640px) 192px, 224px"
+                            className="object-contain select-none"
                           />
                         </div>
 
